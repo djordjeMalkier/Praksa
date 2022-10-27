@@ -6,7 +6,7 @@ import java.util.stream.IntStream;
 //Svaki drugi element u nizu da bude veci od elementa levo i desno od njega
 public class Zadatak07 {
     public static void main(String[] args) {
-        int[] array = IntStream.range(0,99).toArray();
+        int[] array = IntStream.range(1,10).toArray();
         Arrays.stream(rearrange(array)).forEach(System.out::println);
     }
 
