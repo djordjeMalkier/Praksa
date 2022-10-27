@@ -13,12 +13,14 @@ public class Zadatak08 {
         for(int i=0; i<niz.length;i++){
             for(int j=i;j<niz.length;j++){
                 if(niz[i]-niz[j]<0){
+
                     razlika=niz[i]-niz[j];
                 }
                 if(max<Math.abs(razlika))
-                    max=razlika;
+                    max=Math.abs(razlika);
             }
         }
+
         return Math.abs(max);
     }
 
@@ -27,7 +29,11 @@ public class Zadatak08 {
         try {
             int[] array=inputArray();
             int razlika=najvecaRazlika(array);
-            System.out.println(razlika);
+            if(razlika <0){
+                System.out.println("Ne postoje dva takva elementa");
+            }else{
+                System.out.println(razlika);
+            }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
