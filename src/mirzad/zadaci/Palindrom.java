@@ -1,3 +1,5 @@
+package mirzad.zadaci;
+
 import java.util.Scanner;
 
 public class Palindrom {
