@@ -1,4 +1,4 @@
-package tamara.bankarskiSistem;
+package common.bankarskiSistem;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,4 @@
-package tamara.bankarskiSistem;
+package common.bankarskiSistem;
 
 public class Kurs {
 

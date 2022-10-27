@@ -1,9 +1,7 @@
-package tamara.bankarskiSistem;
+package common.bankarskiSistem;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class Banka {
     private String ime;
