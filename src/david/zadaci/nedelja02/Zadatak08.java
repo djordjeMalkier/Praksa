@@ -19,10 +19,12 @@ public class Zadatak08 {
     private static int maxDiff(int[] array) {
         int maxDifference = -Integer.MAX_VALUE;
         for (int i = 0; i < array.length; i++)
-            for (int j = i+1; j < array.length; j++) {
+            for (int j = i+1; j < array.length; j++)
                 if (array[j] - array[i] > maxDifference)
                     maxDifference = array[j] - array[i];
-        }
+        if (maxDifference < 0)
+            return -1;
+
         return maxDifference;
     }
 }
