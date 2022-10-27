@@ -1,3 +1,5 @@
+package mirzad.zadaci;
+
 public class Broj10 {
     public static void main(String[] args) {
         String[] strings = {"sa10sas","sa10sa20","20sds10s","sa102sas","10av20sa10gh"};

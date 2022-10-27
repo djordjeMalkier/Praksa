@@ -1,3 +1,5 @@
+package mirzad.zadaci;
+
 public class TriVezanaBroja {
     public static void main(String[] args) {
         String[] strings = {"blablabla", "sasa123","sasfd23432", "dad32wds34", "asa32as21sa345", "dss123sdsd12d12", "123sad32sas32"};
