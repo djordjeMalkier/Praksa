@@ -1,4 +1,4 @@
-package permutationMap;
+package mirzad.zadaci;
 
 import java.util.*;
 
