@@ -1,3 +1,5 @@
+package mirzad.zadaci;
+
 public class SortiraniNizovi {
     public static void main(String[] args) {
         int[] array1 = {1,2,3,3,5,9,11,18};

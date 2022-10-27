@@ -1,4 +1,4 @@
-package permutationSort;
+package mirzad.zadaci;
 
 import java.util.Scanner;
 

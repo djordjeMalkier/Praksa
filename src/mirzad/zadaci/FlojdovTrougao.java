@@ -1,3 +1,5 @@
+package mirzad.zadaci;
+
 public class FlojdovTrougao {
     public static void main(String[] args) {
         draw(5);

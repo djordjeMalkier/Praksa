@@ -1,3 +1,5 @@
+package mirzad.zadaci;
+
 public class Deljivost {
     public static void main(String[] args) {
 
