@@ -2,14 +2,14 @@ package mirzad.zadaci;
 
 public class Podniz {
     public static void main(String[] args) {
-        int[] array = {1,4,23,7,5,64,12,3};
+        int[] inputArray = {1,4,23,7,5,64,12,3};
         int[] subArray = {7,5};
         boolean flag = false;
 
 
-        for (int i = 0; i < array.length; i++){
-            if (array[i] == subArray[0]) {
-                flag = check(array, subArray, i);
+        for (int i = 0; i < inputArray.length; i++){
+            if (inputArray[i] == subArray[0]) {
+                flag = check(inputArray, subArray, i);
             }
         }
         printCheck(flag);
