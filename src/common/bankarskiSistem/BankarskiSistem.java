@@ -19,14 +19,15 @@ public class BankarskiSistem {
             };
 
             ArrayList<Racun> racuni = new ArrayList<>();
-
-
+            ArrayList<Racun> racuni2 = new ArrayList<>();
 
             Banka bankaIntesa = new Banka("Intesa", "Adresa 1", new Kurs(kursnaLista1));
             Banka bankaErste = new Banka("Erste", "Adresa 2", new Kurs(kursnaLista2));
 
             Korisnik korisnik = new Korisnik("Pera", "Peric", "Topolska 18", "2001999710033");
             Korisnik korisnik2 = new Korisnik("Marko", "Markovic", "Topolska 19", "1001989710043");
+            Racun racun3 = new Racun(Tip.DEVIZNI,Valuta.USD, 100, korisnik2, bankaErste);
+
 
             Scanner sc = new Scanner(System.in);
             StringBuilder tip = new StringBuilder();
@@ -38,7 +39,8 @@ public class BankarskiSistem {
 
             if(tip.isEmpty())  return;
 
-            racuni = napraviRacune(tip.toString(), korisnik,bankaIntesa);
+            racuni = napraviRacune(tip.toString(), korisnik, bankaIntesa);
+            racuni2 = napraviRacune(tip.toString(), korisnik2,bankaErste);
 
             if(!racuni.isEmpty()) {
                 for (Racun racun : racuni) {
@@ -48,8 +50,14 @@ public class BankarskiSistem {
 
             korisnik.uplata(racuni.get(0), 100);
 
+<<<<<<< Updated upstream
             korisnik.zatvoriSveRacune(Tip.DEVIZNI);
             System.out.println(korisnik.stanjeSvihRacuna(Valuta.EUR));
+=======
+            bankaIntesa.prebaciNovacKorisniku(korisnik, racuni.get(0), korisnik2, racun3, 23);
+
+            korisnik2.stanjeSvihRacuna(Valuta.RSD);
+>>>>>>> Stashed changes
 
         }
 
