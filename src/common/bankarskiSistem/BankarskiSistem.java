@@ -48,6 +48,9 @@ public class BankarskiSistem {
 
             korisnik.uplata(racuni.get(0), 100);
 
+            korisnik.zatvoriSveRacune(Tip.DEVIZNI);
+            System.out.println(korisnik.stanjeSvihRacuna(Valuta.EUR));
+
         }
 
         private static ArrayList<Racun> napraviRacune(String tip, Korisnik korisnik, Banka banka){
