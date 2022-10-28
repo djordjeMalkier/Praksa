@@ -6,6 +6,7 @@ public class Podniz {
         int[] subArray = {7,5};
         boolean flag = false;
 
+
         for (int i = 0; i < array.length; i++){
             if (array[i] == subArray[0]) {
                 flag = check(array, subArray, i);
@@ -15,6 +16,8 @@ public class Podniz {
     }
 
     private static boolean check(int[] array, int[] subArray, int start) {
+        if(subArray.length < array.length) return false;
+
         boolean check = true;
 
         for (int i = 0; i < subArray.length; i++) {
