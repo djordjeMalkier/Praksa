@@ -2,41 +2,39 @@ package zivkovicj.zadaci;
 
 public class NizNulaIJedinica {
     public static void main(String[] args) {
-        // program koji ispisuje sve brojeve koji se pojavljajuju samo jednom i broj koji se pojavljuje najvise puta
-        int[] arr = {1, 0, 2, 1, 4, 0, 6, 1, 1};
 
-        int l = 0;
-        int r = arr.length - 1;
+        int[] inputArray = {1, 0, 2, 1, 4, 0, 6, 1, 1};
 
-        while (l < r) {
-            while (l < r && arr[r] == 1) {
-                r--;
+        int leftPointer = 0;
+        int rightPointer = inputArray.length - 1;
+
+        while (leftPointer < rightPointer) {
+            while (leftPointer < rightPointer && inputArray[rightPointer] == 1) {
+                rightPointer--;
             }
-            if (arr[l] == 1) {
-                swap(arr, l, r);
+            if (inputArray[leftPointer] == 1) {
+                swap(inputArray, leftPointer, rightPointer);
             }
-            l++;
+            leftPointer++;
         }
 
-        for (int i = 1; i < arr.length; i++) {
-            if (arr[i] == 0) {
+        for (int i = 1; i < inputArray.length; i++) {
+            if (inputArray[i] == 0) {
 
                 for (int j = i; j > 0; j--) {
-                    int temp = arr[j];
-                    arr[j] = arr[j-1];
-                    arr[j-1] = temp;
+                    swap(inputArray, j, j-1);
                 }
             }
-
         }
-        for (int a : arr) {
+
+        for (int a : inputArray) {
             System.out.println(a);
         }
     }
 
-    public static void swap(int[] arr, int b, int a) {
-        int temp = arr[a];
-        arr[a] = arr[b];
-        arr[b] = temp;
+    public static void swap(int[] inputArray, int b, int a) {
+        int temp = inputArray[a];
+        inputArray[a] = inputArray[b];
+        inputArray[b] = temp;
     }
 }
