@@ -2,7 +2,7 @@ package tamara.zadaci;
 
 public class DvaNajmanjaBroja {
     public static void main(String[] args) {
-        int[] niz = {5, 4, 2, -7, 0};
+        int[] niz = {5, 7, -2, -1, 0};
 
         if(niz.length == 0) {
             System.out.println("Niz je prazan. ");
@@ -23,9 +23,6 @@ public class DvaNajmanjaBroja {
                 minEl = niz[i];
                 index = i;
             }
-        }
-
-        for (int i = 0; i < niz.length; i++) {
             if (niz[i] < minEl2 && index != i) {
                 minEl2 = niz[i];
             }
