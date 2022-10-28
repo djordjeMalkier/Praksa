@@ -50,15 +50,11 @@ public class BankarskiSistem {
 
             korisnik.uplata(racuni.get(0), 100);
 
-<<<<<<< Updated upstream
             korisnik.zatvoriSveRacune(Tip.DEVIZNI);
             System.out.println(korisnik.stanjeSvihRacuna(Valuta.EUR));
-=======
             bankaIntesa.prebaciNovacKorisniku(korisnik, racuni.get(0), korisnik2, racun3, 23);
 
             korisnik2.stanjeSvihRacuna(Valuta.RSD);
->>>>>>> Stashed changes
-
         }
 
         private static ArrayList<Racun> napraviRacune(String tip, Korisnik korisnik, Banka banka){
