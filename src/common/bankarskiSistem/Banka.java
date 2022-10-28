@@ -75,4 +75,17 @@ public class Banka {
         korisnik.getRacuni().remove(racun);
     }
 
+    public void prebaciNovacKorisniku(Korisnik posiljalac, Racun racunPosiljalaca, Korisnik primalac,
+                                      Racun racunPrimalaca, float iznos){
+        if(racunPosiljalaca.getValuta() != racunPrimalaca.getValuta()){
+            iznos *= kurs.convert(racunPosiljalaca.getValuta(), racunPrimalaca.getValuta());
+            primalac.uplata(racunPrimalaca, iznos);
+            posiljalac.isplata(racunPosiljalaca, iznos);
+        } else{
+            primalac.uplata(racunPrimalaca, iznos);
+            posiljalac.isplata(racunPosiljalaca, iznos);
+        }
+
+    }
+
 }
