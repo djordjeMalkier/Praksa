@@ -79,24 +79,34 @@ public class Korisnik {
         return racun.getStanje() * racun.getBanka().getKurs().convert(racun.getValuta(), valuta);
     }
 
-    public void uplata(Racun racun, float iznos) {
+    public float uplata(Racun racun, float iznos) {
         racun.setStanje(racun.getStanje() + iznos);
+        return iznos;
     }
 
-    public void isplata(Racun racun, float iznos) {
+    public float isplata(Racun racun, float iznos) {
         if(iznos > racun.getStanje()) {
             System.out.println("Iznos je veci od stanja na racunu. ");
-            return;
+            return -1;
         }
         else {
             System.out.println("Uspjesno.");
             racun.setStanje(racun.getStanje() - iznos);
             //funkcija signum gleda i najmanju vrijednost ako ima razlike, jer poredjenje float-a sa 0 ne bi radilo
             if (Math.signum(racun.getStanje()) == 0)
-                racun.getBanka().obrisiRacun(racun);
+                obrisiRacun(racun);
         }
-
+        return iznos;
     }
 
+    public void zatvoriSveRacune(Tip tipRacuna) {
+        for (Racun racun : racuni)
+            if (racun.getTipRacuna() == tipRacuna)
+                obrisiRacun(racun);
+    }
 
+    private boolean obrisiRacun(Racun racun) {
+        if (racun == null) throw new NullPointerException("Nije prosledjen racun");
+        return racuni.remove(racun);
+    }
 }
