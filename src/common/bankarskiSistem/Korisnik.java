@@ -97,6 +97,18 @@ public class Korisnik {
         }
 
     }
+    public void transferIzmedjuRacuna(Racun saRacuna, Racun naRacun, float iznos) {
+        if(saRacuna.getValuta() != naRacun.getValuta()) {
+            isplata(saRacuna, iznos);
+               float konvertovanaValuta = saRacuna.getBanka().getKurs().convert(saRacuna.getValuta(), naRacun.getValuta());
+               iznos *= konvertovanaValuta;
+               uplata(naRacun, iznos);
+        } else {
+            isplata(saRacuna, iznos);
+            uplata(naRacun, iznos);
+        }
+
+    }
 
 
 }
