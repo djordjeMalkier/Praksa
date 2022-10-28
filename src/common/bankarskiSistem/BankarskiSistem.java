@@ -1,5 +1,9 @@
 package common.bankarskiSistem;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Scanner;
+
 public class BankarskiSistem {
         public static void main(String[] args) {
 
@@ -14,28 +18,50 @@ public class BankarskiSistem {
                     {1.05F, 121.04F, 1F}
             };
 
+            ArrayList<Racun> racuni = new ArrayList<>();
+
+
+
             Banka bankaIntesa = new Banka("Intesa", "Adresa 1", new Kurs(kursnaLista1));
             Banka bankaErste = new Banka("Erste", "Adresa 2", new Kurs(kursnaLista2));
 
             Korisnik korisnik = new Korisnik("Pera", "Peric", "Topolska 18", "2001999710033");
             Korisnik korisnik2 = new Korisnik("Marko", "Markovic", "Topolska 19", "1001989710043");
 
-            Racun racun = new Racun(Tip.DEVIZNI,Valuta.EUR, 123, korisnik, bankaIntesa);
-            Racun racun2 = new Racun(Tip.DINARSKI,Valuta.RSD, 124, korisnik, bankaIntesa);
-            Racun racun3 = new Racun(Tip.DEVIZNI,Valuta.USD, 100, korisnik, bankaErste);
+            Scanner sc = new Scanner(System.in);
+            StringBuilder tip = new StringBuilder();
+            System.out.println("Tip: ");
 
-            bankaIntesa.dodajRacun(racun, korisnik);
-            bankaIntesa.dodajRacun(racun2, korisnik);
-            bankaErste.dodajRacun(racun3, korisnik2);
-            korisnik.uplata(racun, 1000); //1000 eur
-            korisnik.uplata(racun2, 11700);  //din - 99e
+            if(sc.hasNextLine()){
+                tip.append(sc.nextLine());
+            }
 
-            System.out.println(korisnik.stanjeSvihRacuna(Valuta.EUR));
+            if(tip.isEmpty())  return;
 
-            korisnik.isplata(racun, 1000);
-            korisnik.stanjeSvihRacuna(Valuta.RSD);
+            racuni = napraviRacune(tip.toString(), korisnik,bankaIntesa);
 
-            System.out.println(korisnik.stanjeSvihRacuna(Valuta.EUR));
+            if(!racuni.isEmpty()) {
+                for (Racun racun : racuni) {
+                    bankaIntesa.dodajRacun(racun, korisnik);
+                }
+            }
 
+            korisnik.uplata(racuni.get(0), 100);
+
+        }
+
+        private static ArrayList<Racun> napraviRacune(String tip, Korisnik korisnik, Banka banka){
+            ArrayList<Racun> racuni = new ArrayList<>();
+            if(tip.toUpperCase().equals(Tip.DEVIZNI.toString())){
+                Racun racun = new Racun(Tip.DEVIZNI,Valuta.EUR, 123, korisnik, banka);
+                Racun racun3 = new Racun(Tip.DEVIZNI,Valuta.USD, 100, korisnik, banka);
+                racuni.add(racun);
+                racuni.add(racun3);
+            }
+            else if (tip.toUpperCase().equals(Tip.DINARSKI.toString())){
+                Racun racun2 = new Racun(Tip.DINARSKI,Valuta.RSD, 124, korisnik, banka);
+                racuni.add(racun2);
+            }
+            return racuni;
         }
 }
