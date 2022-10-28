@@ -1,0 +1,34 @@
+package mirzad.zadaci;
+
+public class Podniz {
+    public static void main(String[] args) {
+        int[] array = {1,4,23,7,5,64,12,3};
+        int[] subArray = {7,5};
+        boolean flag = false;
+
+        for (int i = 0; i < array.length; i++){
+            if (array[i] == subArray[0]) {
+                flag = check(array, subArray, i);
+            }
+        }
+        printCheck(flag);
+    }
+
+    private static boolean check(int[] array, int[] subArray, int start) {
+        boolean check = true;
+
+        for (int i = 0; i < subArray.length; i++) {
+            if (subArray[i] != array[start++]) {
+                check = false;
+                break;
+            }
+        }
+
+        return check;
+    }
+
+    private static void printCheck(boolean check){
+        if (check) System.out.println("Postoji podniz u nizu.");
+        else System.out.println("Podniz ne postoji u nizu.");
+    }
+}
