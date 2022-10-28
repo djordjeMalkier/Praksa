@@ -88,6 +88,13 @@ public class Banka {
 
     }
 
+    public Korisnik nadjiKorisnika(String jmbg){
+        for (Korisnik k : korisnici){
+            if (k.getJmbg().equals(jmbg)) return k;
+        }
+        return null;
+    }
+
     @Override
     public String toString() {
         return "Banka: " + ime + " na adresi: " + adresa + "\nKursna lista: " + getKurs().toString();

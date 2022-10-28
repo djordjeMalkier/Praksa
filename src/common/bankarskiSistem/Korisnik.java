@@ -117,8 +117,17 @@ public class Korisnik {
                 obrisiRacun(racun);
     }
 
-    private boolean obrisiRacun(Racun racun) {
+    public boolean obrisiRacun(Racun racun) {
         if (racun == null) throw new NullPointerException("Nije prosledjen racun");
         return racuni.remove(racun);
+    }
+
+    public void ispisiRacune(){
+        int i = 1;
+        System.out.println("---Racuni---");
+        for (Racun r : racuni){
+            System.out.println(i++ + " " + r.getBrojRacuna() + " " + r.getTipRacuna() + " " + r.getValuta());
+        }
+        System.out.println("---");
     }
 }
