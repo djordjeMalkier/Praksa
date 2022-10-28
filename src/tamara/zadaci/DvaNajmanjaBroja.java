@@ -2,29 +2,29 @@ package tamara.zadaci;
 
 public class DvaNajmanjaBroja {
     public static void main(String[] args) {
-        int[] niz = {5, 7, -2, -1, 0};
+        int[] zadatiNiz = {5, 7, -2, -1, 0};
 
-        if(niz.length == 0) {
+        if(zadatiNiz.length == 0) {
             System.out.println("Niz je prazan. ");
             return;
         }
 
-        if(niz.length == 1) {
+        if(zadatiNiz.length == 1) {
             System.out.println("Niz ima samo jedan element.");
             return;
         }
 
-        int minEl = niz[0];
-        int minEl2 = niz[0];
+        int minEl = zadatiNiz[0];
+        int minEl2 = zadatiNiz[0];
         int index = 0;
 
-        for (int i = 0; i < niz.length; i++) {
-            if (niz[i] < minEl) {
-                minEl = niz[i];
+        for (int i = 0; i < zadatiNiz.length; i++) {
+            if (zadatiNiz[i] < minEl) {
+                minEl = zadatiNiz[i];
                 index = i;
             }
-            if (niz[i] < minEl2 && index != i) {
-                minEl2 = niz[i];
+            if (zadatiNiz[i] < minEl2 && index != i) {
+                minEl2 = zadatiNiz[i];
             }
         }
 
