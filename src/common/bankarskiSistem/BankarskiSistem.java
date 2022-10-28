@@ -20,9 +20,9 @@ public class BankarskiSistem {
             Korisnik korisnik = new Korisnik("Pera", "Peric", "Topolska 18", "2001999710033");
             Korisnik korisnik2 = new Korisnik("Marko", "Markovic", "Topolska 19", "1001989710043");
 
-            Racun racun = new Racun(Valuta.EUR, 123, korisnik, bankaIntesa);
-            Racun racun2 = new Racun(Valuta.RSD, 124, korisnik, bankaIntesa);
-            Racun racun3 = new Racun(Valuta.USD, 100, korisnik, bankaErste);
+            Racun racun = new Racun(Tip.DEVIZNI,Valuta.EUR, 123, korisnik, bankaIntesa);
+            Racun racun2 = new Racun(Tip.DINARSKI,Valuta.RSD, 124, korisnik, bankaIntesa);
+            Racun racun3 = new Racun(Tip.DEVIZNI,Valuta.USD, 100, korisnik, bankaErste);
 
             bankaIntesa.dodajRacun(racun, korisnik);
             bankaIntesa.dodajRacun(racun2, korisnik);

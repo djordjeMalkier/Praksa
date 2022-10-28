@@ -76,7 +76,7 @@ public class Korisnik {
     }
 
     public float proveraStanja(Racun racun, Valuta valuta) {
-        return racun.getStanje() * racun.getBanka().getKurs().convert(racun.getTipRacuna(), valuta);
+        return racun.getStanje() * racun.getBanka().getKurs().convert(racun.getValuta(), valuta);
     }
 
     public void uplata(Racun racun, float iznos) {

@@ -3,13 +3,15 @@ package common.bankarskiSistem;
 public class Racun {
     private float stanje;
     private int brojRacuna;
-    private Valuta tipRacuna;
+    private Valuta valuta;
+    private Tip tipRacuna;
     private Korisnik korisnik;
     private Banka banka;
 
-    public Racun(Valuta tipRacuna, int brojRacuna, Korisnik korisnik, Banka banka) {
-        this.stanje = 0;
+    public Racun(Tip tipRacuna,Valuta valuta, int brojRacuna, Korisnik korisnik, Banka banka) {
         this.tipRacuna = tipRacuna;
+        this.stanje = 0;
+        this.valuta = valuta;
         this.brojRacuna = brojRacuna;
         this.korisnik = korisnik;
         this.banka = banka;
@@ -31,12 +33,12 @@ public class Racun {
         this.brojRacuna = brojRacuna;
     }
 
-    public Valuta getTipRacuna() {
-        return tipRacuna;
+    public Valuta getValuta() {
+        return valuta;
     }
 
-    public void setTipRacuna(Valuta tipRacuna) {
-        this.tipRacuna = tipRacuna;
+    public void setValuta(Valuta valuta) {
+        this.valuta = valuta;
     }
 
     public Korisnik getKorisnik() {
@@ -53,5 +55,13 @@ public class Racun {
 
     public void setBanka(Banka banka) {
         this.banka = banka;
+    }
+
+    public Tip getTipRacuna() {
+        return tipRacuna;
+    }
+
+    public void setTipRacuna(Tip tipRacuna) {
+        this.tipRacuna = tipRacuna;
     }
 }
