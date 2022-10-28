@@ -11,7 +11,7 @@ public class Zadatak09 {
     public static void main(String[] args) {
         try {
             int[] array = inputArray();
-            Arrays.stream(productOfOtherElements(array)).forEach(System.out::println);
+            Arrays.stream(productOfOtherElements2(array)).forEach(System.out::println);
         } catch (IOException e) {
             System.err.println(e.getMessage());
         }
@@ -36,5 +36,12 @@ public class Zadatak09 {
                 prod *= array[j];
         }
         return prod;
+    }
+
+    private static int[] productOfOtherElements2(int[] array) {
+        if (array == null) throw new NullPointerException("Null array");
+
+        int arrayProduct = Arrays.stream(array).reduce((a, b) -> a*b).orElse(1);
+        return  Arrays.stream(array).map(a -> arrayProduct / a).toArray();
     }
 }
