@@ -11,7 +11,7 @@ public class Zadatak01 {
         showMatrix(transposedMatrix);
     }
 
-    private static void showMatrix(int[][] inputMatrix) {
+    public static void showMatrix(int[][] inputMatrix) {
         if(checkIfNullMatrix(inputMatrix)) throw new NullPointerException("Null matrix");
 
         for (int[] row: inputMatrix) {
@@ -22,7 +22,7 @@ public class Zadatak01 {
         System.out.println();
     }
 
-    private static boolean checkIfNullMatrix(int[][] inputMatrix) {
+    public static boolean checkIfNullMatrix(int[][] inputMatrix) {
         if (inputMatrix == null) return true;
         for (int[] row: inputMatrix)
             if (row == null) return true;
@@ -30,7 +30,7 @@ public class Zadatak01 {
         return false;
     }
 
-    private static int[][] transposeMatrix(int[][] inputMatrix) {
+    public static int[][] transposeMatrix(int[][] inputMatrix) {
         if(checkIfNullMatrix(inputMatrix)) throw new NullPointerException("Null matrix");
         int rowLen = inputMatrix[0].length;
         int[][] transposedMatrix = new int[rowLen][inputMatrix.length];
