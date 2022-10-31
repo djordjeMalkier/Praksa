@@ -65,7 +65,7 @@ public class BankarskiSistem {
 
     private static Banka odabirBanke(ArrayList<Banka> banke, Scanner sc) {
         for (int i = 0; i < banke.size(); i++) {
-            System.out.println(i+1 + ")");
+            System.out.print(i+1 + ") ");
             System.out.println(banke.get(i));
             System.out.println();
         }
@@ -73,13 +73,24 @@ public class BankarskiSistem {
 
         int odabir = -1;
         if (sc.hasNextLine()) {
-            odabir = Integer.parseInt(sc.nextLine());
+            odabir = ucitajInt(sc);
         }
 
         if (odabir <= 0 || odabir > banke.size())
             throw new IndexOutOfBoundsException("Nevalidan broj banke");
 
         return banke.get(odabir-1);
+    }
+
+    private static int ucitajInt(Scanner sc) {
+        int num;
+        try {
+            num = Integer.parseInt(sc.nextLine());
+            return num;
+        } catch (NumberFormatException e) {
+            System.out.println("Nevalidan unos broja");
+            throw e;
+        }
     }
 
     private static int uslugeBanke(Scanner sc) {
@@ -92,7 +103,7 @@ public class BankarskiSistem {
                 "7 - Transfer\n" +
                 "8 - Zatvori racun\n" +
                 "9 - Izlaz");
-        return Integer.parseInt(sc.nextLine());
+        return ucitajInt(sc);
     }
 
     private static Korisnik kreirajKorisnika(Banka banka,Scanner sc) {
@@ -122,9 +133,9 @@ public class BankarskiSistem {
         if (korisnik != null) {
             korisnik.ispisiRacune();
             System.out.println("Izaberite racun za uplatu: ");
-            choice = Integer.parseInt(sc.nextLine())-1;
+            choice = ucitajInt(sc) - 1;
             System.out.println("Unesite iznos uplate: ");
-            int iznos = Integer.parseInt(sc.nextLine());
+            int iznos = ucitajInt(sc);
             korisnik.uplata(korisnik.getRacuni().get(choice), iznos);
         }
         else System.out.println("Ne postoji korisnik! ");
@@ -137,9 +148,9 @@ public class BankarskiSistem {
         int choice;
         if (korisnik != null){
             korisnik.ispisiRacune();
-            choice = Integer.parseInt(sc.nextLine());
+            choice = ucitajInt(sc);
             System.out.println("Unesite iznos isplate: ");
-            int iznos = Integer.parseInt(sc.nextLine());
+            int iznos = ucitajInt(sc);
             korisnik.isplata(korisnik.getRacuni().get(choice), iznos);
         }
         else System.out.println("Ne postoji korisnik! ");
@@ -177,7 +188,7 @@ public class BankarskiSistem {
         if (korisnik != null) {
             korisnik.ispisiRacune();
             System.out.println("Izaberite racun: ");
-            choice = Integer.parseInt(sc.nextLine())-1;
+            choice = ucitajInt(sc)-1;
             Racun racun = korisnik.getRacuni().get(choice);
             System.out.println("Stanje je: " + korisnik.proveraStanja(racun,racun.getValuta()));
         }
@@ -193,11 +204,11 @@ public class BankarskiSistem {
         korisnik.ispisiRacune();
 
         System.out.println("Izaberite racun sa kog vrsite transfer: ");
-        int transferSaRacuna = Integer.parseInt(sc.nextLine());
+        int transferSaRacuna = ucitajInt(sc);
         Racun racun = korisnik.getRacuni().get(transferSaRacuna);
 
         System.out.println("Unesite broj racuna na koji vrsite transfer: ");
-        int transferNaRacun = Integer.parseInt(sc.nextLine());
+        int transferNaRacun = ucitajInt(sc);
 
         Racun racunZaTransfer = null;
         for (Banka b : banke)
@@ -228,7 +239,7 @@ public class BankarskiSistem {
         if (korisnik != null) {
             korisnik.ispisiRacune();
             System.out.println("Izaberite racun za brisanje: ");
-            choice = Integer.parseInt(sc.nextLine()) - 1;
+            choice = ucitajInt(sc) - 1;
             korisnik.obrisiRacun(korisnik.getRacuni().get(choice));
         } else System.out.println("Ne postoji korisnik!");
 

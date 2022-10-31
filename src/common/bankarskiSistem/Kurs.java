@@ -5,6 +5,10 @@ public class Kurs {
     float[][] kursnaLista;
     public Kurs(float[][] kursnaLista) {
         if (kursnaLista == null) throw new NullPointerException("Null kursna lista");
+        if (kursnaLista.length != 3) throw new IndexOutOfBoundsException("Kurs treba da ima 3 valute");
+        for (float[] vrsta : kursnaLista) {
+            if (vrsta.length != 3) throw new IndexOutOfBoundsException("Kurs treba da ima 3 valute");
+        }
         this.kursnaLista = kursnaLista;
     }
 
