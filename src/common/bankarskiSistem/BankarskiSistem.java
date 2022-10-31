@@ -30,8 +30,18 @@ public class BankarskiSistem {
                     case 3 -> isplati(banka, sc);
                     case 4 -> otvoriRacun(banka, sc);
                     case 5 -> stanjeSvihRacuna(banka, sc);
-                }
+                    case 6 -> {
+                        //stanje jednog racuna
+                    }
+                    case 7 -> {
+                        //transfer
 
+                    }
+                    case 8 -> {
+                        //zatvori racun
+                    }
+                    case 9 -> System.exit(1);
+                }
 
             }
         }
