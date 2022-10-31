@@ -30,9 +30,7 @@ public class BankarskiSistem {
                     case 3 -> isplati(banka, sc);
                     case 4 -> otvoriRacun(banka, sc);
                     case 5 -> stanjeSvihRacuna(banka, sc);
-                    case 6 -> {
-                        //stanje jednog racuna
-                    }
+                    case 6 -> stanjeRacuna(banka,sc);
                     case 7 -> {
                         //transfer
 
@@ -152,5 +150,22 @@ public class BankarskiSistem {
                 korisnik.uplata(korisnik.getRacuni().get(choice), iznos);
             }
             else System.out.println("Ne postoji korisnik! ");
+        }
+
+        private static void stanjeRacuna(Banka banka, Scanner sc){
+            System.out.println("Unesite jmbg: ");
+            String jmbg = sc.nextLine();
+            Korisnik korisnik = banka.nadjiKorisnika(jmbg);
+            int choice;
+            if (korisnik != null) {
+                korisnik.ispisiRacune();
+                System.out.println("Izaberite racun: ");
+                choice = Integer.parseInt(sc.nextLine())-1;
+                Racun racun = korisnik.getRacuni().get(choice);
+                System.out.println("Stanje je: " + korisnik.proveraStanja(racun,racun.getValuta()));
+            }
+            else System.out.println("Ne postoji korisnik! ");
+
+
         }
 }
