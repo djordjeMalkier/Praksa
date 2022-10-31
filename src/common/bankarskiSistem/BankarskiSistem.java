@@ -104,10 +104,10 @@ public class BankarskiSistem {
         String adresa = sc.nextLine();
         String jmbg = sc.nextLine();
 
-        /*if(jmbg.length() != 13 || !jmbg.matches("[0-9]+")) {
+        if(jmbg.length() != 13 || !jmbg.matches("[0-9]+")) {
             System.out.println("Nevalidan jmbg!");
             return null;
-        }*/
+        }
 
         Korisnik korisnik = new Korisnik(ime, prezime, adresa, jmbg);
         banka.getKorisnici().add(korisnik);
