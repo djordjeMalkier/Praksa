@@ -3,9 +3,9 @@ package david.zadaci.nedelja03;
 public class Zadatak01 {
     public static void main(String[] args) {
         int[][] inputMatrix = {
-                {1,2,3},
-                {4,5,6},
-                {7,8,9}};
+                {1,2,3,-1},
+                {4,5,6,-1},
+                {7,8,9,-1}};
         showMatrix(inputMatrix);
         int[][] transposedMatrix = transposeMatrix(inputMatrix);
         showMatrix(transposedMatrix);
@@ -31,15 +31,14 @@ public class Zadatak01 {
     }
 
     private static int[][] transposeMatrix(int[][] inputMatrix) {
-        int rowLen = inputMatrix[0].length;
-        int[][] transposedMatrix = new int[inputMatrix.length][rowLen];
         if(checkIfNullMatrix(inputMatrix)) throw new NullPointerException("Null matrix");
+        int rowLen = inputMatrix[0].length;
+        int[][] transposedMatrix = new int[rowLen][inputMatrix.length];
 
         for (int i = 0; i < inputMatrix.length; i++) {
             if (inputMatrix[i].length != rowLen) throw new IndexOutOfBoundsException("Invalid matrix: row len");
-            for (int j = 0; j < inputMatrix[i].length; j++) {
-                transposedMatrix[i][j] = inputMatrix[j][i];
-            }
+            for (int j = 0; j < inputMatrix[i].length; j++)
+                transposedMatrix[j][i] = inputMatrix[i][j];
         }
         return transposedMatrix;
     }
