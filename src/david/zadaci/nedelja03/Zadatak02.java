@@ -16,47 +16,24 @@ public class Zadatak02 {
     private static int[] RowOrColumnWithMaxSum(int[][] inputMatrix) {
         if(checkIfNullMatrix(inputMatrix)) throw new NullPointerException("Null matrix");
 
-        int indexOfMaxRow = maxRowInMatrix(inputMatrix);
-        int indexOfMaxColumn = maxRowInMatrix(transposeMatrix(inputMatrix));
+        int[] maxRow = maxRowInMatrix(inputMatrix);
+        int[] maxColumn = maxRowInMatrix(transposeMatrix(inputMatrix));
 
-        if (Arrays.stream(inputMatrix[indexOfMaxRow]).sum() > columnSum(inputMatrix, indexOfMaxColumn))
-            return inputMatrix[indexOfMaxRow];
-        return column(inputMatrix, indexOfMaxColumn);
+        return (Arrays.stream(maxRow).sum() > Arrays.stream(maxColumn).sum()) ? maxRow : maxColumn;
     }
 
-    private static int[] column(int[][] inputMatrix, int indexOfMaxColumn) {
+    private static int[] maxRowInMatrix(int[][] inputMatrix) {
         if(checkIfNullMatrix(inputMatrix)) throw new NullPointerException("Null matrix");
 
-        int[] column = new int[inputMatrix.length];
-        for (int i = 0; i < inputMatrix.length; i++)
-            column[i] = inputMatrix[i][indexOfMaxColumn];
-
-        return column;
-    }
-
-    private static int columnSum(int[][] inputMatrix, int indexOfMaxColumn) {
-        if(checkIfNullMatrix(inputMatrix)) throw new NullPointerException("Null matrix");
-
-        int sum = 0;
-        for (int[] row : inputMatrix)
-            sum += row[indexOfMaxColumn];
-
-        return sum;
-    }
-
-    private static int maxRowInMatrix(int[][] inputMatrix) {
-        if(checkIfNullMatrix(inputMatrix)) throw new NullPointerException("Null matrix");
-
-        int sumRow = 0;
-        int indexRow = 0;
-        for (int i = 0; i < inputMatrix.length; i++) {
-            int currentSum = Arrays.stream(inputMatrix[i]).sum();
+        int[] maxRow = inputMatrix[0];
+        int sumRow = Arrays.stream(maxRow).sum();
+        for (int[] row : inputMatrix) {
+            int currentSum = Arrays.stream(row).sum();
             if (currentSum > sumRow) {
                 sumRow = currentSum;
-                indexRow = i;
+                maxRow = row;
             }
         }
-        return indexRow;
+        return maxRow;
     }
-
 }
