@@ -1,18 +1,22 @@
 package common.bankarskiSistem;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 public class Racun {
     private float stanje;
-    private int brojRacuna;
+    private final int brojRacuna;
+    private static final AtomicInteger count = new AtomicInteger(0);
+
     private Valuta valuta;
     private Tip tipRacuna;
     private Korisnik korisnik;
     private Banka banka;
 
-    public Racun(Tip tipRacuna,Valuta valuta, int brojRacuna, Korisnik korisnik, Banka banka) {
+    public Racun(Tip tipRacuna,Valuta valuta, Korisnik korisnik, Banka banka) {
         this.tipRacuna = tipRacuna;
         this.stanje = 0;
         this.valuta = valuta;
-        this.brojRacuna = brojRacuna;
+        brojRacuna = count.incrementAndGet();
         this.korisnik = korisnik;
         this.banka = banka;
     }
@@ -27,10 +31,6 @@ public class Racun {
 
     public int getBrojRacuna() {
         return brojRacuna;
-    }
-
-    public void setBrojRacuna(int brojRacuna) {
-        this.brojRacuna = brojRacuna;
     }
 
     public Valuta getValuta() {

@@ -126,8 +126,8 @@ public class Korisnik {
         int i = 1;
         System.out.println("---Racuni---");
         for (Racun r : racuni){
-            System.out.println(i++ + " " + r.getBrojRacuna() + " " + r.getTipRacuna() + " " + r.getValuta());
+            System.out.println(i++ + " " + r.getBrojRacuna() + " " + r.getTipRacuna() + " " + r.getStanje() +  " "  + r.getValuta());
         }
-        System.out.println("---");
+        System.out.println("---******---");
     }
 }
