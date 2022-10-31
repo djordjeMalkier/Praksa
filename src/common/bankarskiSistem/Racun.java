@@ -13,6 +13,9 @@ public class Racun {
     private Banka banka;
 
     public Racun(Tip tipRacuna,Valuta valuta, Korisnik korisnik, Banka banka) {
+        if(tipRacuna == null || valuta == null || korisnik == null || banka == null) {
+            throw new NullPointerException("Konstruktor ne prima null vrednosti");
+        }
         this.tipRacuna = tipRacuna;
         this.stanje = 0;
         this.valuta = valuta;
@@ -38,6 +41,7 @@ public class Racun {
     }
 
     public void setValuta(Valuta valuta) {
+        if(valuta == null) throw new NullPointerException("Prosledjena valuta je null");
         this.valuta = valuta;
     }
 
@@ -46,6 +50,7 @@ public class Racun {
     }
 
     public void setKorisnik(Korisnik korisnik) {
+        if(korisnik == null) throw new NullPointerException("Prosledjen korisnik je null");
         this.korisnik = korisnik;
     }
 
@@ -54,6 +59,7 @@ public class Racun {
     }
 
     public void setBanka(Banka banka) {
+        if(banka == null) throw new NullPointerException("Prosledjena banka je null");
         this.banka = banka;
     }
 
@@ -62,6 +68,7 @@ public class Racun {
     }
 
     public void setTipRacuna(Tip tipRacuna) {
+        if(tipRacuna == null) throw new NullPointerException("Prosledjen tip racuna je null");
         this.tipRacuna = tipRacuna;
     }
 }
