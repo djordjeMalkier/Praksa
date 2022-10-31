@@ -35,7 +35,7 @@ public class BankarskiSistem {
                     }
                     case 7 -> {
                         //transfer
-
+                        transfer(banka, banke, sc);
                     }
                     case 8 -> {
                         //zatvori racun
@@ -45,6 +45,39 @@ public class BankarskiSistem {
 
             }
         }
+
+    private static void transfer(Banka banka, ArrayList<Banka> banke, Scanner sc) {
+        System.out.println("Unesite jmbg: ");
+        String jmbg = sc.nextLine();
+        Korisnik korisnik = banka.nadjiKorisnika(jmbg);
+        korisnik.ispisiRacune();
+
+        System.out.println("Izaberite racun sa kog vrsite transfer: ");
+        int transferSaRacuna = Integer.parseInt(sc.nextLine());
+        Racun racun = korisnik.getRacuni().get(transferSaRacuna);
+
+        System.out.println("Unesite broj racuna na koji vrsite transfer: ");
+        int transferNaRacun = Integer.parseInt(sc.nextLine());
+
+        Racun racunZaTransfer = null;
+        for (Banka b : banke)
+            for (Korisnik k: b.getKorisnici())
+                for (Racun r: k.getRacuni())
+                    if (r.getBrojRacuna() == transferNaRacun) {
+                        racunZaTransfer = r;
+                        break;
+                    }
+
+        if (racunZaTransfer == null) {
+            System.out.println("Ne postoji racun ni u jednoj banci");
+            return;
+        }
+
+        System.out.println("Unesite iznos: ");
+        float iznosTransfera = Float.parseFloat(sc.nextLine());
+        Korisnik primalac = racunZaTransfer.getKorisnik();
+        banka.prebaciNovacKorisniku(korisnik, racun, primalac, racunZaTransfer, iznosTransfera);
+    }
 
         private static void stanjeSvihRacuna(Banka banka, Scanner sc){
             System.out.println("Unesite jmbg: ");
@@ -126,13 +159,13 @@ public class BankarskiSistem {
             System.out.println("Unesite tip racuna: ");
             String tip = sc.nextLine();
             if(tip.toUpperCase().equals(Tip.DEVIZNI.toString())){
-                Racun racun = new Racun(Tip.DEVIZNI,Valuta.EUR, 123, korisnik, banka);
-                Racun racun3 = new Racun(Tip.DEVIZNI,Valuta.USD, 100, korisnik, banka);
+                Racun racun = new Racun(Tip.DEVIZNI,Valuta.EUR, korisnik, banka);
+                Racun racun3 = new Racun(Tip.DEVIZNI,Valuta.USD, korisnik, banka);
                 banka.dodajRacun(racun, korisnik);
                 banka.dodajRacun(racun3, korisnik);
             }
             else if (tip.toUpperCase().equals(Tip.DINARSKI.toString())){
-                Racun racun2 = new Racun(Tip.DINARSKI,Valuta.RSD, 124, korisnik, banka);
+                Racun racun2 = new Racun(Tip.DINARSKI,Valuta.RSD, korisnik, banka);
                 banka.dodajRacun(racun2, korisnik);
             }
 
