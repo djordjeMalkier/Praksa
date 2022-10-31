@@ -31,13 +31,8 @@ public class BankarskiSistem {
                     case 4 -> otvoriRacun(banka, sc);
                     case 5 -> stanjeSvihRacuna(banka, sc);
                     case 6 -> stanjeRacuna(banka,sc);
-                    case 7 -> {
-                        //transfer
-                        transfer(banka, banke, sc);
-                    }
-                    case 8 -> {
-                        //zatvori racun
-                    }
+                    case 7 -> transfer(banka, banke, sc);
+                    case 8 -> zatvoriRacun(banka, sc);
                     case 9 -> System.exit(1);
                 }
 
@@ -201,4 +196,18 @@ public class BankarskiSistem {
 
 
         }
+    private static void zatvoriRacun(Banka banka, Scanner sc) {
+        System.out.println("Unesite jmbg: ");
+        String jmbg = sc.nextLine();
+        Korisnik korisnik = banka.nadjiKorisnika(jmbg);
+
+        int choice;
+        if (korisnik != null) {
+            korisnik.ispisiRacune();
+            System.out.println("Izaberite racun za brisanje: ");
+            choice = Integer.parseInt(sc.nextLine()) - 1;
+            korisnik.obrisiRacun(korisnik.getRacuni().get(choice));
+        } else System.out.println("Ne postoji korisnik!");
+
+    }
 }
