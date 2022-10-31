@@ -97,6 +97,7 @@ public class Banka {
 
     @Override
     public String toString() {
-        return "Banka: " + ime + " na adresi: " + adresa + "\nKursna lista: " + getKurs().toString();
+        return "Banka: " + ime + " na adresi: " + adresa;
+        //+ "\nKursna lista: " + getKurs().toString();
     }
 }

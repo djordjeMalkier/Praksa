@@ -21,20 +21,15 @@ public class BankarskiSistem {
             while(true) {
                 Banka banka = odabirBanke(banke, sc);
                 int choice = uslugeBanke(sc);
-                switch (choice){
-                    case 1:
-                        Korisnik korisnik = kreirajKorisnika(banka,sc);
+                switch (choice) {
+                    case 1 -> {
+                        Korisnik korisnik = kreirajKorisnika(banka, sc);
                         napraviRacune(korisnik, banka, sc);
-                        break;
-                    case 2:
-                        uplati(banka, sc);
-                        break;
-                    case 3:
-                        isplati(banka,sc);
-                        break;
-                    case 4: otvoriRacun(banka, sc);
-                        break;
-                    case 5: stanjeSvihRacuna(banka,sc);
+                    }
+                    case 2 -> uplati(banka, sc);
+                    case 3 -> isplati(banka, sc);
+                    case 4 -> otvoriRacun(banka, sc);
+                    case 5 -> stanjeSvihRacuna(banka, sc);
                 }
 
 
