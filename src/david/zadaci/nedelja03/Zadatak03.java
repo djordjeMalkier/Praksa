@@ -10,7 +10,7 @@ public class Zadatak03 {
         int tableSize = 8;
         ArrayList<Pair> visited = new ArrayList<>();
         Pair start = new Pair(0, 0);
-        Pair end = new Pair(7, 7);
+        Pair end = new Pair(7, 4);
         findPath(tableSize, start, end, visited);
 
         minPath.forEach(System.out::println);
@@ -35,17 +35,19 @@ public class Zadatak03 {
     private static boolean findPath(int tableSize, Pair start, Pair end, ArrayList<Pair> path) {
         path.add(start);
 
-        if (start.equals(end))
-            return true;
+        if (start.equals(end)) {
+            if (path.size() < minPathLen) {
+                minPathLen = path.size();
+                minPath = new ArrayList<>(path);
+                return true;
+            }
+            return false;
+        }
 
         for (Pair position : possiblePlacesForKnight(tableSize, start.getFirst(), start.getSecond())) {
             if (!path.contains(position)) {
                 if (distance(path.get(path.size() - 1), end) > distance(position, end)) {
-                    if (findPath(tableSize, position, end, path))
-                        if (path.size() < minPathLen) {
-                            minPathLen = path.size();
-                            minPath = new ArrayList<>(path);
-                        }
+                    findPath(tableSize, position, end, path);
                 }
                 path.remove(position);
             }
