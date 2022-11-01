@@ -95,7 +95,7 @@ public class MatriceSuma {
         return niz;
     }
 
-    private static void ispisiMatricu(int[][] matrica, int n) {
+    public static void ispisiMatricu(int[][] matrica, int n) {
         for(int i=0;i<n;i++){
             System.out.println();
             for(int j=0; j<n; j++){
@@ -105,7 +105,7 @@ public class MatriceSuma {
         System.out.println();
     }
 
-    private static int [] [] ucitajMatricu(int n) {
+    public static int [] [] ucitajMatricu(int n) {
         
         Scanner s=new Scanner(System.in);
         
