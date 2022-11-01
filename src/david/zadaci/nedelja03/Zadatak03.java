@@ -1,42 +1,64 @@
 package david.zadaci.nedelja03;
 
 import java.util.ArrayList;
-import java.util.Scanner;
 
 public class Zadatak03 {
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        System.out.println("Insert table size: ");
-        int tableSize;
-        if (sc.hasNextInt()) {
-            tableSize = sc.nextInt();
-            int startI = 0, startJ = 0;
-            int endI = 4, endJ = 5;
-            findPath(tableSize, startI, startJ, endI, endJ);
-        }
-        else
-            System.err.println("Input is not integer");
+    private static int minPathLen = Integer.MAX_VALUE;
+    private static ArrayList<Pair> minPath = new ArrayList<>();
 
-        sc.close();
+    public static void main(String[] args) {
+        int tableSize = 8;
+        ArrayList<Pair> visited = new ArrayList<>();
+        Pair start = new Pair(0, 0);
+        Pair end = new Pair(7, 7);
+        findPath(tableSize, start, end, visited);
+
+        minPath.forEach(System.out::println);
+        System.out.println(minPathLen-1 + " jumps");
+        for (Pair position : minPath) {
+            drawTable(tableSize, position);
+        }
     }
 
-    private static boolean findPath(int tableSize, int startI, int startJ, int endI, int endJ) {
-        if (startI == endI && startJ == endJ)
+    private static void drawTable(int tableSize, Pair position) {
+        for (int i = 0; i < tableSize; i++) {
+            for (int j = 0; j < tableSize; j++) {
+                if (i == position.getFirst() && j == position.getSecond())
+                    System.out.print("x ");
+                else System.out.print("- ");
+            }
+            System.out.println();
+        }
+        System.out.println();
+    }
+
+    private static boolean findPath(int tableSize, Pair start, Pair end, ArrayList<Pair> path) {
+        path.add(start);
+
+        if (start.equals(end))
             return true;
 
-        Pair end = new Pair(endI, endJ);
-        ArrayList<Pair> possiblePlaces = possiblePlacesForKnight(tableSize, startI, startJ);
-        for (Pair position : possiblePlaces)
-            if (position.equals(end)) {
-                System.out.println("(" + startI + ", " + startJ + ")");
-                System.out.println(position);
-                return true;
+        for (Pair position : possiblePlacesForKnight(tableSize, start.getFirst(), start.getSecond())) {
+            if (!path.contains(position)) {
+                if (distance(path.get(path.size() - 1), end) > distance(position, end)) {
+                    if (findPath(tableSize, position, end, path))
+                        if (path.size() < minPathLen) {
+                            minPathLen = path.size();
+                            minPath = new ArrayList<>(path);
+                        }
+                }
+                path.remove(position);
             }
+        }
 
-        for (Pair position : possiblePlaces)
-            return findPath(tableSize, position.getFirst(), position.getSecond(), endI, endJ);
-
+        path.remove(start);
         return false;
+    }
+
+    private static double distance(Pair start, Pair end) {
+        double ac = Math.abs(end.getSecond() - start.getSecond());
+        double cb = Math.abs(end.getFirst() - start.getFirst());
+        return Math.hypot(ac, cb);
     }
 
     private static ArrayList<Pair> possiblePlacesForKnight(int tableSize, int i, int j) {
