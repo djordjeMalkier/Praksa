@@ -1,6 +1,7 @@
 package mirzad.zadaci;
 
 import java.util.Scanner;
+import java.util.stream.IntStream;
 
 public class MatricaDijagonale {
 
@@ -29,6 +30,9 @@ public class MatricaDijagonale {
         int ispodSporedne = 0;
         int iznadSporedne = 0;
         int proizvod = 1;
+
+        glavnaDijagonalaSum = IntStream.range(0,matrix.length).map(i -> matrix[i][i]).sum();
+        sporednaDijagonalaSum = IntStream.range(0, matrix.length).map(i -> matrix[i][matrix.length - i - 1]).sum();
 
         for (int i = 0; i < n; i++){
             for (int j = 0; j < n; j++){
