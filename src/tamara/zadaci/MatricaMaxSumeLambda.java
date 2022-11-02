@@ -14,13 +14,12 @@ public class MatricaMaxSumeLambda {
         int[][] matrica = new int[velicina][velicina];
         System.out.println("Unesite elemente: ");
 
-        for (int i = 0; i < velicina; i++) {
-            for (int j = 0; j < velicina; j++) {
-                matrica[i][j] = ulaz.nextInt();
-            }
-        }
+        IntStream.range(0, matrica.length * matrica.length)
+                .forEach(i -> matrica[i / matrica.length][i % matrica.length] = ulaz.nextInt());
 
         ulaz.close();
+
+        Arrays.stream(matrica).forEach(row -> System.out.println(Arrays.toString(row)));
 
         int sumaGlavne = IntStream.range(0, matrica.length)
                 .map(i -> matrica[i][i])
