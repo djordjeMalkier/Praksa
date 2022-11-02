@@ -25,8 +25,8 @@ public class Lambda {
         if(s1.length()!=s2.length())
             return false;
 
-        Map<Character, Integer> prviString= IntStream.range(0,s1.length()).boxed().collect(Collectors.toMap(s1::charAt, i->1,(x, y)->x+1));
-        Map<Character, Integer> drugiString= IntStream.range(0,s2.length()).boxed().collect(Collectors.toMap(s2::charAt, i->1,(x, y)->x+1));
+        Map<Character, Integer> prviString= IntStream.range(0,s1.length()).boxed().collect(Collectors.toMap(s1.toLowerCase()::charAt, i->1,(x, y)->x+1));
+        Map<Character, Integer> drugiString= IntStream.range(0,s2.length()).boxed().collect(Collectors.toMap(s2.toLowerCase()::charAt, i->1,(x, y)->x+1));
 
         return prviString.equals(drugiString);
     }
