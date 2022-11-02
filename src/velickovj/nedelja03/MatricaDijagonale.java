@@ -52,19 +52,19 @@ public class MatricaDijagonale {
 
     private static int zbirIspodSporedneDijagonale(int[][] matrica, int n) {
         int suma=0;
-        for(int i=1, j=n-1;i<n && j>=0; i++,j--){
-
-            suma=suma+matrica[i][j];
-
+        for(int i=n-1; i>0; i--) {
+            for(int j=n-i;j<n;j++)
+                suma=suma+matrica[i][j];
         }
         return suma;
     }
 
     private static int zbirIznadSporedneDijagonale(int[][] matrica, int n) {
         int suma=0;
-        for(int i=0; i<n-1; i++)
-            for(int j=0;j<n-i;j++)
+        for(int i=0; i<n-1; i++) {
+            for(int j=0;j<n-1-i;j++)
                 suma=suma+matrica[i][j];
+        }
         return suma;
     }
 
