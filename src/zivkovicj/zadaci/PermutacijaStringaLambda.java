@@ -1,9 +1,7 @@
 package zivkovicj.zadaci;
 
-import java.util.Arrays;
 import java.util.Map;
 import java.util.Scanner;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -20,9 +18,13 @@ public class PermutacijaStringaLambda {
         System.out.print("Unesite neki string:");
         String inputString = scanner.nextLine();
 
-        Map<Character, Integer> map = IntStream.range(0, firstString.length()).boxed().collect(Collectors.toMap(
-                firstString.toLowerCase()::charAt, i -> 1, (x, y) -> x + 1));
-        Map<Character, Integer> map2 = IntStream.range(0, inputString.length()).boxed().collect(Collectors.toMap(
+        Map<Character, Integer> map = IntStream.range(0, firstString.length())
+                .boxed()
+                .collect(Collectors.toMap(firstString.toLowerCase()::charAt, i -> 1, (x, y) -> x + 1));
+
+        Map<Character, Integer> map2 = IntStream.range(0, inputString.length())
+                .boxed()
+                .collect(Collectors.toMap(
                 inputString.toLowerCase()::charAt, i -> 1, (x, y) -> x + 1));
 
         if (map.equals(map2)) {
