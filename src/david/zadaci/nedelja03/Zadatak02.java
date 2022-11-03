@@ -2,7 +2,9 @@ package david.zadaci.nedelja03;
 
 import java.util.Arrays;
 import static david.zadaci.nedelja03.Zadatak01.*;
-
+/*
+* Pronaci kolonu ili vrstu koja ima maksimalnu sumu elemenata
+* */
 public class Zadatak02 {
     public static void main(String[] args) {
         int[][] inputMatrix = {

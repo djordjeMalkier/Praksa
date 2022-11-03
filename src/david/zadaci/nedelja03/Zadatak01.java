@@ -1,5 +1,7 @@
 package david.zadaci.nedelja03;
-
+/*
+* Transponovanje matrice
+* */
 public class Zadatak01 {
     public static void main(String[] args) {
         int[][] inputMatrix = {

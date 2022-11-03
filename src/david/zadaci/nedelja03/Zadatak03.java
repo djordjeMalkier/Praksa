@@ -1,7 +1,10 @@
 package david.zadaci.nedelja03;
 
 import java.util.ArrayList;
-
+/*
+* Za pocetnu i krajnju poziciju na sahovskoj tabli NxN
+* naci najkraci put skokom konja
+* */
 public class Zadatak03 {
     private static int minPathLen = Integer.MAX_VALUE;
     private static ArrayList<Pair> minPath = new ArrayList<>();
