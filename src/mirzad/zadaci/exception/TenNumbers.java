@@ -18,10 +18,10 @@ public class TenNumbers {
               addToList(numbersList,scanner);
             } catch (ThreeException e) {
                 count++;
-                System.out.println(e.toString());
+                System.out.println(e.getMessage());
             } catch (InputMismatchException e){
                 String a = scanner.nextLine();
-                System.out.println(e.toString());
+                System.out.println(e.getMessage());
             }
         }
 
