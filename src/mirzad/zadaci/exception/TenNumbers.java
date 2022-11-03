@@ -1,6 +1,7 @@
 package mirzad.zadaci.exception;
 
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class TenNumbers {
@@ -18,6 +19,9 @@ public class TenNumbers {
             } catch (ThreeException e) {
                 count++;
                 System.out.println(e.toString());
+            } catch (InputMismatchException e){
+                String a = scanner.nextLine();
+                System.out.println(e.toString());
             }
         }
 
@@ -26,12 +30,17 @@ public class TenNumbers {
 
     }
 
-    public static void addToList(ArrayList<Integer> list, Scanner scanner) throws ThreeException {
-        int a = scanner.nextInt();
-        if (a % 3 == 0) {
-            throw new ThreeException("Broj je deljiv sa tri!");
-        }
-        list.add(a);
+    public static void addToList(ArrayList<Integer> list, Scanner scanner) throws ThreeException, InputMismatchException {
+        int a;
+
+       if(scanner.hasNextInt()) {
+           a = scanner.nextInt();
+           if (a % 3 == 0) {
+               throw new ThreeException("Broj je deljiv sa tri!");
+           }
+           list.add(a);
+        } else throw new InputMismatchException("Nevalidan unos.");
+
     }
 
 }
