@@ -93,10 +93,10 @@ public class Banka {
     }
 
     public Korisnik nadjiKorisnika(String jmbg){
-        for (Korisnik k : korisnici){
-            if (k.getJmbg().equals(jmbg)) return k;
-        }
-        return null;
+        return korisnici.stream()
+                .filter(korisnik -> korisnik.getJmbg().equals(jmbg))
+                .findAny()
+                .orElse(null);
     }
 
     @Override

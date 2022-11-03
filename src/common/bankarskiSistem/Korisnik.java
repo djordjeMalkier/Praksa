@@ -2,6 +2,7 @@ package common.bankarskiSistem;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.IntStream;
 
 public class Korisnik {
     private String ime;
@@ -70,11 +71,9 @@ public class Korisnik {
     }
 
     public float stanjeSvihRacuna(Valuta valuta) {
-        float sum = 0;
-        for (Racun racun: racuni) {
-            sum += proveraStanja(racun, valuta);
-        }
-        return sum;
+        return racuni.stream()
+                .map(racun -> proveraStanja(racun, valuta))
+                .reduce((float) 0, Float::sum);
     }
 
     public float proveraStanja(Racun racun, Valuta valuta) {
@@ -128,9 +127,9 @@ public class Korisnik {
     public void zatvoriSveRacune(Tip tipRacuna) {
         if (tipRacuna == null) throw new NullPointerException("Prosledjen je null tip racuna");
 
-        for (Racun racun : racuni)
-            if (racun.getTipRacuna() == tipRacuna)
-                obrisiRacun(racun);
+        racuni = racuni.stream()
+                .filter(racun -> racun.getTipRacuna() != tipRacuna)
+                .toList();
     }
 
     public boolean obrisiRacun(Racun racun) {
@@ -139,12 +138,11 @@ public class Korisnik {
     }
 
     public void ispisiRacune(){
-        int i = 1;
         System.out.println("---Racuni---");
-        for (Racun racun : racuni){
-            System.out.println(i++ + ": " + racun.getBrojRacuna() + " " + racun.getTipRacuna()
-                    + " " + racun.getStanje() +  " "  + racun.getValuta());
-        }
+        IntStream.range(0, racuni.size())
+                .forEach(i ->
+                    System.out.println(i + ": " + racuni.get(i).getBrojRacuna() + " " + racuni.get(i).getTipRacuna()
+                    + " " + racuni.get(i).getStanje() +  " "  + racuni.get(i).getValuta()));
         System.out.println("---******---");
     }
 }
