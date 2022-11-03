@@ -1,6 +1,7 @@
 package david.zadaci.nedelja03;
 
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -17,26 +18,33 @@ public class Zadatak07 {
         int numDividedBy3 = 0;
 
         Scanner scanner = new Scanner(System.in);
-        while (scanner.hasNextInt() && inputElements.size() < 10) {
+        while (inputElements.size() < 10) {
             try {
-                    inputWithout3(scanner, inputElements);
-                } catch(InputNumber3Exception e){
-                    System.out.println(e.getMessage());
-                    numDividedBy3++;
-                }
+                inputWithout3(scanner, inputElements);
+            } catch(InputNumber3Exception e){
+                System.err.println(e.getMessage());
+                numDividedBy3++;
+            } catch (InputMismatchException e) {
+                System.err.println(e.getMessage());
+            }
         }
         scanner.close();
 
         inputElements.forEach(System.out::println);
-        System.out.println("Deljivi sa 3: " + numDividedBy3);
+        System.out.println("Elements divided by 3: " + numDividedBy3);
     }
 
     private static void inputWithout3(Scanner scanner, List<Integer> inputElements)
-            throws InputNumber3Exception {
+            throws InputNumber3Exception, InputMismatchException {
 
+        if (!scanner.hasNextInt()) {
+            scanner.next();
+            throw new InputMismatchException("Not a number!");
+        }
         int inputNumber = scanner.nextInt();
         if (inputNumber % 3 == 0)
-            throw new InputNumber3Exception("Unet broj je deljiv sa 3");
+            throw new InputNumber3Exception("Number is divided by 3");
+
         inputElements.add(inputNumber);
     }
 }
