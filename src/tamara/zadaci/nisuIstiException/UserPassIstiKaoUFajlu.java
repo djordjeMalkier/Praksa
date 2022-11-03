@@ -1,4 +1,4 @@
-package tamara.zadaci.nisuIsti;
+package tamara.zadaci.nisuIstiException;
 
 import java.io.File;
 import java.util.Scanner;
