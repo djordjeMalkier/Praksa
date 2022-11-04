@@ -38,9 +38,9 @@ public class PozitivanNegativanTekst {
 
 
         }
-       /* System.out.println(brojacPozitivni);
-        System.out.println(brojacNegativni);
-*/
+      /* System.out.println(brojacPozitivni);
+        System.out.println(brojacNegativni);*/
+
 
 
         if (brojacPozitivni > brojacNegativni)
