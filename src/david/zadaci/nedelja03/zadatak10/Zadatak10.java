@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Stream;
 
 /*niz brijeva sa tastature
 rezultat> ako je broj paran dodaje se u sumu
@@ -20,7 +21,7 @@ public class Zadatak10 {
         List<Integer> inputNumbers = inputList();
         String pathFile = "C:\\Users\\Malkier_3\\IdeaProjects\\Praksa\\src\\david\\zadaci\\nedelja03\\zadatak10\\sumArithmeticOperations.txt";
         try {
-            System.out.println("Sum = " + writeArithmeticToFile(inputNumbers, pathFile));
+            System.out.println("Sum = " + writeArithmeticToFileFunctional(inputNumbers, pathFile));
         } catch (IOException | NullPointerException e) {
             System.err.println(e.getMessage());
         }
@@ -52,6 +53,39 @@ public class Zadatak10 {
         } catch (IOException | NullPointerException e) {
             throw new IOException(e.getMessage());
         }
+        return sumOfInputNumbers;
+    }
+
+    private static int writeArithmeticToFileFunctional(List<Integer> inputNumbers, String pathFile) throws IOException {
+        if (inputNumbers == null) throw new NullPointerException("List of input numbers is null");
+        int sumOfInputNumbers = 0;
+
+        Stream<ArrayList<String>> pozitivniParni = inputNumbers.stream()
+                .filter(x -> x >= 0)
+                .filter(x -> x % 2 == 0)
+                .map(x -> new ArrayList<>(Arrays.asList(x.toString(), x.toString(), "+")));
+
+        Stream<ArrayList<String>> pozitivniNeparni = inputNumbers.stream()
+                .filter(x -> x >= 0)
+                .filter(x -> x % 2 != 0)
+                .map(x -> new ArrayList<>(Arrays.asList(x.toString(), "-" + x, "-")));
+
+        Stream<ArrayList<String>> negativniParni = inputNumbers.stream()
+                .filter(x -> x < 0)
+                .map(x -> x * x)
+                .filter(x -> x % 2 == 0)
+                .map(x -> new ArrayList<>(Arrays.asList(((int)Math.sqrt(x))+"", x+"", "+2")));
+
+        Stream<ArrayList<String>> negativniNeparni = inputNumbers.stream()
+                .filter(x -> x < 0)
+                .map(x -> x * x)
+                .filter(x -> x % 2 != 0)
+                .map(x -> new ArrayList<>(Arrays.asList("-"+((int)Math.sqrt(x))+"", "-"+x, "-2")));
+
+        Stream<ArrayList<String>> result = Stream.concat( Stream.concat(pozitivniParni, pozitivniNeparni),
+                       Stream.concat(negativniParni, negativniNeparni));
+
+        result.forEach(System.out::println);
 
         return sumOfInputNumbers;
     }
