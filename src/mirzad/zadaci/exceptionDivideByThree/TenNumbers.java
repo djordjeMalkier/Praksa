@@ -1,4 +1,4 @@
-package mirzad.zadaci.exception;
+package mirzad.zadaci.exceptionDivideByThree;
 
 import java.util.ArrayList;
 import java.util.InputMismatchException;
