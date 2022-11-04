@@ -1,4 +1,4 @@
-package tamara.zadaci;
+package tamara.zadaci.nedjeljiviSa3Exception;
 
 import java.util.ArrayList;
 import java.util.InputMismatchException;
