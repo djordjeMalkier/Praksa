@@ -35,8 +35,8 @@ public class MapaPozitivnihNegativnihRijeci {
         }
         else if(brojacPozitivnih > brojacNegativnih) {
             System.out.println("Vise ima pozitivnih rijeci.");
-            System.out.println(brojacPozitivnih);
             System.out.println(brojacNegativnih);
+            System.out.println(brojacPozitivnih);
         }
         else
             System.out.println("Ima jednak broj pozitivnih i negativnih rijeci.");
