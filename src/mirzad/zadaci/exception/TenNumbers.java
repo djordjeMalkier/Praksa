@@ -8,7 +8,8 @@ public class TenNumbers {
     public static void main(String[] args) {
         ArrayList<Integer> numbersList = new ArrayList<>();
         Scanner scanner = new Scanner(System.in);
-
+// textfile upisan username i password
+        //treba da ucita podatke i da se unese user i pass da li je ispravno
         int count = 0;
         int n = 10;
 
