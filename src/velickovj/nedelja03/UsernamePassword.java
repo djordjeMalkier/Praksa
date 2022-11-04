@@ -1,6 +1,8 @@
 package velickovj.nedelja03;
 
 
+import mirzad.zadaci.jsonException.LoginException;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.List;
@@ -9,6 +11,8 @@ import java.util.Scanner;
 public class UsernamePassword {
     static String ime;
     static String sifra;
+    static String username;
+    static String password;
     public static void main(String[] args) throws FileNotFoundException {
         File file=new File("src/velickovj/nedelja03/usernamepassword");
         String[] strings = new String[2];
@@ -28,20 +32,20 @@ public class UsernamePassword {
         }
         String username=strings[0].split(":")[1].split("\"")[1];
         String password=strings[1].split(":")[1].split("\"")[1];
-
+        System.out.println(username);
+        System.out.println(password);
 
 
       /*  System.out.println(username);
         System.out.println(password);
 */
-        ucitajImeISifru();
+
         boolean flag=false;
-        boolean flag2=false;
-        while(!flag && !flag2){
+
+        while(!flag ){
         try {
 
-            flag=(porediStringove(username,ime) );
-                    flag2=porediStringove(password,sifra);
+            flag=porediStringove() ;
             System.out.println("Uspesno ste logovani");
         } catch (IzuzetakUsernamePassword e) {
 
@@ -55,11 +59,21 @@ public class UsernamePassword {
 
     }
 
-    public static boolean porediStringove(String s1, String s2) throws IzuzetakUsernamePassword {
+    public static boolean porediStringove() throws IzuzetakUsernamePassword {
+        Scanner scanner=new Scanner(System.in);
+        String insertedUsername = "";
+        String insertedPassword = "";
 
-        ucitajImeISifru();
-        if(!s1.equals(s2))
-            throw new IzuzetakUsernamePassword("Nije dobro ime ili sifra");
+        System.out.println("Unesite username: ");
+        insertedUsername = scanner.nextLine();
+
+        System.out.println("Unesite Pasword");
+        insertedPassword = scanner.nextLine();
+
+        if(!insertedUsername.equals(username) || !insertedPassword.equals(password)) {
+            throw new IzuzetakUsernamePassword("Pogresan password ili username.");
+        }
+
         return true;
 
     }
