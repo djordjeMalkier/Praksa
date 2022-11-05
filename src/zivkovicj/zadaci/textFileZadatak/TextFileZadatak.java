@@ -1,11 +1,7 @@
 package zivkovicj.zadaci.textFileZadatak;
 
-import mirzad.zadaci.exception.ThreeException;
-import zivkovicj.zadaci.brojeviDeljiviSaTriException.NumbersDevisibleByThreeException;
-
-import java.io.*;
-import java.util.ArrayList;
-import java.util.InputMismatchException;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 
