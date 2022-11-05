@@ -1,4 +1,4 @@
-package tamara.zadaci;
+package tamara.zadaci.postupakUFajl;
 
 import java.io.*;
 import java.util.Scanner;
