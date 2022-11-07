@@ -1,6 +1,5 @@
 package zivkovicj.zadaci.textFileZadatak;
 
-import mirzad.zadaci.exception.ThreeException;
 import zivkovicj.zadaci.brojeviDeljiviSaTriException.NumbersDevisibleByThreeException;
 
 import java.io.*;
