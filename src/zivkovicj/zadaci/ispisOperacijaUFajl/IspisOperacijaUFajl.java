@@ -14,8 +14,6 @@ public class IspisOperacijaUFajl {
         String path = "C:\\Users\\Malkier_4\\IdeaProjects\\Praksa\\src\\zivkovicj\\zadaci\\ispisOperacijaUFajl\\append.txt";
         File file = new File(path);
         FileWriter fr = new FileWriter(file, true);
-
-        //BufferedWriter br = new BufferedWriter(fr);
         PrintWriter out = new PrintWriter(fr);
 
         int suma = 0;
