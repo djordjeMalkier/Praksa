@@ -17,7 +17,7 @@ public class IspisivanjeDirektorijuma {
 
     }
 
-    private static void ispisiFajlove(File [] fajlovi) {
+    public static void ispisiFajlove(File[] fajlovi) {
         for(File file: fajlovi){
             if(file.isDirectory()){
                 System.out.println("Direktorijum: "+file.getName());
