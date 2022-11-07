@@ -5,7 +5,7 @@ import java.util.Scanner;
 
 public class NizPozitivnihINegativnihUSumu {
     public static void main(String[] args) throws IOException {
-            String path = "C:\\Users\\Malkier_1\\IdeaProjects\\Praksa\\src\\tamara\\zadaci\\postupak.txt";
+            String path = "C:\\Users\\Malkier_1\\IdeaProjects\\Praksa\\src\\tamara\\zadaci\\postupakUFajl\\postupak.txt";
             FileWriter fw = new FileWriter(path, true);
 
             Scanner ulaz = new Scanner(System.in);
