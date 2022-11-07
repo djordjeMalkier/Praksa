@@ -8,7 +8,6 @@ public class BrojeviDeljiviSaTri {
     public static void main(String[] args) {
         ArrayList<Integer> listaBrojeva = new ArrayList<>();
         Scanner sc = new Scanner(System.in);
-        System.out.println("Unesite 10 brojeva:");
 
         int i = 0;
         int counter = 0;
