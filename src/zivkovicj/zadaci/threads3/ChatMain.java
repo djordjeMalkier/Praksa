@@ -13,16 +13,16 @@ public class ChatMain {
         String path = "C:\\Users\\Malkier_4\\IdeaProjects\\Praksa\\src\\zivkovicj\\zadaci\\threads3\\general.txt";
 
         try (ExecutorService executor = Executors.newFixedThreadPool(5)) {
-            FileWriter fr = new FileWriter(path);
-            for (int i = 0; i < 10; i++) {
-                Runnable thread = new ChatThread(fr, "Jovana ");
-                executor.execute(thread);
-            }
+            try(FileWriter fr = new FileWriter(path)) {
+                for (int i = 0; i < 10; i++) {
+                    Runnable thread = new ChatThread(fr, "Jovana ");
+                    executor.execute(thread);
+                }
 
-            executor.shutdown();
-            while (!executor.isTerminated()) {
+                executor.shutdown();
+                while (!executor.isTerminated()) {
+                }
             }
-            fr.close();
         }
     }
 }
