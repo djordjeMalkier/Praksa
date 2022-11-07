@@ -2,6 +2,7 @@ package common.bankarskiSistem;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.IntStream;
 
 public class Korisnik {
     private String ime;
@@ -9,7 +10,6 @@ public class Korisnik {
     private String jmbg;
     private String adresa;
     private List<Racun> racuni;
-
 
     public Korisnik(String ime, String prezime, String adresa, String jmbg) {
         this.ime = ime;
@@ -64,39 +64,85 @@ public class Korisnik {
     }
 
     public void setRacuni(List<Racun> racuni) {
-        this.racuni = racuni;
+        if (racuni != null)
+            this.racuni = racuni;
+        else
+            throw new NullPointerException("Prosledjen je null racun");
     }
 
     public float stanjeSvihRacuna(Valuta valuta) {
-        float sum = 0;
-        for (Racun racun: racuni ) {
-            sum += proveraStanja(racun, valuta);
-        }
-        return sum;
+        return racuni.stream()
+                .map(racun -> proveraStanja(racun, valuta))
+                .reduce((float) 0, Float::sum);
     }
 
     public float proveraStanja(Racun racun, Valuta valuta) {
-        return racun.getStanje() * racun.getBanka().getKurs().convert(racun.getTipRacuna(), valuta);
+        if (racun == null) throw new NullPointerException("Prosledjen je null racun");
+        if (valuta == null) throw new NullPointerException("Nije prosledjena validna valuta");
+
+        return racun.getStanje() * racun.getBanka().getKurs().convert(racun.getValuta(), valuta);
     }
 
-    public void uplata(Racun racun, float iznos) {
-        racun.setStanje(racun.getStanje() + iznos);
+    public float uplata(Racun racun, float iznos) {
+        if (racun == null) throw new NullPointerException("Prosledjen je null racun");
+
+        if (iznos <= 0) {
+            System.out.println("Iznos za uplatu mora biti pozitivan");
+        } else
+            racun.setStanje(racun.getStanje() + iznos);
+
+        return racun.getStanje();
     }
 
-    public void isplata(Racun racun, float iznos) {
-        if(iznos > racun.getStanje()) {
+    public float isplata(Racun racun, float iznos) {
+        if (racun == null) throw new NullPointerException("Prosledjen je null racun");
+
+        if(iznos > racun.getStanje())
             System.out.println("Iznos je veci od stanja na racunu. ");
-            return;
-        }
         else {
-            System.out.println("Uspjesno.");
             racun.setStanje(racun.getStanje() - iznos);
-            //funkcija signum gleda i najmanju vrijednost ako ima razlike, jer poredjenje float-a sa 0 ne bi radilo
+            //Zatvaranje racuna u slucaju da je iznos nula
             if (Math.signum(racun.getStanje()) == 0)
-                racun.getBanka().obrisiRacun(racun);
+                obrisiRacun(racun);
         }
 
+        return racun.getStanje();
+    }
+    public void transferIzmedjuRacuna(Racun saRacuna, Racun naRacun, float iznos) {
+        if (saRacuna == null || naRacun == null) throw new NullPointerException("Prosledjen je null racun");
+
+        if (iznos <= 0) {
+            System.out.println("Iznos za uplatu mora biti pozitivan");
+        } else if (saRacuna.getValuta() != naRacun.getValuta()) {
+                isplata(saRacuna, iznos);
+                float konvertovanaValuta = saRacuna.getBanka().getKurs().convert(saRacuna.getValuta(), naRacun.getValuta());
+                iznos *= konvertovanaValuta;
+                uplata(naRacun, iznos);
+            } else {
+                isplata(saRacuna, iznos);
+                uplata(naRacun, iznos);
+            }
     }
 
+    public void zatvoriSveRacune(Tip tipRacuna) {
+        if (tipRacuna == null) throw new NullPointerException("Prosledjen je null tip racuna");
 
+        racuni = racuni.stream()
+                .filter(racun -> racun.getTipRacuna() != tipRacuna)
+                .toList();
+    }
+
+    public boolean obrisiRacun(Racun racun) {
+        if (racun == null) throw new NullPointerException("Nije prosledjen racun");
+        return racuni.remove(racun);
+    }
+
+    public void ispisiRacune(){
+        System.out.println("---Racuni---");
+        IntStream.range(0, racuni.size())
+                .forEach(i ->
+                    System.out.println(i + ": " + racuni.get(i).getBrojRacuna() + " " + racuni.get(i).getTipRacuna()
+                    + " " + racuni.get(i).getStanje() +  " "  + racuni.get(i).getValuta()));
+        System.out.println("---******---");
+    }
 }

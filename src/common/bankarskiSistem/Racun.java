@@ -1,16 +1,25 @@
 package common.bankarskiSistem;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 public class Racun {
     private float stanje;
-    private int brojRacuna;
-    private Valuta tipRacuna;
+    private final int brojRacuna;
+    private static final AtomicInteger count = new AtomicInteger(0);
+
+    private Valuta valuta;
+    private Tip tipRacuna;
     private Korisnik korisnik;
     private Banka banka;
 
-    public Racun(Valuta tipRacuna, int brojRacuna, Korisnik korisnik, Banka banka) {
-        this.stanje = 0;
+    public Racun(Tip tipRacuna,Valuta valuta, Korisnik korisnik, Banka banka) {
+        if(tipRacuna == null || valuta == null || korisnik == null || banka == null) {
+            throw new NullPointerException("Konstruktor ne prima null vrednosti");
+        }
         this.tipRacuna = tipRacuna;
-        this.brojRacuna = brojRacuna;
+        this.stanje = 0;
+        this.valuta = valuta;
+        brojRacuna = count.incrementAndGet();
         this.korisnik = korisnik;
         this.banka = banka;
     }
@@ -27,16 +36,13 @@ public class Racun {
         return brojRacuna;
     }
 
-    public void setBrojRacuna(int brojRacuna) {
-        this.brojRacuna = brojRacuna;
+    public Valuta getValuta() {
+        return valuta;
     }
 
-    public Valuta getTipRacuna() {
-        return tipRacuna;
-    }
-
-    public void setTipRacuna(Valuta tipRacuna) {
-        this.tipRacuna = tipRacuna;
+    public void setValuta(Valuta valuta) {
+        if(valuta == null) throw new NullPointerException("Prosledjena valuta je null");
+        this.valuta = valuta;
     }
 
     public Korisnik getKorisnik() {
@@ -44,6 +50,7 @@ public class Racun {
     }
 
     public void setKorisnik(Korisnik korisnik) {
+        if(korisnik == null) throw new NullPointerException("Prosledjen korisnik je null");
         this.korisnik = korisnik;
     }
 
@@ -52,6 +59,16 @@ public class Racun {
     }
 
     public void setBanka(Banka banka) {
+        if(banka == null) throw new NullPointerException("Prosledjena banka je null");
         this.banka = banka;
+    }
+
+    public Tip getTipRacuna() {
+        return tipRacuna;
+    }
+
+    public void setTipRacuna(Tip tipRacuna) {
+        if(tipRacuna == null) throw new NullPointerException("Prosledjen tip racuna je null");
+        this.tipRacuna = tipRacuna;
     }
 }
