@@ -1,6 +1,5 @@
 package david.zadaci.nedelja03.zadatak10;
 
-import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -58,34 +57,47 @@ public class Zadatak10 {
 
     private static int writeArithmeticToFileFunctional(List<Integer> inputNumbers, String pathFile) throws IOException {
         if (inputNumbers == null) throw new NullPointerException("List of input numbers is null");
-        int sumOfInputNumbers = 0;
+        int sumOfInputNumbers;
 
         Stream<ArrayList<String>> pozitivniParni = inputNumbers.stream()
                 .filter(x -> x >= 0)
                 .filter(x -> x % 2 == 0)
-                .map(x -> new ArrayList<>(Arrays.asList(x.toString(), x.toString(), "+")));
+                .map(x -> new ArrayList<>(Arrays.asList(x+"", "+"+x+" ")));
 
         Stream<ArrayList<String>> pozitivniNeparni = inputNumbers.stream()
                 .filter(x -> x >= 0)
                 .filter(x -> x % 2 != 0)
-                .map(x -> new ArrayList<>(Arrays.asList(x.toString(), "-" + x, "-")));
+                .map(x -> new ArrayList<>(Arrays.asList("-"+x, "-"+x+" ")));
 
         Stream<ArrayList<String>> negativniParni = inputNumbers.stream()
                 .filter(x -> x < 0)
                 .map(x -> x * x)
                 .filter(x -> x % 2 == 0)
-                .map(x -> new ArrayList<>(Arrays.asList(((int)Math.sqrt(x))+"", x+"", "+2")));
+                .map(x -> new ArrayList<>(Arrays.asList(x+"", "+(-" + (int)Math.sqrt(x) + ")^2 ")));
 
         Stream<ArrayList<String>> negativniNeparni = inputNumbers.stream()
                 .filter(x -> x < 0)
                 .map(x -> x * x)
                 .filter(x -> x % 2 != 0)
-                .map(x -> new ArrayList<>(Arrays.asList("-"+((int)Math.sqrt(x))+"", "-"+x, "-2")));
+                .map(x -> new ArrayList<>(Arrays.asList("-"+x, "-(-" + (int)Math.sqrt(x) + ")^2 ")));
 
         Stream<ArrayList<String>> result = Stream.concat( Stream.concat(pozitivniParni, pozitivniNeparni),
                        Stream.concat(negativniParni, negativniNeparni));
 
-        result.forEach(System.out::println);
+        try (FileWriter myWriter = new FileWriter(pathFile)) {
+
+            sumOfInputNumbers = Integer.parseInt(result.reduce(new ArrayList<>(Arrays.asList("0", "+")), (x, y) -> {
+                try {
+                    y.set(0, (Integer.parseInt(x.get(0)) + Integer.parseInt(y.get(0)))+"");
+                    myWriter.write(y.get(1));
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                return y;
+            }).get(0));
+        } catch (IOException | NullPointerException e) {
+            throw new IOException(e.getMessage());
+        }
 
         return sumOfInputNumbers;
     }
