@@ -1,4 +1,4 @@
-package david.zadaci.nedelja04;
+package david.zadaci.nedelja04.threadFile;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -7,7 +7,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 public class Zadatak01 {
-    private final static String PATH = "C:\\Users\\Malkier_3\\IdeaProjects\\Praksa\\src\\david\\zadaci\\nedelja04\\out.txt";
+    private final static String PATH = "C:\\Users\\Malkier_3\\IdeaProjects\\Praksa\\src\\david\\zadaci\\nedelja04\\threadFile\\ThreadMSG.txt";
     private final static int NUMBER_OF_THREADS = 5;
 
     public static void main(String[] args) {
