@@ -2,6 +2,13 @@ package common.bankarskiSistem;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
+/**
+ * Klasa racun sadrzi jedinstveni broj racuna koji pripada samo jednom {@link Korisnik}
+ * i stanje raspolozovih sredstava u odredjenoj valuti.
+ * Racun pipada samo jednoj banci i samo jednom korisniku i definisan je tip racuna
+ * {@link Tip}
+ */
+
 public class Racun {
     private float stanje;
     private final int brojRacuna;

@@ -3,6 +3,12 @@ package common.bankarskiSistem;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Ova klasa je zaduzena za sve u vezi sa bankama. Klasa se pravi sa dva konstruktora.
+ * Prvi konstruktor sa tri parametra {@link #Banka(String, String, Kurs)} se koristi u koliko se banka tek kreira i trenutno nema nijednog korisnika.
+ * Drugi konstruktor sa cetiri parametra {@link #Banka(String, String, List, Kurs)} u koliko zelimo da napravimo banku sa korisnicima.
+ * I default-ni konstruktor.
+ */
 public class Banka {
     private String ime;
     private String adresa;
@@ -59,6 +65,11 @@ public class Banka {
         this.kurs = kurs;
     }
 
+    /**
+     *
+     * @param racun - racun korisnika u banci koji se dodaje korisniku
+     * @param korisnik - korisnik kojem se dodaje racun
+     */
     public void dodajRacun(Racun racun, Korisnik korisnik) {
         if(korisnici.contains(korisnik)) {
             korisnik.getRacuni().add(racun);
@@ -70,6 +81,10 @@ public class Banka {
         }
     }
 
+    /**
+     *
+     * @param racun - racun koji se brise iz banke
+     */
     public void obrisiRacun(Racun racun) {
         Korisnik korisnik = racun.getKorisnik();
         try {
@@ -78,6 +93,16 @@ public class Banka {
             System.out.println("Ne postoji korisnik.");
         }
     }
+
+    /**
+     * Ova metoda je zaduzena za prebacivanje novca sa jednog korisnickog racuna korisnika koji je posiljalac
+     * na racun korisnika koji je primalac.
+     * @param posiljalac - korisnik sa cijeg se racuna salje novac
+     * @param racunPosiljalaca - racun posiljaoca sa kojeg se skida novac
+     * @param primalac - korisnik na ciji se racun uplacuje novac
+     * @param racunPrimalaca racun primaoca na koji se uplacuje novac
+     * @param iznos - iznos koji se uplacuje u valuti u kojoj zeli da posalje novac
+     */
 
     public void prebaciNovacKorisniku(Korisnik posiljalac, Racun racunPosiljalaca, Korisnik primalac,
                                       Racun racunPrimalaca, float iznos){
@@ -91,6 +116,12 @@ public class Banka {
         }
 
     }
+
+    /**
+     * Trazenje korisnika u bazi banke prema jmbg-u.
+     * @param jmbg - jmbg korisnika
+     * @return - Korisnik sa unetim jmbg-om.
+     */
 
     public Korisnik nadjiKorisnika(String jmbg){
         return korisnici.stream()
