@@ -11,7 +11,7 @@ public class PogodiBroj {
         Scanner ulaz = new Scanner(System.in);
         System.out.println("Unesite broj: ");
         int brojPokusaja = 0;
-        int broj = 0;
+        int broj = -1;
 
         while (broj != randomBroj) {
             String neki = ulaz.next();
