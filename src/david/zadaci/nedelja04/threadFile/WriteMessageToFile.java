@@ -1,4 +1,4 @@
-package david.zadaci.nedelja04;
+package david.zadaci.nedelja04.threadFile;
 
 import java.io.FileWriter;
 import java.io.IOException;
