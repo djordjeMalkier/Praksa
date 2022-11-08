@@ -1,4 +1,4 @@
-package mirzad.threadFiles;
+package mirzad.zadaci.threadFiles;
 
 import mirzad.zadaci.thread.ThreadMessage;
 

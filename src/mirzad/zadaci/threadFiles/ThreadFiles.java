@@ -1,6 +1,5 @@
-package mirzad.threadFiles;
+package mirzad.zadaci.threadFiles;
 
-import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -17,8 +16,9 @@ public class ThreadFiles {
             a = line.charAt(0);
             if(characters.contains(a)) break;
 
-            if (line.length() > 1 || (a < 65 && a > 122)){
+            if (line.length() > 1 || (a < 65 || a > 122)){
                 System.out.println("Pogresan unos");
+                continue;
             }
 
             String name;
@@ -31,7 +31,7 @@ public class ThreadFiles {
             }
 
             characters.add(a);
-            FileWriter writer = new FileWriter("C:\\Users\\Malkier_2\\Documents\\Zadaci\\Praksa\\src\\mirzad\\threadFiles\\" + name + ".txt");
+            FileWriter writer = new FileWriter("C:\\Users\\Malkier_2\\Documents\\Zadaci\\Praksa\\src\\mirzad\\zadaci\\threadFiles\\" + name + ".txt");
             Thread thread = new Thread(new MyThread(a, writer));
             thread.start();
         }
