@@ -9,7 +9,7 @@ public class Samoglasnici {
 
         File text = new File("C:\\Users\\Malkier_2\\Documents\\Zadaci\\Praksa\\src\\common\\tekst.txt");
         Scanner sc = new Scanner(text);
-        sc.useDelimiter(" ");
+        //sc.useDelimiter(" ");
         int max = 0;
         int sum = 0;
         String maxWord = "";
@@ -32,7 +32,6 @@ public class Samoglasnici {
 
             if (count > max) {
                 max = count;
-                System.out.println(word);
                 maxWord = word;
             }
 
