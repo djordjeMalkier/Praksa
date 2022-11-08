@@ -45,7 +45,10 @@ public class NitiKarakteri {
             File file=new File("src/velickovj/nedelja04"+"/"+ime);
 
             try {
-                if(file.createNewFile()){
+                if(!Character.isAlphabetic(karakter)){
+                    System.out.println("Nije unet odgovarajuci karakter");
+                }
+                else if(file.createNewFile()){
                     FileWriter myFileWriter=new FileWriter("src/velickovj/nedelja04"+"/"+ime);
                     for(int i=0; i<(int)karakter;i++) {
                         Random rand = new Random();
