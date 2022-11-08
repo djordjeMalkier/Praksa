@@ -1,5 +1,5 @@
 Cao, ja sam Thread-0
-Cao, ja sam Thread-4
 Cao, ja sam Thread-3
-Cao, ja sam Thread-2
+Cao, ja sam Thread-4
 Cao, ja sam Thread-1
+Cao, ja sam Thread-2
