@@ -1,6 +1,5 @@
 package zivkovicj.zadaci.threads3;
 
-import zivkovicj.zadaci.threads.ChatThread;
 
 import java.io.FileWriter;
 import java.io.IOException;
