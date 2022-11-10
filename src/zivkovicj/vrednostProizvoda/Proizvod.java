@@ -40,9 +40,7 @@ public class Proizvod implements Comparable<Proizvod> {
     @Override
     public String toString() {
         return
-                "ime='" + ime + '\'' +
-                ", cena=" + cena +
-                ", vrednost=" + vrednost;
+                ime + " " + cena + " din. " + " (vrednost: " + vrednost + ")\n";
     }
 
 
