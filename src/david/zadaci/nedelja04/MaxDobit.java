@@ -19,46 +19,45 @@ public class MaxDobit {
             if (!scanner.hasNextDouble()) return;
 
             double budget = scanner.nextDouble();
-            System.out.println(solveFindMaxValue(products, budget));
+            List<Product> chosenProducts = solveFindMaxValue(products, budget);
+            chosenProducts.forEach(System.out::println);
+            System.out.println(sumList(chosenProducts));
 
         } catch (NullPointerException e) {
             System.err.println(e.getMessage());
         }
     }
 
-    private static double sumStr(String s) {
+    private static double sumList(List<Product> products) {
         double sum = 0;
-        for(String num: s.split(" "))
-            sum += Double.parseDouble(num);
+        for (Product product: products) {
+            sum += product.getValue();
+        }
         return sum;
     }
 
-    public static String solveFindMaxValue(List<Product> products, double budget) {
-        double[] profits = new double[products.size()];
-        double[] weights = new double[products.size()];
-        for (int i = 0; i < products.size(); i++) {
-            profits[i] = products.get(i).getValue();
-            weights[i] = products.get(i).getPrice();
-        }
-        return findMaxValue(profits, weights, budget, 0);
+    public static List<Product> solveFindMaxValue(List<Product> products, double budget) {
+        return findMaxValue(products, budget, 0);
     }
 
-    private static String findMaxValue(double[] profits, double[] weights, double budget, int currentIndex) {
+    private static List<Product> findMaxValue(List<Product> products, double budget, int currentIndex) {
         //base
-        if (budget <= 0 || currentIndex >= profits.length) {
-            return " ";
+        if (budget <= 0 || currentIndex >= products.size()) {
+            return new ArrayList<>();
         }
 
         //recursive call
-        String profitWithElement = " ";
-        if(weights[currentIndex] <= budget ) {
-            profitWithElement = profits[currentIndex] + " " +
-                    findMaxValue(profits, weights, budget - weights[currentIndex], currentIndex + 1);
+        List<Product> profitWithElement = new ArrayList<>();
+        if(products.get(currentIndex).getPrice() <= budget ) {
+            profitWithElement = findMaxValue(products,
+                    budget - products.get(currentIndex).getPrice(),
+                    currentIndex + 1);
+            profitWithElement.add(products.get(currentIndex));
         }
 
         //recursive call after excluding the element
-        String profitWithoutElement = findMaxValue(profits, weights, budget, currentIndex + 1);
-        if (sumStr(profitWithElement) >= sumStr(profitWithoutElement)) {
+        List<Product> profitWithoutElement = findMaxValue(products, budget, currentIndex + 1);
+        if (sumList(profitWithElement) >= sumList(profitWithoutElement)) {
             return profitWithElement;
         } else {
             return profitWithoutElement;
