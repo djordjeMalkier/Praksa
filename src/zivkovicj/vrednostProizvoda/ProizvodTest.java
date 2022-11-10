@@ -3,8 +3,8 @@ package zivkovicj.vrednostProizvoda;
 import java.util.*;
 
 public class ProizvodTest {
-    //public static double sumVrednost;
     public static List<Double> listaVr = new ArrayList<>();
+
     public static void main(String[] args) {
 
         ArrayList<Proizvod> proizvodi = new ArrayList<>();
@@ -20,59 +20,58 @@ public class ProizvodTest {
         Scanner sc = new Scanner(System.in);
         System.out.println("Unesite budzet za kupovinu");
         double budzet = sc.nextDouble();
-        double ukupnaCenaProizvoda = 0.0;
 
+        ArrayList<ArrayList<Proizvod>> niz = new ArrayList<>();
+        ArrayList<Proizvod> indeksi = new ArrayList<>();
 
-        for (Proizvod p : proizvodi) {
-            ukupnaCenaProizvoda += p.cena;
+        for (int i = 0; i < proizvodi.size(); i++) {
+            recurseAdd(i, niz, indeksi, proizvodi, new ArrayList<Double>(), new ArrayList<Double>(),0, 0, budzet);
         }
-        ArrayList<Proizvod> proizvodi2 = new ArrayList<>();
 
-        for(int i = 0; i < proizvodi.size(); i++) {
-            recurseAdd(i,  new ArrayList<ArrayList<Integer>>(), proizvodi,  new ArrayList<Double>(), new ArrayList<Double>(), proizvodi2,0,0, budzet);
-        }
-        System.out.print("Lista vrednosti ");
-        System.out.println(listaVr);
-        for (Proizvod p : proizvodi2){
-            System.out.println(p);
-        }
+        System.out.println("Konacni proizvodi sa najvecom vrednoscu: " + listaVr.get(0));
+        System.out.println(niz.get(0));
 
     }
-    private static void recurseAdd(int currentIndex, ArrayList<ArrayList<Integer>> niz, ArrayList<Proizvod> proizvodi, List<Double> usedNumbers,
-                                   List<Double> vrednosti, List<Proizvod> proizvodi2, double sumVrednost, double sum, double budzet) {
+
+    private static void recurseAdd(int currentIndex, ArrayList<ArrayList<Proizvod>> niz, ArrayList<Proizvod> indeksi,
+                                   ArrayList<Proizvod> proizvodi, List<Double> cene,
+                                   List<Double> vrednosti, double sumVrednost, double sum, double budzet) {
+
         if (currentIndex >= proizvodi.size()) {
             return;
         }
-        ArrayList<Integer> indeksi = new ArrayList<>();
+
         sum = sum + proizvodi.get(currentIndex).cena;
-        usedNumbers.add(proizvodi.get(currentIndex).cena);
+        cene.add(proizvodi.get(currentIndex).cena);
         sumVrednost = sumVrednost + proizvodi.get(currentIndex).vrednost;
         vrednosti.add(proizvodi.get(currentIndex).vrednost);
-        indeksi.add(currentIndex);
-        niz.add(indeksi);
+        indeksi.add(proizvodi.get(currentIndex));
+
+
 
         if (sum == budzet) {
-            System.out.print("Cene: ");
-            System.out.println(usedNumbers);
-            System.out.print("Vrednosti: ");
-            System.out.println(vrednosti);
+            System.out.print("Cene: " + cene);
+            System.out.println();
+            System.out.print("Vrednosti: " + vrednosti);
+            System.out.println();
             System.out.print("Ukupna vrednost: " + vrednosti.stream().mapToDouble(Double::doubleValue).sum() + "\n");
             System.out.println("----------");
-
+            ArrayList<Proizvod> konacno = new ArrayList<>();
+            konacno.addAll(indeksi);
+            niz.add(konacno);
+            indeksi.clear();
 
             listaVr.add(vrednosti.stream().mapToDouble(Double::doubleValue).sum());
-            for (Integer n : niz.get(0)){
-                proizvodi2.add(proizvodi.get(n));
-            }
             return;
         }
         if (sum > budzet) {
+            indeksi.remove(indeksi.size() - 1);
             return;
         }
 
         for (int i = currentIndex + 1; i < proizvodi.size(); i++) {
-            recurseAdd(i, niz, new ArrayList<>(proizvodi), new ArrayList<>(usedNumbers),
-                    new ArrayList<>(vrednosti),proizvodi2, sumVrednost, sum, budzet);
+            recurseAdd(i, niz, indeksi, new ArrayList<>(proizvodi), new ArrayList<>(cene),
+                    new ArrayList<>(vrednosti), sumVrednost, sum, budzet);
         }
     }
 }
