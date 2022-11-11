@@ -13,10 +13,6 @@ public class KupovinaProizvoda {
         Proizvod p4 = new Proizvod("olovka",    400, 385);
         Proizvod p5 = new Proizvod("slusalice", 500, 125); //385+100+80=565
 
-        double budzet = 800;
-        double sumaProizvoda = 0;
-
-
         List<Proizvod> listaProizvoda = new ArrayList<>();
         listaProizvoda.add(p1);
         listaProizvoda.add(p2);
@@ -28,36 +24,38 @@ public class KupovinaProizvoda {
 
         System.out.println("Lista proizvoda: ");
         for (Proizvod proizvod : listaProizvoda) {
-            System.out.print(proizvod + " ");
+            System.out.print(proizvod + ", ");
         }
 
-        //suma cijena proizvoda
-        for (Proizvod proizvod : listaProizvoda) {
-            sumaProizvoda += proizvod.getCijena();
-        }
+        List<Double> listaCijena = new ArrayList<>();
+        List<Double> listaVrijednosti = new ArrayList<>();
 
-        int trenutniIndeks;
-        System.out.println(kupiProizvod(listaProizvoda, budzet, 0));
+        for(Proizvod proizvod: listaProizvoda){
+            listaVrijednosti.add(proizvod.getVrijednost());
+            listaCijena.add(proizvod.getCijena());
+        }
+        System.out.println("\n");
+
+        double budzet = 800;
+        double sumaVrijednosti = maxVrijednost(budzet, listaCijena, listaVrijednosti, listaProizvoda.size());
+
+        System.out.println("Suma vrijednosti je: " + sumaVrijednosti);
 
     }
 
-    private static List<Proizvod> kupiProizvod(List<Proizvod> listaProizvoda, double budzet, int trenutniIndeks) {
-        double sumaVrijednosti = 0;
+    public static double maxVrijednost( double budzet, List<Double> cijena, List<Double> vrijednost,  int duzina){
 
-        if(trenutniIndeks >= listaProizvoda.size())
-            return null;
+        if(budzet == 0 || duzina == 0)
+            return 0;
 
-        List<Proizvod> kupljeniProizvodi = new ArrayList<>();
+        if(cijena.get(duzina-1) > budzet){
 
-        if (budzet > 0 && listaProizvoda.get(trenutniIndeks).getCijena() <= budzet) {
-            kupljeniProizvodi = kupiProizvod(listaProizvoda,
-                    budzet - listaProizvoda.get(trenutniIndeks).getCijena(),
-                    trenutniIndeks + 1);
-            sumaVrijednosti += listaProizvoda.get(trenutniIndeks).getVrijednost();
-            kupljeniProizvodi.add(listaProizvoda.get(trenutniIndeks));
+            return maxVrijednost(budzet, cijena, vrijednost,duzina-1);
         }
+        else
+            return Math.max(vrijednost.get(duzina-1) +
+                            maxVrijednost(budzet - cijena.get(duzina-1), cijena, vrijednost, duzina - 1),
+                            maxVrijednost(budzet, cijena, vrijednost, duzina - 1));
 
-        System.out.println(budzet);
-        return kupljeniProizvodi;
     }
 }
