@@ -89,7 +89,7 @@ public class Banka {
                     "'" + racun.getStanje() + "'" +
                     "," + (racun.getIdValuta()+1) + "," +
                     (racun.getIdTip()+1) + "," +
-                    korisnik.getIdKorisnik() + "," +
+                    (korisnik.getIdKorisnik()+1) + "," +
                     + idBanke + ")";
             BankarskiSistem.database.insertDataForQuery(query);
             System.out.println(query);
