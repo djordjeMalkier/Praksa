@@ -141,6 +141,10 @@ public class BankarskiSistem {
 
         Korisnik korisnik = new Korisnik(ime, prezime, adresa, jmbg, idKorisnik++);
         banka.getKorisnici().add(korisnik);
+        System.out.println("Insert into \"Korisnik\" values(" + idKorisnik + "," +  "'" + jmbg + "'" + "," + "'" + ime + "'" +
+                "," + "'" + prezime + "'" + "," + "'" + adresa + "'" );
+        database.insertDataForQuery("Insert into \"Korisnik\" values(" + idKorisnik + "," +  "'" + jmbg + "'" + "," + "'" + ime + "'" +
+                "," + "'" + prezime + "'" + "," + "'" + adresa + "')" );
 
         return korisnik;
     }
