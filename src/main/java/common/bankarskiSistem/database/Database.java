@@ -11,7 +11,10 @@ public interface Database{
 
     List<Row> readDataFromTable(String tableName);
 
-    public List<Row> insertDataForQuery(String query);
+    List<Row> readDataFromQuery(String query);
 
+    public List<Row> insertDataForQuery(String query);
+    public List<Row> updateDataForQuery(String query);
+    public void deleteDataForQuery(String query);
 
 }

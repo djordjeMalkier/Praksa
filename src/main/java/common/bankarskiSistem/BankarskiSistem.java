@@ -12,13 +12,11 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class BankarskiSistem {
+        public static Database database;
         public static void main(String[] args) {
            Settings settings = initSettings();
-           Database database = new DatabaseImplementation(new PostgreRepository(settings));
+           database = new DatabaseImplementation(new PostgreRepository(settings));
             InformationResource ir = (InformationResource) database.loadResource();
-
-            //System.out.println(database.readDataFromTable("\"Kurs\""));
-            //database.insertDataForQuery("INSERT INTO \"Tip\" VALUES (5, 'nesto');");
 
             Scanner sc = new Scanner(System.in);
             ArrayList<Banka> banke = new ArrayList<>();
@@ -70,7 +68,7 @@ public class BankarskiSistem {
                     }
                     case 8 -> {
                         zatvoriRacun
-                                (banka, sc);
+                                (database, banka, sc);
                         System.out.println();
                     }
                     case 9 -> System.exit(1);
@@ -246,7 +244,7 @@ public class BankarskiSistem {
         banka.prebaciNovacKorisniku(korisnik, racun, primalac, racunZaTransfer, iznosTransfera);
     }
 
-    private static void zatvoriRacun(Banka banka, Scanner sc) {
+    private static void zatvoriRacun(Database database, Banka banka, Scanner sc) {
         System.out.println("Unesite jmbg: ");
         String jmbg = sc.nextLine();
         Korisnik korisnik = banka.nadjiKorisnika(jmbg);
@@ -256,8 +254,10 @@ public class BankarskiSistem {
             korisnik.ispisiRacune();
             System.out.println("Izaberite racun za brisanje: ");
             choice = ucitajInt(sc) - 1;
-            korisnik.obrisiRacun(korisnik.getRacuni().get(choice));
+            Racun racun = korisnik.getRacuni().get(choice);
+            korisnik.obrisiRacun(racun);
         } else System.out.println("Ne postoji korisnik!");
+
 
     }
 

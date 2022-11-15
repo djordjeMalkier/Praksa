@@ -115,6 +115,10 @@ public class Korisnik {
             System.out.println("Iznos za uplatu mora biti pozitivan");
         } else
             racun.setStanje(racun.getStanje() + iznos);
+        //IZMENA
+        BankarskiSistem.database.updateDataForQuery("UPDATE \"Racun\" SET stanje = " +
+                (racun.getStanje() + iznos) + " WHERE brojRacuna = " +
+                racun.getBrojRacuna());
 
         return racun.getStanje();
     }
@@ -132,6 +136,8 @@ public class Korisnik {
             System.out.println("Iznos je veci od stanja na racunu. ");
         else {
             racun.setStanje(racun.getStanje() - iznos);
+            BankarskiSistem.database.updateDataForQuery("UPDATE \"Racun\" SET stanje = " + (racun.getStanje() - iznos) + " WHERE brojRacuna = " +
+                    racun.getBrojRacuna());
             //Zatvaranje racuna u slucaju da je iznos nula
             if (Math.signum(racun.getStanje()) == 0)
                 obrisiRacun(racun);
@@ -183,11 +189,15 @@ public class Korisnik {
      */
 
     public boolean obrisiRacun(Racun racun) {
+
         if (racun == null) throw new NullPointerException("Nije prosledjen racun");
+        //IZMENA
+        BankarskiSistem.database.deleteDataForQuery("DELETE FROM \"Racun\" WHERE brojRacuna = " + racun.getBrojRacuna());
         return racuni.remove(racun);
     }
 
     public void ispisiRacune(){
+
         System.out.println("---Racuni---");
         IntStream.range(0, racuni.size())
                 .forEach(i ->
