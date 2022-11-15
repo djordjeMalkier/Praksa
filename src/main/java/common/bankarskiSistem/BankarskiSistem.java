@@ -5,10 +5,12 @@ import common.bankarskiSistem.database.DatabaseImplementation;
 import common.bankarskiSistem.database.PostgreRepository;
 import common.bankarskiSistem.database.settings.Settings;
 import common.bankarskiSistem.database.settings.SettingsImplementation;
+import common.bankarskiSistem.resources.data.Row;
 import common.bankarskiSistem.resources.implementation.InformationResource;
 import common.bankarskiSistem.utils.Constants;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class BankarskiSistem {
@@ -19,18 +21,13 @@ public class BankarskiSistem {
            database = new DatabaseImplementation(new PostgreRepository(settings));
             InformationResource ir = (InformationResource) database.loadResource();
 
+            List<Kurs> kursevi = initKursevi(database);
+            System.out.println(kursevi.get(0));
+
             Scanner sc = new Scanner(System.in);
             ArrayList<Banka> banke = new ArrayList<>();
-            banke.add(new Banka(0, "Intesa", "Adresa 1", new Kurs(0, new float[][] {
-                    {1F, 117.3F, .98F},
-                    {.0085F, 1F, .0083F},
-                    {1.02F, 120.04F, 1F}
-            })));
-            banke.add(new Banka(1, "Erste", "Adresa 2", new Kurs(1, new float[][] {
-                    {1F, 117.3F, .95F},
-                    {.0083F, 1F, .0080F},
-                    {1.05F, 121.04F, 1F}
-            })));
+            banke.add(new Banka(1, "Intesa", "Adresa 1", kursevi.get(0)));
+            banke.add(new Banka(2, "Erste", "Adresa 2", kursevi.get(1)));
 
             for (Banka b: banke) {
                 idKorisnik += b.getKorisnici().size();
@@ -81,6 +78,22 @@ public class BankarskiSistem {
 
             }
         }
+
+    private static List<Kurs> initKursevi(Database database) {
+            List<Kurs> kursevi = new ArrayList<>();
+
+            List<Row> rows = database.readDataFromQuery("SELECT * FROM \"Kurs\"");
+            int i = 1;
+            for (Row row : rows) {
+                System.out.println(row.getFields());
+                kursevi.add(new Kurs(i++, new float[][] {
+                        {1F, Float.parseFloat(row.getFields().get("EUR_RSD").toString()), Float.parseFloat(row.getFields().get("EUR_RSD").toString())},
+                        {Float.parseFloat(row.getFields().get("RSD_EUR").toString()), 1F, Float.parseFloat(row.getFields().get("RSD_USD").toString())},
+                        {Float.parseFloat(row.getFields().get("USD_EUR").toString()), Float.parseFloat(row.getFields().get("USD_RSD").toString()), 1F}
+                }));
+            }
+            return kursevi;
+    }
 
     private static Banka odabirBanke(ArrayList<Banka> banke, Scanner sc) {
         for (int i = 0; i < banke.size(); i++) {
