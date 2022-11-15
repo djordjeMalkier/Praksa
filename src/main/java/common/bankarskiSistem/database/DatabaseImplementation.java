@@ -24,6 +24,11 @@ public class DatabaseImplementation implements Database {
         return repository.get(tableName);
     }
 
+    @Override
+    public List<Row> readDataFromQuery(String query) {
+        return repository.getFromQuery(query);
+    }
+
     public List<Row> insertDataForQuery(String query){
         return repository.getQueryWithInsert(query);
     }

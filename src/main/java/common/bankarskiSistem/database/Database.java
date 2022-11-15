@@ -11,6 +11,8 @@ public interface Database{
 
     List<Row> readDataFromTable(String tableName);
 
+    List<Row> readDataFromQuery(String query);
+
     public List<Row> insertDataForQuery(String query);
 
 

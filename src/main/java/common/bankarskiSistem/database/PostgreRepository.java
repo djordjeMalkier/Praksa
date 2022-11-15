@@ -160,6 +160,55 @@ public class PostgreRepository implements Repository{
         return rows;
     }
 
+
+    @Override
+    public List<Row> getFromQuery(String query) {
+
+        List<Row> rows = new ArrayList<>();
+
+
+        try{
+            this.initConnection();
+
+
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            ResultSet rs = preparedStatement.executeQuery();
+            ResultSetMetaData resultSetMetaData = rs.getMetaData();
+
+            while (rs.next()){
+
+                Row row = new Row();
+
+                String table = null;
+
+                String[] splitted = query.split("\\s+");
+                for (int i = 0; i< splitted.length; i++){
+                    if (splitted[i].equalsIgnoreCase("FROM")) {
+                        table = splitted[i+1];
+                        System.out.println(table);
+                        break;
+                    }
+                }
+
+                row.setName(table);
+
+                for (int i = 1; i<=resultSetMetaData.getColumnCount(); i++){
+                    row.addField(resultSetMetaData.getColumnName(i), rs.getString(i));
+                }
+                rows.add(row);
+
+
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        finally {
+            this.closeConnection();
+        }
+
+        return rows;
+    }
     public List<Row> getQueryWithInsert(String query) {
 
         try{

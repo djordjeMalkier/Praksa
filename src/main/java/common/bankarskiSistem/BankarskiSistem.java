@@ -8,6 +8,7 @@ import common.bankarskiSistem.database.settings.SettingsImplementation;
 import common.bankarskiSistem.resources.implementation.InformationResource;
 import common.bankarskiSistem.utils.Constants;
 
+
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -17,7 +18,7 @@ public class BankarskiSistem {
            Database database = new DatabaseImplementation(new PostgreRepository(settings));
             InformationResource ir = (InformationResource) database.loadResource();
 
-            System.out.println(database.readDataFromTable("Kurs"));
+           // System.out.println(database.readDataFromTable("\"Kurs\""));
 
             Scanner sc = new Scanner(System.in);
             ArrayList<Banka> banke = new ArrayList<>();
@@ -56,11 +57,11 @@ public class BankarskiSistem {
                         System.out.println();
                     }
                     case 5 -> {
-                        stanjeSvihRacuna(banka, sc);
+                        stanjeSvihRacuna(database,banka, sc);
                         System.out.println();
                     }
                     case 6 -> {
-                        stanjeRacuna(banka, sc);
+                        stanjeRacuna(database,banka, sc);
                         System.out.println();
                     }
                     case 7 -> {
@@ -183,7 +184,7 @@ public class BankarskiSistem {
 
     }
 
-    private static void stanjeSvihRacuna(Banka banka, Scanner sc){
+    private static void stanjeSvihRacuna(Database database, Banka banka, Scanner sc){
         System.out.println("Unesite jmbg: ");
         String jmbg = sc.nextLine();
         Korisnik korisnik = banka.nadjiKorisnika(jmbg);
@@ -192,9 +193,10 @@ public class BankarskiSistem {
         } else {
             System.out.println("Ne postoji korisnik!");
         }
+        System.out.println(database.readDataFromQuery("SELECT sum(stanje) FROM \"Racun\" JOIN \"Korisnik\" ON \"Racun\".\"idKorisnik\" = \"Korisnik\".\"idKorisnik\" WHERE jmbg="+"'"+jmbg+"';"));
     }
 
-    private static void stanjeRacuna(Banka banka, Scanner sc){
+    private static void stanjeRacuna(Database database, Banka banka, Scanner sc){
         System.out.println("Unesite jmbg: ");
         String jmbg = sc.nextLine();
         Korisnik korisnik = banka.nadjiKorisnika(jmbg);
@@ -205,8 +207,10 @@ public class BankarskiSistem {
             choice = ucitajInt(sc)-1;
             Racun racun = korisnik.getRacuni().get(choice);
             System.out.println("Stanje je: " + korisnik.proveraStanja(racun,racun.getValuta()));
+            System.out.println(database.readDataFromQuery("SELECT stanje FROM \"Racun\" JOIN \"Korisnik\" ON \"Racun\".\"idKorisnik\" = \"Korisnik\".\"idKorisnik\" WHERE jmbg="+"'"+jmbg+"' AND \"idTip\"="+choice));
         }
         else System.out.println("Ne postoji korisnik! ");
+
 
 
     }
