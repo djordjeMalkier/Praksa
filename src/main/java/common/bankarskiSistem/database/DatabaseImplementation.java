@@ -27,4 +27,9 @@ public class DatabaseImplementation implements Database {
     public List<Row> insertDataForQuery(String query){
         return repository.getQueryWithInsert(query);
     }
+
+    @Override
+    public List<Row> updateDataForQuery(String query) {
+        return repository.getQueryWithUpdate(query);
+    }
 }

@@ -13,5 +13,5 @@ public interface Database{
 
     public List<Row> insertDataForQuery(String query);
 
-
+    public List<Row> updateDataForQuery(String query);
 }

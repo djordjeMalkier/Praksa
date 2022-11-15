@@ -12,13 +12,18 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class BankarskiSistem {
+        public static Database database = null;
         public static void main(String[] args) {
-           Settings settings = initSettings();
-           Database database = new DatabaseImplementation(new PostgreRepository(settings));
+            Settings settings = initSettings();
+            database = new DatabaseImplementation(new PostgreRepository(settings));
             InformationResource ir = (InformationResource) database.loadResource();
 
-            //System.out.println(database.readDataFromTable("\"Kurs\""));
+            //System.out.println(database.readDataFromTable("SELECT * FROM \"Kurs\""));
             //database.insertDataForQuery("INSERT INTO \"Tip\" VALUES (5, 'nesto');");
+            //delete
+            //update - uplati, isplati
+
+            //initKurs();
 
             Scanner sc = new Scanner(System.in);
             ArrayList<Banka> banke = new ArrayList<>();
@@ -45,11 +50,11 @@ public class BankarskiSistem {
                         }
                     }
                     case 2 -> {
-                        uplati(banka, sc);
+                        uplati(database, banka, sc);
                         System.out.println();
                     }
                     case 3 -> {
-                        isplati(banka, sc);
+                        isplati(database, banka, sc);
                         System.out.println();
                     }
                     case 4 -> {
@@ -141,10 +146,11 @@ public class BankarskiSistem {
 
         return korisnik;
     }
-    private static void uplati (Banka banka, Scanner sc){
+    private static void uplati (Database database, Banka banka, Scanner sc){
         System.out.println("Unesite jmbg: ");
         String jmbg = sc.nextLine();
         Korisnik korisnik = banka.nadjiKorisnika(jmbg);
+
         int choice;
         if (korisnik != null) {
             korisnik.ispisiRacune();
@@ -153,11 +159,15 @@ public class BankarskiSistem {
             System.out.println("Unesite iznos uplate: ");
             int iznos = ucitajInt(sc);
             korisnik.uplata(korisnik.getRacuni().get(choice), iznos);
+
+            database.updateDataForQuery("UPDATE \"Racun\" " +
+                    "SET stanje = "+ korisnik.getRacuni().get(choice).getStanje() + "\n" +
+                    "WHERE brojRacuna = " + korisnik.getRacuni().get(choice).getBrojRacuna() + ";");
         }
         else System.out.println("Ne postoji korisnik! ");
     }
 
-    private static void isplati(Banka banka, Scanner sc) {
+    private static void isplati(Database database, Banka banka, Scanner sc) {
         System.out.println("Unesite jmbg: ");
         String jmbg = sc.nextLine();
         Korisnik korisnik = banka.nadjiKorisnika(jmbg);
@@ -168,6 +178,10 @@ public class BankarskiSistem {
             System.out.println("Unesite iznos isplate: ");
             int iznos = ucitajInt(sc);
             korisnik.isplata(korisnik.getRacuni().get(choice), iznos);
+
+            database.updateDataForQuery("UPDATE \"Racun\" " +
+                    "SET stanje = "+ korisnik.getRacuni().get(choice).getStanje() + "\n" +
+                    "WHERE brojRacuna = " + korisnik.getRacuni().get(choice).getBrojRacuna() + ";");
         }
         else System.out.println("Ne postoji korisnik! ");
     }

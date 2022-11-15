@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Data
-public class PostgreRepository implements Repository{
+public class PostgreRepository implements Repository {
 
     private Settings settings;
     private Connection connection;
@@ -25,26 +25,24 @@ public class PostgreRepository implements Repository{
         this.settings = settings;
     }
 
-    private void initConnection() throws SQLException, ClassNotFoundException{
+    private void initConnection() throws SQLException, ClassNotFoundException {
         String ip = (String) settings.getParameter("ip");
         String database = (String) settings.getParameter("database");
         String username = (String) settings.getParameter("username");
         String password = (String) settings.getParameter("password");
         //Class.forName("net.sourceforge.jtds.jdbc.Driver");
-        connection = DriverManager.getConnection("jdbc:postgresql://" + ip+"/" + database,username,password);
+        connection = DriverManager.getConnection("jdbc:postgresql://" + ip + "/" + database, username, password);
         //jdbc:postgresql://localhost:5432/banka/password
 
 
     }
 
-    private void closeConnection(){
-        try{
+    private void closeConnection() {
+        try {
             connection.close();
-        }
-        catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
-        }
-        finally {
+        } finally {
             connection = null;
         }
     }
@@ -53,7 +51,7 @@ public class PostgreRepository implements Repository{
     @Override
     public DBNode getSchema() {
 
-        try{
+        try {
             this.initConnection();
 
             DatabaseMetaData metaData = connection.getMetaData();
@@ -62,10 +60,10 @@ public class PostgreRepository implements Repository{
             String tableType[] = {"TABLE"};
             ResultSet tables = metaData.getTables(connection.getCatalog(), null, null, tableType);
 
-            while (tables.next()){
+            while (tables.next()) {
 
                 String tableName = tables.getString("TABLE_NAME");
-                if(tableName.contains("trace"))continue;
+                if (tableName.contains("trace")) continue;
                 Entity newTable = new Entity(tableName, ir);
                 ir.addChild(newTable);
 
@@ -73,7 +71,7 @@ public class PostgreRepository implements Repository{
 
                 ResultSet columns = metaData.getColumns(connection.getCatalog(), null, tableName, null);
 
-                while (columns.next()){
+                while (columns.next()) {
 
                     String columnName = columns.getString("COLUMN_NAME");
                     String columnType = columns.getString("TYPE_NAME");
@@ -92,12 +90,11 @@ public class PostgreRepository implements Repository{
                     Attribute attribute = new Attribute(columnName, newTable,
                             AttributeType.valueOf(
                                     Arrays.stream(columnType.toUpperCase().split(" "))
-                                    .collect(Collectors.joining("_"))),
+                                            .collect(Collectors.joining("_"))),
                             columnSize);
                     newTable.addChild(attribute);
 
                 }
-
 
 
             }
@@ -111,12 +108,11 @@ public class PostgreRepository implements Repository{
             // ResultSet foreignKeys = metaData.getImportedKeys(connection.getCatalog(), null, table.getName());
             // ResultSet primaryKeys = metaData.getPrimaryKeys(connection.getCatalog(), null, table.getName());
 
-        }
-        catch (SQLException e1) {
+        } catch (SQLException e1) {
             e1.printStackTrace();
-        }
-        catch (ClassNotFoundException e2){ e2.printStackTrace();}
-        finally {
+        } catch (ClassNotFoundException e2) {
+            e2.printStackTrace();
+        } finally {
             this.closeConnection();
         }
 
@@ -124,36 +120,44 @@ public class PostgreRepository implements Repository{
     }
 
     @Override
-    public List<Row> get(String from) {
+    public List<Row> get(String query) {
 
         List<Row> rows = new ArrayList<>();
 
 
-        try{
+        try {
             this.initConnection();
 
-            String query = "SELECT * FROM "  + from;
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             ResultSet rs = preparedStatement.executeQuery();
             ResultSetMetaData resultSetMetaData = rs.getMetaData();
 
-            while (rs.next()){
+            String table = null;
+
+            String[] splitted = query.split("\\s+");
+            for (int i = 0; i < splitted.length; i++) {
+                if (splitted[i].equalsIgnoreCase("FROM")) {
+                    table = splitted[i + 1];
+                    System.out.println(table);
+                    break;
+                }
+            }
+
+            while (rs.next()) {
 
                 Row row = new Row();
-                row.setName(from);
+                row.setName(table);
 
-                for (int i = 1; i<=resultSetMetaData.getColumnCount(); i++){
+                for (int i = 1; i <= resultSetMetaData.getColumnCount(); i++) {
                     row.addField(resultSetMetaData.getColumnName(i), rs.getString(i));
                 }
                 rows.add(row);
 
 
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
-        }
-        finally {
+        } finally {
             this.closeConnection();
         }
 
@@ -161,26 +165,22 @@ public class PostgreRepository implements Repository{
     }
 
     public List<Row> getQueryWithInsert(String query) {
-
-        try{
+        try {
             this.initConnection();
-
             Statement preparedStatement = connection.createStatement();
             preparedStatement.executeUpdate(query);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
-        }
-        finally {
+        } finally {
             this.closeConnection();
         }
 
         String table = null;
 
         String[] splitted = query.split("\\s+");
-        for (int i = 0; i< splitted.length; i++){
+        for (int i = 0; i < splitted.length; i++) {
             if (splitted[i].equalsIgnoreCase("INTO")) {
-                table = splitted[i+1];
+                table = splitted[i + 1];
                 System.out.println(table);
                 break;
             }
@@ -188,4 +188,30 @@ public class PostgreRepository implements Repository{
 
         return get(table);
     }
+
+    public List<Row> getQueryWithUpdate(String query) {
+        try {
+            this.initConnection();
+            Statement preparedStatement = connection.createStatement();
+            preparedStatement.executeUpdate(query);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            this.closeConnection();
+        }
+
+        String table = null;
+
+        String[] splitted = query.split("\\s+");
+        for (int i = 0; i < splitted.length; i++) {
+            if (splitted[i].equalsIgnoreCase("UPDATE")) {
+                table = splitted[i + 1];
+                System.out.println(table);
+                break;
+            }
+        }
+
+        return get(table);
+    }
+
 }
