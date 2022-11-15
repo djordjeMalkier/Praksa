@@ -84,6 +84,15 @@ public class Banka {
     public void dodajRacun(Racun racun, Korisnik korisnik) {
         if(korisnici.contains(korisnik)) {
             korisnik.getRacuni().add(racun);
+            String query = "Insert into \"Racun\" values("
+                    + racun.getBrojRacuna() + "," +
+                    "'" + racun.getStanje() + "'" +
+                    "," + (racun.getIdValuta()+1) + "," +
+                    (racun.getIdTip()+1) + "," +
+                    korisnik.getIdKorisnik() + "," +
+                    + idBanke + ")";
+            BankarskiSistem.database.insertDataForQuery(query);
+            System.out.println(query);
         }
         else {
 
