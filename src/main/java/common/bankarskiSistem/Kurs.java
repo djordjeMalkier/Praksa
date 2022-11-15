@@ -6,9 +6,11 @@ package common.bankarskiSistem;
  * U tabeli je predstavljena vrstom jedinica valute u vrednosti druge valute sa presekom odgovarajuce kolone.
  */
 public class Kurs {
+    private int idKurs;
 
     float[][] kursnaLista;
-    public Kurs(float[][] kursnaLista) {
+    public Kurs(int idKurs, float[][] kursnaLista) {
+        this.idKurs = idKurs;
         if (kursnaLista == null) throw new NullPointerException("Null kursna lista");
         if (kursnaLista.length != 3) throw new IndexOutOfBoundsException("Kurs treba da ima 3 valute");
         for (float[] vrsta : kursnaLista) {
@@ -43,5 +45,9 @@ public class Kurs {
         }
         
         return kursnaListaString.toString();
+    }
+
+    public int getID() {
+        return idKurs;
     }
 }

@@ -12,31 +12,29 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class BankarskiSistem {
-        public static Database database = null;
+        public static Database database;
+        public static int idKorisnik = 0;
         public static void main(String[] args) {
-            Settings settings = initSettings();
-            database = new DatabaseImplementation(new PostgreRepository(settings));
+           Settings settings = initSettings();
+           database = new DatabaseImplementation(new PostgreRepository(settings));
             InformationResource ir = (InformationResource) database.loadResource();
-
-            //System.out.println(database.readDataFromTable("SELECT * FROM \"Kurs\""));
-            //database.insertDataForQuery("INSERT INTO \"Tip\" VALUES (5, 'nesto');");
-            //delete
-            //update - uplati, isplati
-
-            //initKurs();
 
             Scanner sc = new Scanner(System.in);
             ArrayList<Banka> banke = new ArrayList<>();
-            banke.add(new Banka("Intesa", "Adresa 1", new Kurs(new float[][] {
+            banke.add(new Banka(0, "Intesa", "Adresa 1", new Kurs(0, new float[][] {
                     {1F, 117.3F, .98F},
                     {.0085F, 1F, .0083F},
                     {1.02F, 120.04F, 1F}
             })));
-            banke.add(new Banka("Erste", "Adresa 2", new Kurs(new float[][] {
+            banke.add(new Banka(1, "Erste", "Adresa 2", new Kurs(1, new float[][] {
                     {1F, 117.3F, .95F},
                     {.0083F, 1F, .0080F},
                     {1.05F, 121.04F, 1F}
             })));
+
+            for (Banka b: banke) {
+                idKorisnik += b.getKorisnici().size();
+            }
 
             while(true) {
                 Banka banka = odabirBanke(banke, sc);
@@ -50,11 +48,11 @@ public class BankarskiSistem {
                         }
                     }
                     case 2 -> {
-                        uplati(database, banka, sc);
+                        uplati(banka, sc);
                         System.out.println();
                     }
                     case 3 -> {
-                        isplati(database, banka, sc);
+                        isplati(banka, sc);
                         System.out.println();
                     }
                     case 4 -> {
@@ -75,7 +73,7 @@ public class BankarskiSistem {
                     }
                     case 8 -> {
                         zatvoriRacun
-                                (banka, sc);
+                                (database, banka, sc);
                         System.out.println();
                     }
                     case 9 -> System.exit(1);
@@ -141,16 +139,15 @@ public class BankarskiSistem {
             return null;
         }
 
-        Korisnik korisnik = new Korisnik(ime, prezime, adresa, jmbg);
+        Korisnik korisnik = new Korisnik(ime, prezime, adresa, jmbg, idKorisnik++);
         banka.getKorisnici().add(korisnik);
 
         return korisnik;
     }
-    private static void uplati (Database database, Banka banka, Scanner sc){
+    private static void uplati (Banka banka, Scanner sc){
         System.out.println("Unesite jmbg: ");
         String jmbg = sc.nextLine();
         Korisnik korisnik = banka.nadjiKorisnika(jmbg);
-
         int choice;
         if (korisnik != null) {
             korisnik.ispisiRacune();
@@ -159,15 +156,11 @@ public class BankarskiSistem {
             System.out.println("Unesite iznos uplate: ");
             int iznos = ucitajInt(sc);
             korisnik.uplata(korisnik.getRacuni().get(choice), iznos);
-
-            database.updateDataForQuery("UPDATE \"Racun\" " +
-                    "SET stanje = "+ korisnik.getRacuni().get(choice).getStanje() + "\n" +
-                    "WHERE brojRacuna = " + korisnik.getRacuni().get(choice).getBrojRacuna() + ";");
         }
         else System.out.println("Ne postoji korisnik! ");
     }
 
-    private static void isplati(Database database, Banka banka, Scanner sc) {
+    private static void isplati(Banka banka, Scanner sc) {
         System.out.println("Unesite jmbg: ");
         String jmbg = sc.nextLine();
         Korisnik korisnik = banka.nadjiKorisnika(jmbg);
@@ -178,10 +171,6 @@ public class BankarskiSistem {
             System.out.println("Unesite iznos isplate: ");
             int iznos = ucitajInt(sc);
             korisnik.isplata(korisnik.getRacuni().get(choice), iznos);
-
-            database.updateDataForQuery("UPDATE \"Racun\" " +
-                    "SET stanje = "+ korisnik.getRacuni().get(choice).getStanje() + "\n" +
-                    "WHERE brojRacuna = " + korisnik.getRacuni().get(choice).getBrojRacuna() + ";");
         }
         else System.out.println("Ne postoji korisnik! ");
     }
@@ -260,7 +249,7 @@ public class BankarskiSistem {
         banka.prebaciNovacKorisniku(korisnik, racun, primalac, racunZaTransfer, iznosTransfera);
     }
 
-    private static void zatvoriRacun(Banka banka, Scanner sc) {
+    private static void zatvoriRacun(Database database, Banka banka, Scanner sc) {
         System.out.println("Unesite jmbg: ");
         String jmbg = sc.nextLine();
         Korisnik korisnik = banka.nadjiKorisnika(jmbg);
@@ -270,8 +259,10 @@ public class BankarskiSistem {
             korisnik.ispisiRacune();
             System.out.println("Izaberite racun za brisanje: ");
             choice = ucitajInt(sc) - 1;
-            korisnik.obrisiRacun(korisnik.getRacuni().get(choice));
+            Racun racun = korisnik.getRacuni().get(choice);
+            korisnik.obrisiRacun(racun);
         } else System.out.println("Ne postoji korisnik!");
+
 
     }
 

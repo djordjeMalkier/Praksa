@@ -10,7 +10,11 @@ public interface Repository {
     DBNode getSchema();
 
     List<Row> get(String from);
+
+    List<Row> getQuery(String query);
     public List<Row> getQueryWithInsert(String query);
 
-    public List<Row> getQueryWithUpdate(String query);
+    void getQueryWithDelete(String query);
+
+    List<Row> getQueryWithUpdate(String query);
 }

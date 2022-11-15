@@ -19,16 +19,38 @@ public class Racun {
     private Korisnik korisnik;
     private Banka banka;
 
-    public Racun(Tip tipRacuna,Valuta valuta, Korisnik korisnik, Banka banka) {
+    private int idValuta, idTip, idKorisnik, idBanka;
+
+    public Racun(Tip tipRacuna, Valuta valuta, Korisnik korisnik, Banka banka) {
         if(tipRacuna == null || valuta == null || korisnik == null || banka == null) {
             throw new NullPointerException("Konstruktor ne prima null vrednosti");
         }
+        this.idValuta = valuta.ordinal();
+        this.idTip = tipRacuna.ordinal();
+        this.idKorisnik = korisnik.getIdKorisnik();
+        this.idBanka = banka.getIdBanke();
         this.tipRacuna = tipRacuna;
         this.stanje = 0;
         this.valuta = valuta;
         brojRacuna = count.incrementAndGet();
         this.korisnik = korisnik;
         this.banka = banka;
+    }
+
+    public int getIdValuta() {
+        return idValuta;
+    }
+
+    public int getIdTip() {
+        return idTip;
+    }
+
+    public int getIdKorisnik() {
+        return idKorisnik;
+    }
+
+    public int getIdBanka() {
+        return idBanka;
     }
 
     public float getStanje() {

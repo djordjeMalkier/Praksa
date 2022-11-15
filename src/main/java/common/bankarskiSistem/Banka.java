@@ -5,28 +5,34 @@ import java.util.List;
 
 /**
  * Ova klasa je zaduzena za sve u vezi sa bankama. Klasa se pravi sa dva konstruktora.
- * Prvi konstruktor sa tri parametra {@link #Banka(String, String, Kurs)} se koristi u koliko se banka tek kreira i trenutno nema nijednog korisnika.
- * Drugi konstruktor sa cetiri parametra {@link #Banka(String, String, List, Kurs)} u koliko zelimo da napravimo banku sa korisnicima.
+ * Prvi konstruktor sa tri parametra  se koristi u koliko se banka tek kreira i trenutno nema nijednog korisnika.
+ * Drugi konstruktor sa cetiri parametra  u koliko zelimo da napravimo banku sa korisnicima.
  * I default-ni konstruktor.
  */
 public class Banka {
+    private int idBanke;
+    private int idKurs;
     private String ime;
     private String adresa;
     private List<Korisnik> korisnici;
     private Kurs kurs;
 
-    public Banka(String ime, String adresa, Kurs kurs) {
+    public Banka(int idBanke, String ime, String adresa, Kurs kurs) {
+        this.idBanke = idBanke;
         this.ime = ime;
         this.adresa = adresa;
         this.korisnici = new ArrayList<>();
         this.kurs = kurs;
+        this.idKurs = kurs.getID();
     }
 
-    public Banka(String ime, String adresa, List<Korisnik> korisnici, Kurs kurs) {
+    public Banka(int idBanke, String ime, String adresa, List<Korisnik> korisnici, Kurs kurs) {
+        this.idBanke = idBanke;
         this.ime = ime;
         this.adresa = adresa;
         this.korisnici = korisnici;
         this.kurs = kurs;
+        this.idKurs = kurs.getID();
     }
 
     public Banka() {
@@ -35,6 +41,10 @@ public class Banka {
 
     public String getIme() {
         return ime;
+    }
+
+    public int getIdBanke() {
+        return idBanke;
     }
 
     public void setIme(String ime) {
