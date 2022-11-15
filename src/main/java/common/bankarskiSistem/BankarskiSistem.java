@@ -13,6 +13,7 @@ import java.util.Scanner;
 
 public class BankarskiSistem {
         public static Database database;
+        public static int idKorisnik = 0;
         public static void main(String[] args) {
            Settings settings = initSettings();
            database = new DatabaseImplementation(new PostgreRepository(settings));
@@ -20,16 +21,20 @@ public class BankarskiSistem {
 
             Scanner sc = new Scanner(System.in);
             ArrayList<Banka> banke = new ArrayList<>();
-            banke.add(new Banka("Intesa", "Adresa 1", new Kurs(new float[][] {
+            banke.add(new Banka(0, "Intesa", "Adresa 1", new Kurs(0, new float[][] {
                     {1F, 117.3F, .98F},
                     {.0085F, 1F, .0083F},
                     {1.02F, 120.04F, 1F}
             })));
-            banke.add(new Banka("Erste", "Adresa 2", new Kurs(new float[][] {
+            banke.add(new Banka(1, "Erste", "Adresa 2", new Kurs(1, new float[][] {
                     {1F, 117.3F, .95F},
                     {.0083F, 1F, .0080F},
                     {1.05F, 121.04F, 1F}
             })));
+
+            for (Banka b: banke) {
+                idKorisnik += b.getKorisnici().size();
+            }
 
             while(true) {
                 Banka banka = odabirBanke(banke, sc);
@@ -134,7 +139,7 @@ public class BankarskiSistem {
             return null;
         }
 
-        Korisnik korisnik = new Korisnik(ime, prezime, adresa, jmbg);
+        Korisnik korisnik = new Korisnik(ime, prezime, adresa, jmbg, idKorisnik++);
         banka.getKorisnici().add(korisnik);
 
         return korisnik;

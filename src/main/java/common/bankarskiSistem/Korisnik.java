@@ -6,8 +6,8 @@ import java.util.stream.IntStream;
 
 /**
  * Klasa Korisnik u sebi sadrzi sve podatke u vezi sa njim i njegovim racunima.
- * {@link #Korisnik(String, String, String, String)} konstruktor bez racuna, ukoliko se kreira korisnik bez ikakvih racuna.
- * {@link #Korisnik(String, String, String, String, List)} konstruktor korisnika ukoliko korisnik vec ima neke racune
+ * {@link #Korisnik(String, String, String, String, int)} konstruktor bez racuna, ukoliko se kreira korisnik bez ikakvih racuna.
+ * {@link #Korisnik(String, String, String, String, List, int)} konstruktor korisnika ukoliko korisnik vec ima neke racune
  */
 
 public class Korisnik {
@@ -16,21 +16,28 @@ public class Korisnik {
     private String jmbg;
     private String adresa;
     private List<Racun> racuni;
+    private int idKorisnik;
 
-    public Korisnik(String ime, String prezime, String adresa, String jmbg) {
+    public Korisnik(String ime, String prezime, String adresa, String jmbg, int idKorisnik) {
         this.ime = ime;
         this.prezime = prezime;
         this.adresa = adresa;
         this.jmbg = jmbg;
+        this.idKorisnik = idKorisnik;
         this.racuni = new ArrayList<>();
     }
 
-    public Korisnik(String ime, String prezime, String jmbg, String adresa, List<Racun> racuni) {
+    public Korisnik(String ime, String prezime, String jmbg, String adresa, List<Racun> racuni, int idKorisnik) {
         this.ime = ime;
         this.prezime = prezime;
         this.jmbg = jmbg;
         this.adresa = adresa;
         this.racuni = racuni;
+        this.idKorisnik = idKorisnik;
+    }
+
+    public int getIdKorisnik() {
+        return idKorisnik;
     }
 
     public Korisnik(){
