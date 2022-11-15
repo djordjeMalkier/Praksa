@@ -17,7 +17,8 @@ public class BankarskiSistem {
            Database database = new DatabaseImplementation(new PostgreRepository(settings));
             InformationResource ir = (InformationResource) database.loadResource();
 
-            System.out.println(database.readDataFromTable("Kurs"));
+            //System.out.println(database.readDataFromTable("\"Kurs\""));
+            //database.insertDataForQuery("INSERT INTO \"Tip\" VALUES (5, 'nesto');");
 
             Scanner sc = new Scanner(System.in);
             ArrayList<Banka> banke = new ArrayList<>();
@@ -68,7 +69,8 @@ public class BankarskiSistem {
                         System.out.println();
                     }
                     case 8 -> {
-                        zatvoriRacun(banka, sc);
+                        zatvoriRacun
+                                (banka, sc);
                         System.out.println();
                     }
                     case 9 -> System.exit(1);

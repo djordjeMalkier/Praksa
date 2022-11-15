@@ -78,7 +78,7 @@ public class PostgreRepository implements Repository{
                     String columnName = columns.getString("COLUMN_NAME");
                     String columnType = columns.getString("TYPE_NAME");
 
-                    System.out.println(columnType);
+                    //System.out.println(columnType);
 
                     int columnSize = Integer.parseInt(columns.getString("COLUMN_SIZE"));
 
@@ -132,7 +132,7 @@ public class PostgreRepository implements Repository{
         try{
             this.initConnection();
 
-            String query = "SELECT * FROM \""  + from + "\"";
+            String query = "SELECT * FROM "  + from;
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             ResultSet rs = preparedStatement.executeQuery();
             ResultSetMetaData resultSetMetaData = rs.getMetaData();
