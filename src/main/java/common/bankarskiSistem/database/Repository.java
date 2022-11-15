@@ -11,6 +11,10 @@ public interface Repository {
 
     List<Row> get(String from);
 
-    List<Row> getFromQuery(String query);
+    List<Row> getQuery(String query);
     public List<Row> getQueryWithInsert(String query);
+
+    void getQueryWithDelete(String query);
+
+    List<Row> getQueryWithUpdate(String query);
 }

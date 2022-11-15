@@ -33,8 +33,6 @@ public class PostgreRepository implements Repository{
         //Class.forName("net.sourceforge.jtds.jdbc.Driver");
         connection = DriverManager.getConnection("jdbc:postgresql://" + ip+"/" + database,username,password);
         //jdbc:postgresql://localhost:5432/banka/password
-
-
     }
 
     private void closeConnection(){
@@ -78,7 +76,7 @@ public class PostgreRepository implements Repository{
                     String columnName = columns.getString("COLUMN_NAME");
                     String columnType = columns.getString("TYPE_NAME");
 
-                    System.out.println(columnType);
+                    //System.out.println(columnType);
 
                     int columnSize = Integer.parseInt(columns.getString("COLUMN_SIZE"));
 
@@ -132,7 +130,7 @@ public class PostgreRepository implements Repository{
         try{
             this.initConnection();
 
-            String query = "SELECT * FROM \""  + from + "\"";
+            String query = "SELECT * FROM "  + from;
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             ResultSet rs = preparedStatement.executeQuery();
             ResultSetMetaData resultSetMetaData = rs.getMetaData();
@@ -160,17 +158,13 @@ public class PostgreRepository implements Repository{
         return rows;
     }
 
-
-    @Override
-    public List<Row> getFromQuery(String query) {
+    public List<Row> getQuery(String query) {
 
         List<Row> rows = new ArrayList<>();
 
 
         try{
             this.initConnection();
-
-
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             ResultSet rs = preparedStatement.executeQuery();
             ResultSetMetaData resultSetMetaData = rs.getMetaData();
@@ -178,19 +172,7 @@ public class PostgreRepository implements Repository{
             while (rs.next()){
 
                 Row row = new Row();
-
-                String table = null;
-
-                String[] splitted = query.split("\\s+");
-                for (int i = 0; i< splitted.length; i++){
-                    if (splitted[i].equalsIgnoreCase("FROM")) {
-                        table = splitted[i+1];
-                        System.out.println(table);
-                        break;
-                    }
-                }
-
-                row.setName(table);
+                row.setName("Table");
 
                 for (int i = 1; i<=resultSetMetaData.getColumnCount(); i++){
                     row.addField(resultSetMetaData.getColumnName(i), rs.getString(i));
@@ -209,6 +191,7 @@ public class PostgreRepository implements Repository{
 
         return rows;
     }
+
     public List<Row> getQueryWithInsert(String query) {
 
         try{
@@ -229,6 +212,51 @@ public class PostgreRepository implements Repository{
         String[] splitted = query.split("\\s+");
         for (int i = 0; i< splitted.length; i++){
             if (splitted[i].equalsIgnoreCase("INTO")) {
+                table = splitted[i+1];
+                System.out.println(table);
+                break;
+            }
+        }
+
+        return get(table);
+    }
+
+    @Override
+    public void getQueryWithDelete(String query) {
+        try{
+            this.initConnection();
+
+            Statement preparedStatement = connection.createStatement();
+            preparedStatement.executeUpdate(query);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        finally {
+            this.closeConnection();
+        }
+    }
+
+    @Override
+    public List<Row> getQueryWithUpdate(String query) {
+        try{
+            this.initConnection();
+
+            Statement preparedStatement = connection.createStatement();
+            preparedStatement.executeUpdate(query);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        finally {
+            this.closeConnection();
+        }
+
+        String table = null;
+
+        String[] splitted = query.split("\\s+");
+        for (int i = 0; i< splitted.length; i++){
+            if (splitted[i].equalsIgnoreCase("SET")) {
                 table = splitted[i+1];
                 System.out.println(table);
                 break;

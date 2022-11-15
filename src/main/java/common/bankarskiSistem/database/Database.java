@@ -14,6 +14,7 @@ public interface Database{
     List<Row> readDataFromQuery(String query);
 
     public List<Row> insertDataForQuery(String query);
-
+    public List<Row> updateDataForQuery(String query);
+    public void deleteDataForQuery(String query);
 
 }
