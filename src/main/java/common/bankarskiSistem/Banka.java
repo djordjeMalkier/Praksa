@@ -93,16 +93,18 @@ public class Banka {
      */
     public void dodajRacun(Racun racun, Korisnik korisnik) {
         if(korisnici.contains(korisnik)) {
-            korisnik.getRacuni().add(racun);
-            String query = "Insert into \"Racun\" values("
-                    + racun.getBrojRacuna() + "," +
-                    "'" + racun.getStanje() + "'" +
+            String query = "Insert into \"Racun\" (\"stanje\", \"idValuta\", \"idTip\", \"idKorisnik\", \"idBanka\") values(" +
+                    racun.getStanje() +
                     "," + (racun.getIdValuta()+1) + "," +
                     (racun.getIdTip()+1) + "," +
                     (vratiID(korisnik)) + "," +
                     + idBanke + ")";
-            BankarskiSistem.database.insertDataForQuery(query);
             System.out.println(query);
+            List<Row> row = BankarskiSistem.database.insertDataForQuery(query);
+            int brojRacuna = Integer.parseInt(row.get(row.size()-1).getFields().get("brojRacuna").toString());
+            racun.setBrojRacuna(brojRacuna);
+            korisnik.getRacuni().add(racun);
+
         }
         else {
 

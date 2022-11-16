@@ -128,12 +128,13 @@ public class Korisnik {
 
         if (iznos <= 0) {
             System.out.println("Iznos za uplatu mora biti pozitivan");
-        } else
+        } else {
             racun.setStanje(racun.getStanje() + iznos);
-        //IZMENA
-        BankarskiSistem.database.updateDataForQuery("UPDATE \"Racun\" SET stanje = " +
-                 (racun.getStanje() + iznos) + " WHERE \"brojRacuna\" = " +
-                racun.getBrojRacuna());
+            //IZMENA
+            BankarskiSistem.database.updateDataForQuery("UPDATE \"Racun\" SET stanje = " +
+                    (racun.getStanje()) + " WHERE \"brojRacuna\" = " +
+                    racun.getBrojRacuna());
+        }
 
         return racun.getStanje();
     }
@@ -152,7 +153,7 @@ public class Korisnik {
         else {
             racun.setStanje(racun.getStanje() - iznos);
             BankarskiSistem.database.updateDataForQuery("UPDATE \"Racun\" SET stanje = " +
-                    (racun.getStanje() - iznos) + " WHERE \"brojRacuna\" = " +
+                    (racun.getStanje()) + " WHERE \"brojRacuna\" = " +
                     racun.getBrojRacuna());
             //Zatvaranje racuna u slucaju da je iznos nula
             if (Math.signum(racun.getStanje()) == 0)
@@ -217,7 +218,7 @@ public class Korisnik {
         System.out.println("---Racuni---");
         IntStream.range(0, racuni.size())
                 .forEach(i ->
-                    System.out.println(i + ": " + racuni.get(i).getBrojRacuna() + " " + racuni.get(i).getTipRacuna()
+                    System.out.println(racuni.get(i).getBrojRacuna() + " " + racuni.get(i).getTipRacuna()
                     + " " + racuni.get(i).getStanje() +  " "  + racuni.get(i).getValuta()));
         System.out.println("---******---");
     }
