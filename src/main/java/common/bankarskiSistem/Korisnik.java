@@ -18,7 +18,9 @@ public class Korisnik {
     private List<Racun> racuni;
     private int idKorisnik;
 
+
     public Korisnik(String ime, String prezime, String adresa, String jmbg, int idKorisnik) {
+
         this.ime = ime;
         this.prezime = prezime;
         this.adresa = adresa;
