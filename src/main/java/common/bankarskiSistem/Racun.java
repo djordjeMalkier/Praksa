@@ -37,6 +37,11 @@ public class Racun {
         this.banka = banka;
     }
 
+    public Racun(Tip tipRacuna, Valuta valuta, Korisnik korisnik, Banka banka, float stanje) {
+        this(tipRacuna,valuta,korisnik,banka);
+        this.stanje = stanje;
+    }
+
     public int getIdValuta() {
         return idValuta;
     }
@@ -99,5 +104,21 @@ public class Racun {
     public void setTipRacuna(Tip tipRacuna) {
         if(tipRacuna == null) throw new NullPointerException("Prosledjen tip racuna je null");
         this.tipRacuna = tipRacuna;
+    }
+
+    @Override
+    public String toString() {
+        return "Racun{" +
+                "stanje=" + stanje +
+                ", brojRacuna=" + brojRacuna +
+                ", valuta=" + valuta +
+                ", tipRacuna=" + tipRacuna +
+                ", korisnik=" + korisnik +
+                ", banka=" + banka +
+                ", idValuta=" + idValuta +
+                ", idTip=" + idTip +
+                ", idKorisnik=" + idKorisnik +
+                ", idBanka=" + idBanka +
+                '}';
     }
 }

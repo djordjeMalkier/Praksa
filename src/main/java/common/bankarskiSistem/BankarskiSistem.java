@@ -25,6 +25,11 @@ public class BankarskiSistem {
             List<Racun> racuni = ucitajRacuneIzBaze(database, banke, korisnici);
             dodajRacune(racuni, banke);
 
+            for (Racun k: racuni
+                 ) {
+                System.out.println(k);
+            }
+
             Scanner sc = new Scanner(System.in);
 
 
@@ -77,7 +82,7 @@ public class BankarskiSistem {
 
     private static void dodajRacune(List<Racun> racuni, List<Banka> banke) {
         for (int i = 0; i < racuni.size(); i++) {
-            Racun racun = racuni.get(0);
+            Racun racun = racuni.get(i);
             Banka bankaKojojSeDodajeRacun =
                     banke.stream().filter(b -> b.getIdBanke() == racun.getBanka().getIdBanke())
                             .findAny()
@@ -123,7 +128,8 @@ public class BankarskiSistem {
                     tipRacuna,
                     valuta,
                     korisnik,
-                    banka
+                    banka,
+                    Float.parseFloat(row.getFields().get("stanje").toString())
             ));
         }
         return racuni;
