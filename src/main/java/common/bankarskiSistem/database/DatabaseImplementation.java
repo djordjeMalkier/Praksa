@@ -1,6 +1,5 @@
 package common.bankarskiSistem.database;
 
-import common.bankarskiSistem.resources.DBNode;
 import common.bankarskiSistem.resources.data.Row;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,11 +12,6 @@ public class DatabaseImplementation implements Database {
 
     private Repository repository;
 
-
-    @Override
-    public DBNode loadResource() {
-        return repository.getSchema();
-    }
 
     @Override
     public List<Row> readDataFromTable(String tableName) {
