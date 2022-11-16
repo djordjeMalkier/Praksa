@@ -6,7 +6,6 @@ import common.bankarskiSistem.database.PostgreRepository;
 import common.bankarskiSistem.database.settings.Settings;
 import common.bankarskiSistem.database.settings.SettingsImplementation;
 import common.bankarskiSistem.resources.data.Row;
-import common.bankarskiSistem.resources.implementation.InformationResource;
 import common.bankarskiSistem.utils.Constants;
 
 import java.util.ArrayList;
@@ -18,7 +17,6 @@ public class BankarskiSistem {
         public static void main(String[] args) {
            Settings settings = initSettings();
            database = new DatabaseImplementation(new PostgreRepository(settings));
-            InformationResource ir = (InformationResource) database.loadResource();
 
             //INICIJALIZACIJA IZ BAZE
             List<Kurs> kursevi = ucitajKurseveIzBaze(database);
