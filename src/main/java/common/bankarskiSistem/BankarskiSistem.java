@@ -308,12 +308,13 @@ public class BankarskiSistem {
 
         System.out.println("Izaberite racun sa kog vrsite transfer: ");
         int transferSaRacuna = ucitajInt(sc);
-        Racun racun = korisnik.getRacuni().get(transferSaRacuna);
+        Racun racun = korisnik.getRacuni().stream().filter(r -> r.getBrojRacuna() == transferSaRacuna).findAny().orElse(null);
+
 
         System.out.println("Unesite broj racuna na koji vrsite transfer: ");
         int transferNaRacun = ucitajInt(sc);
 
-        Racun racunZaTransfer = null;
+        Racun racunZaTransfer = korisnik.getRacuni().stream().filter(r -> r.getBrojRacuna() == transferNaRacun).findAny().orElse(null);;
         for (Banka b : banke)
             for (Korisnik k: b.getKorisnici())
                 for (Racun r: k.getRacuni())
@@ -342,8 +343,8 @@ public class BankarskiSistem {
         if (korisnik != null) {
             korisnik.ispisiRacune();
             System.out.println("Izaberite racun za brisanje: ");
-            choice = ucitajInt(sc) - 1;
-            Racun racun = korisnik.getRacuni().get(choice);
+            choice = ucitajInt(sc);
+            Racun racun = korisnik.getRacuni().stream().filter(r -> r.getBrojRacuna() == choice).findAny().orElse(null);
             korisnik.obrisiRacun(racun);
         } else System.out.println("Ne postoji korisnik!");
 
