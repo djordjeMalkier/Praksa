@@ -15,7 +15,6 @@ import java.util.Scanner;
 
 public class BankarskiSistem {
         public static Database database;
-        public static int idKorisnik = 0;
         public static void main(String[] args) {
            Settings settings = initSettings();
            database = new DatabaseImplementation(new PostgreRepository(settings));
@@ -27,9 +26,6 @@ public class BankarskiSistem {
             Scanner sc = new Scanner(System.in);
 
 
-            for (Banka b: banke) {
-                idKorisnik += b.getKorisnici().size();
-            }
 
             while(true) {
                 Banka banka = odabirBanke(banke, sc);
@@ -162,11 +158,11 @@ public class BankarskiSistem {
             return null;
         }
 
-        Korisnik korisnik = new Korisnik(ime, prezime, adresa, jmbg, idKorisnik++);
+        Korisnik korisnik = new Korisnik(ime, prezime, adresa, jmbg);
         banka.getKorisnici().add(korisnik);
-        System.out.println("Insert into \"Korisnik\" values(" + idKorisnik + "," +  "'" + jmbg + "'" + "," + "'" + ime + "'" +
+        System.out.println("Insert into \"Korisnik\" (jmbg, ime, prezime, adresa) values(" + "'" + jmbg + "'" + "," + "'" + ime + "'" +
                 "," + "'" + prezime + "'" + "," + "'" + adresa + "'" );
-        database.insertDataForQuery("Insert into \"Korisnik\" values(" + idKorisnik + "," +  "'" + jmbg + "'" + "," + "'" + ime + "'" +
+        database.insertDataForQuery("Insert into \"Korisnik\" (jmbg, ime, prezime, adresa) values(" + "'" + jmbg + "'" + "," + "'" + ime + "'" +
                 "," + "'" + prezime + "'" + "," + "'" + adresa + "')" );
 
         return korisnik;
