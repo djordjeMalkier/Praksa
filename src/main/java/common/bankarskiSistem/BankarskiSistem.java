@@ -25,14 +25,7 @@ public class BankarskiSistem {
             List<Racun> racuni = ucitajRacuneIzBaze(database, banke, korisnici);
             dodajRacune(racuni, banke);
 
-            for (Racun k: racuni
-                 ) {
-                System.out.println(k);
-            }
-
             Scanner sc = new Scanner(System.in);
-
-
 
             while(true) {
                 Banka banka = odabirBanke(banke, sc);
@@ -118,6 +111,7 @@ public class BankarskiSistem {
         List<Racun> racuni = new ArrayList<>();
         List<Row> rows = database.readDataFromQuery("SELECT * FROM \"Racun\"");
         for (Row row : rows) {
+
             Tip tipRacuna = Tip.values()[Integer.parseInt(row.getFields().get("idTip").toString())-1];
             Valuta valuta = Valuta.values()[Integer.parseInt(row.getFields().get("idValuta").toString())-1];
             int idKorisnik = Integer.parseInt(row.getFields().get("idKorisnik").toString());

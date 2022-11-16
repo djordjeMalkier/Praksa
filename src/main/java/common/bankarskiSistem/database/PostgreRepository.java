@@ -6,9 +6,7 @@ import lombok.Data;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Data
 public class PostgreRepository implements Repository{
@@ -165,6 +163,7 @@ public class PostgreRepository implements Repository{
 
             Statement preparedStatement = connection.createStatement();
             preparedStatement.executeUpdate(query);
+
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -173,11 +172,11 @@ public class PostgreRepository implements Repository{
             this.closeConnection();
         }
 
-        String table = null;
+       String table = null;
 
         String[] splitted = query.split("\\s+");
         for (int i = 0; i< splitted.length; i++){
-            if (splitted[i].equalsIgnoreCase("SET")) {
+            if (splitted[i].equalsIgnoreCase("UPDATE")) {
                 table = splitted[i+1];
                 System.out.println(table);
                 break;
@@ -185,5 +184,6 @@ public class PostgreRepository implements Repository{
         }
 
         return get(table);
+
     }
 }

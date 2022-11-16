@@ -132,7 +132,7 @@ public class Korisnik {
             racun.setStanje(racun.getStanje() + iznos);
         //IZMENA
         BankarskiSistem.database.updateDataForQuery("UPDATE \"Racun\" SET stanje = " +
-                (racun.getStanje() + iznos) + " WHERE brojRacuna = " +
+                 (racun.getStanje() + iznos) + " WHERE \"brojRacuna\" = " +
                 racun.getBrojRacuna());
 
         return racun.getStanje();
@@ -151,7 +151,8 @@ public class Korisnik {
             System.out.println("Iznos je veci od stanja na racunu. ");
         else {
             racun.setStanje(racun.getStanje() - iznos);
-            BankarskiSistem.database.updateDataForQuery("UPDATE \"Racun\" SET stanje = " + (racun.getStanje() - iznos) + " WHERE brojRacuna = " +
+            BankarskiSistem.database.updateDataForQuery("UPDATE \"Racun\" SET stanje = " +
+                    (racun.getStanje() - iznos) + " WHERE \"brojRacuna\" = " +
                     racun.getBrojRacuna());
             //Zatvaranje racuna u slucaju da je iznos nula
             if (Math.signum(racun.getStanje()) == 0)
