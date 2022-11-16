@@ -37,6 +37,11 @@ public class Racun {
         this.banka = banka;
     }
 
+    public Racun(Tip tipRacuna, Valuta valuta, Korisnik korisnik, Banka banka, float stanje) {
+        this(tipRacuna,valuta,korisnik,banka);
+        this.stanje = stanje;
+    }
+
     public int getIdValuta() {
         return idValuta;
     }

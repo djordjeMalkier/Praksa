@@ -122,7 +122,8 @@ public class BankarskiSistem {
                     tipRacuna,
                     valuta,
                     korisnik,
-                    banka
+                    banka,
+                    Float.parseFloat(row.getFields().get("stanje").toString())
             ));
         }
         return racuni;
