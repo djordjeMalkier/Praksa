@@ -1,7 +1,5 @@
 package common.bankarskiSistem;
 
-import java.util.concurrent.atomic.AtomicInteger;
-
 /**
  * Klasa racun sadrzi jedinstveni broj racuna koji pripada samo jednom {@link Korisnik}
  * i stanje raspolozovih sredstava u odredjenoj valuti.
@@ -11,8 +9,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class Racun {
     private float stanje;
-    private final int brojRacuna;
-    private static final AtomicInteger count = new AtomicInteger(0);
+    private int brojRacuna;
 
     private Valuta valuta;
     private Tip tipRacuna;
@@ -21,7 +18,7 @@ public class Racun {
 
     private int idValuta, idTip, idKorisnik, idBanka;
 
-    public Racun(Tip tipRacuna, Valuta valuta, Korisnik korisnik, Banka banka) {
+    public Racun(Tip tipRacuna, Valuta valuta, Korisnik korisnik, Banka banka, int brojRacuna) {
         if(tipRacuna == null || valuta == null || korisnik == null || banka == null) {
             throw new NullPointerException("Konstruktor ne prima null vrednosti");
         }
@@ -32,13 +29,13 @@ public class Racun {
         this.tipRacuna = tipRacuna;
         this.stanje = 0;
         this.valuta = valuta;
-        brojRacuna = count.incrementAndGet();
+        this.brojRacuna = brojRacuna;
         this.korisnik = korisnik;
         this.banka = banka;
     }
 
-    public Racun(Tip tipRacuna, Valuta valuta, Korisnik korisnik, Banka banka, float stanje) {
-        this(tipRacuna,valuta,korisnik,banka);
+    public Racun(Tip tipRacuna, Valuta valuta, Korisnik korisnik, Banka banka, float stanje, int brojRacuna) {
+        this(tipRacuna,valuta,korisnik,banka, brojRacuna);
         this.stanje = stanje;
     }
 
@@ -120,5 +117,9 @@ public class Racun {
                 ", idKorisnik=" + idKorisnik +
                 ", idBanka=" + idBanka +
                 '}';
+    }
+
+    public void setBrojRacuna(int brojRacuna) {
+        this.brojRacuna = brojRacuna;
     }
 }

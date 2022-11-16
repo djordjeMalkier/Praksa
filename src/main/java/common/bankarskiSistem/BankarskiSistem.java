@@ -25,6 +25,9 @@ public class BankarskiSistem {
             List<Racun> racuni = ucitajRacuneIzBaze(database, banke, korisnici);
             dodajRacune(racuni, banke);
 
+            for (Racun r : racuni)
+                System.out.println(r);
+
             Scanner sc = new Scanner(System.in);
 
             while(true) {
@@ -116,13 +119,16 @@ public class BankarskiSistem {
             Valuta valuta = Valuta.values()[Integer.parseInt(row.getFields().get("idValuta").toString())-1];
             int idKorisnik = Integer.parseInt(row.getFields().get("idKorisnik").toString());
             Korisnik korisnik = korisnici.stream().filter(k -> k.getIdKorisnik() == idKorisnik).findAny().orElse(null);
-            Banka banka = banke.get(Integer.parseInt(row.getFields().get("idBanka").toString())-1);
+            int idBanke = Integer.parseInt(row.getFields().get("idBanka").toString());
+            Banka banka = banke.stream().filter(b -> b.getIdBanke() == idBanke).findAny().orElse(null);
+            int brojRacuna = Integer.parseInt(row.getFields().get("brojRacuna").toString());
             racuni.add(new Racun(
                     tipRacuna,
                     valuta,
                     korisnik,
                     banka,
-                    Float.parseFloat(row.getFields().get("stanje").toString())
+                    Float.parseFloat(row.getFields().get("stanje").toString()),
+                    brojRacuna
             ));
         }
         return racuni;
@@ -156,11 +162,10 @@ public class BankarskiSistem {
 
     private static Banka odabirBanke(List<Banka> banke, Scanner sc) {
         for (int i = 0; i < banke.size(); i++) {
-            System.out.print(i+1 + ") ");
             System.out.println(banke.get(i));
             System.out.println();
         }
-        System.out.println("Odaberi redni broj banke: ");
+        System.out.println("Odaberi ID banke: ");
 
         int odabir = -1;
         if (sc.hasNextLine()) {
@@ -170,7 +175,8 @@ public class BankarskiSistem {
         if (odabir <= 0 || odabir > banke.size())
             throw new IndexOutOfBoundsException("Nevalidan broj banke");
 
-        return banke.get(odabir-1);
+        int finalOdabir = odabir;
+        return banke.stream().filter(b -> b.getIdBanke() == finalOdabir).findAny().orElse(null);
     }
 
     private static int ucitajInt(Scanner sc) {
@@ -228,10 +234,11 @@ public class BankarskiSistem {
         if (korisnik != null) {
             korisnik.ispisiRacune();
             System.out.println("Izaberite racun za uplatu: ");
-            choice = ucitajInt(sc) - 1;
+            choice = ucitajInt(sc);
             System.out.println("Unesite iznos uplate: ");
             int iznos = ucitajInt(sc);
-            korisnik.uplata(korisnik.getRacuni().get(choice), iznos);
+            Racun racunZaUplatu = korisnik.getRacuni().stream().filter(r -> r.getBrojRacuna() == choice).findAny().orElse(null);
+            korisnik.uplata(racunZaUplatu, iznos);
         }
         else System.out.println("Ne postoji korisnik! ");
     }
@@ -246,7 +253,8 @@ public class BankarskiSistem {
             choice = ucitajInt(sc);
             System.out.println("Unesite iznos isplate: ");
             int iznos = ucitajInt(sc);
-            korisnik.isplata(korisnik.getRacuni().get(choice), iznos);
+            Racun racunZaIsplatu = korisnik.getRacuni().stream().filter(r -> r.getBrojRacuna() == choice).findAny().orElse(null);
+            korisnik.isplata(racunZaIsplatu, iznos);
         }
         else System.out.println("Ne postoji korisnik! ");
     }
@@ -283,8 +291,8 @@ public class BankarskiSistem {
         if (korisnik != null) {
             korisnik.ispisiRacune();
             System.out.println("Izaberite racun: ");
-            choice = ucitajInt(sc)-1;
-            Racun racun = korisnik.getRacuni().get(choice);
+            choice = ucitajInt(sc);
+            Racun racun = korisnik.getRacuni().stream().filter(r -> r.getBrojRacuna() == choice).findAny().orElse(null);
             System.out.println("Stanje je: " + korisnik.proveraStanja(racun,racun.getValuta()));
         }
         else System.out.println("Ne postoji korisnik! ");
@@ -300,12 +308,13 @@ public class BankarskiSistem {
 
         System.out.println("Izaberite racun sa kog vrsite transfer: ");
         int transferSaRacuna = ucitajInt(sc);
-        Racun racun = korisnik.getRacuni().get(transferSaRacuna);
+        Racun racun = korisnik.getRacuni().stream().filter(r -> r.getBrojRacuna() == transferSaRacuna).findAny().orElse(null);
+
 
         System.out.println("Unesite broj racuna na koji vrsite transfer: ");
         int transferNaRacun = ucitajInt(sc);
 
-        Racun racunZaTransfer = null;
+        Racun racunZaTransfer = korisnik.getRacuni().stream().filter(r -> r.getBrojRacuna() == transferNaRacun).findAny().orElse(null);;
         for (Banka b : banke)
             for (Korisnik k: b.getKorisnici())
                 for (Racun r: k.getRacuni())
@@ -334,8 +343,8 @@ public class BankarskiSistem {
         if (korisnik != null) {
             korisnik.ispisiRacune();
             System.out.println("Izaberite racun za brisanje: ");
-            choice = ucitajInt(sc) - 1;
-            Racun racun = korisnik.getRacuni().get(choice);
+            choice = ucitajInt(sc);
+            Racun racun = korisnik.getRacuni().stream().filter(r -> r.getBrojRacuna() == choice).findAny().orElse(null);
             korisnik.obrisiRacun(racun);
         } else System.out.println("Ne postoji korisnik!");
 
@@ -346,13 +355,13 @@ public class BankarskiSistem {
         System.out.println("Unesite tip racuna: DEVZINI/DINARSKI ");
         String tip = sc.nextLine();
         if(tip.toUpperCase().equals(Tip.DEVIZNI.toString())){
-            Racun racun = new Racun(Tip.DEVIZNI,Valuta.EUR, korisnik, banka);
-            Racun racun3 = new Racun(Tip.DEVIZNI,Valuta.USD, korisnik, banka);
+            Racun racun = new Racun(Tip.DEVIZNI,Valuta.EUR, korisnik, banka, -1);
+            Racun racun3 = new Racun(Tip.DEVIZNI,Valuta.USD, korisnik, banka, -1);
             banka.dodajRacun(racun, korisnik);
             banka.dodajRacun(racun3, korisnik);
         }
         else if (tip.toUpperCase().equals(Tip.DINARSKI.toString())){
-            Racun racun2 = new Racun(Tip.DINARSKI,Valuta.RSD, korisnik, banka);
+            Racun racun2 = new Racun(Tip.DINARSKI,Valuta.RSD, korisnik, banka, -1);
             banka.dodajRacun(racun2, korisnik);
         }
 
