@@ -105,4 +105,20 @@ public class Racun {
         if(tipRacuna == null) throw new NullPointerException("Prosledjen tip racuna je null");
         this.tipRacuna = tipRacuna;
     }
+
+    @Override
+    public String toString() {
+        return "Racun{" +
+                "stanje=" + stanje +
+                ", brojRacuna=" + brojRacuna +
+                ", valuta=" + valuta +
+                ", tipRacuna=" + tipRacuna +
+                ", korisnik=" + korisnik +
+                ", banka=" + banka +
+                ", idValuta=" + idValuta +
+                ", idTip=" + idTip +
+                ", idKorisnik=" + idKorisnik +
+                ", idBanka=" + idBanka +
+                '}';
+    }
 }

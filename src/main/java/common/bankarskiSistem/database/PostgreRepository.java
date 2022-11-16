@@ -177,7 +177,7 @@ public class PostgreRepository implements Repository{
 
         String[] splitted = query.split("\\s+");
         for (int i = 0; i< splitted.length; i++){
-            if (splitted[i].equalsIgnoreCase("SET")) {
+            if (splitted[i].equalsIgnoreCase("UPDATE")) {
                 table = splitted[i+1];
                 System.out.println(table);
                 break;

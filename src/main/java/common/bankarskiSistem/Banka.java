@@ -102,6 +102,8 @@ public class Banka {
     }
 
     public void dodajRacunUListu(Racun racun, Korisnik korisnik) {
+        System.out.println("dodaje se racun " + racun);
+        System.out.println("korisnika " + korisnik);
         if(korisnici.contains(korisnik)) {
             korisnik.getRacuni().add(racun);
         }
@@ -162,7 +164,7 @@ public class Banka {
 
     @Override
     public String toString() {
-        return "Banka: " + ime + " na adresi: " + adresa;
+        return "ID: "+ idBanke + " Banka: " + ime + " na adresi: " + adresa + " broj korisnika=" + korisnici.size();
         //+ "\nKursna lista: " + getKurs().toString();
     }
 }
