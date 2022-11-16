@@ -101,6 +101,16 @@ public class Banka {
         }
     }
 
+    public void dodajRacunUListu(Racun racun, Korisnik korisnik) {
+        if(korisnici.contains(korisnik)) {
+            korisnik.getRacuni().add(racun);
+        }
+        else {
+            korisnici.add(korisnik);
+            korisnik.getRacuni().add(racun);
+        }
+    }
+
     /**
      *
      * @param racun - racun koji se brise iz banke
