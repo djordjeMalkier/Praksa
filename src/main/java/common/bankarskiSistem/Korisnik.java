@@ -123,17 +123,16 @@ public class Korisnik {
      * @param iznos - iznos koji se upacujue
      * @return - stanje nakon uplate
      */
-    public float uplata(Racun racun, double iznos) {
+    public float uplata(Racun racun, float iznos) {
         if (racun == null) throw new NullPointerException("Prosledjen je null racun");
 
         if (iznos <= 0) {
             System.out.println("Iznos za uplatu mora biti pozitivan");
         } else
-            racun.setStanje((float) (racun.getStanje() + iznos));
+            racun.setStanje(racun.getStanje() + iznos);
         //IZMENA
-
         BankarskiSistem.database.updateDataForQuery("UPDATE \"Racun\" SET stanje = " +
-                (racun.getStanje() + iznos) + " WHERE \"brojRacuna\" = " +
+                 (racun.getStanje() + iznos) + " WHERE \"brojRacuna\" = " +
                 racun.getBrojRacuna());
 
         return racun.getStanje();
@@ -152,7 +151,8 @@ public class Korisnik {
             System.out.println("Iznos je veci od stanja na racunu. ");
         else {
             racun.setStanje(racun.getStanje() - iznos);
-            BankarskiSistem.database.updateDataForQuery("UPDATE \"Racun\" SET stanje = " + (racun.getStanje() - iznos) + " WHERE brojRacuna = " +
+            BankarskiSistem.database.updateDataForQuery("UPDATE \"Racun\" SET stanje = " +
+                    (racun.getStanje() - iznos) + " WHERE \"brojRacuna\" = " +
                     racun.getBrojRacuna());
             //Zatvaranje racuna u slucaju da je iznos nula
             if (Math.signum(racun.getStanje()) == 0)
