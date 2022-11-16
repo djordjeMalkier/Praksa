@@ -26,6 +26,15 @@ public class Korisnik {
         this.racuni = new ArrayList<>();
     }
 
+    public Korisnik(String ime, String prezime, String adresa, String jmbg, int idKorisnik) {
+        this.ime = ime;
+        this.prezime = prezime;
+        this.adresa = adresa;
+        this.jmbg = jmbg;
+        this.racuni = new ArrayList<>();
+        this.idKorisnik = idKorisnik;
+    }
+
     public Korisnik(String ime, String prezime, String jmbg, String adresa, List<Racun> racuni, int idKorisnik) {
         this.ime = ime;
         this.prezime = prezime;
