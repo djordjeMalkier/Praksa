@@ -21,8 +21,12 @@ public class BankarskiSistem {
            database = new DatabaseImplementation(new PostgreRepository(settings));
             InformationResource ir = (InformationResource) database.loadResource();
 
-
-            List<Banka> banke = ucitajBankeIzBaze(database);
+            //INICIJALIZACIJA IZ BAZE
+            List<Kurs> kursevi = ucitajKurseveIzBaze(database);
+            List<Banka> banke = ucitajBankeIzBaze(database, kursevi);
+            List<Korisnik> korisnici = ucitajKorisnikeIzBaze(database);
+            List<Racun> racuni = ucitajRacuneIzBaze(database, banke, korisnici);
+            dodajRacune(racuni, banke);
 
             Scanner sc = new Scanner(System.in);
 
@@ -77,9 +81,60 @@ public class BankarskiSistem {
             }
         }
 
-    private static List<Banka> ucitajBankeIzBaze(Database database) {
-        List<Kurs> kursevi = ucitajKurseveIzBaze(database);
+    private static void dodajRacune(List<Racun> racuni, List<Banka> banke) {
+        for (int i = 0; i < racuni.size(); i++) {
+            Racun racun = racuni.get(0);
+            Banka bankaKojojSeDodajeRacun =
+                    banke.stream().filter(b -> b.getIdBanke() == racun.getBanka().getIdBanke())
+                            .findAny()
+                            .orElse(null);
+            Korisnik korisnikRacuna = racun.getKorisnik();
+            assert bankaKojojSeDodajeRacun != null;
+            bankaKojojSeDodajeRacun.dodajRacunUListu(racun, korisnikRacuna);
+        }
+    }
 
+    private static void initBankarskiSistem(Database database) {
+    }
+
+    private static List<Korisnik> ucitajKorisnikeIzBaze(Database database) {
+        List<Korisnik> korisnici = new ArrayList<>();
+        List<Row> rows = database.readDataFromQuery("SELECT * FROM \"Korisnik\"");
+        for (Row row : rows) {
+            String ime = row.getFields().get("ime").toString().trim();
+            String prezime = row.getFields().get("prezime").toString().trim();
+            String adresa = row.getFields().get("adresa").toString().trim();
+            String jmbg = row.getFields().get("jmbg").toString().trim();
+            int idKorisnika = Integer.parseInt(row.getFields().get("idKorisnik").toString().trim());
+            korisnici.add(new Korisnik(ime,
+                    prezime,
+                    adresa,
+                    jmbg,
+                    idKorisnika));
+        }
+        return korisnici;
+    }
+
+    private static List<Racun> ucitajRacuneIzBaze(Database database, List<Banka> banke, List<Korisnik> korisnici) {
+        List<Racun> racuni = new ArrayList<>();
+        List<Row> rows = database.readDataFromQuery("SELECT * FROM \"Racun\"");
+        for (Row row : rows) {
+            Tip tipRacuna = Tip.values()[Integer.parseInt(row.getFields().get("idTip").toString())-1];
+            Valuta valuta = Valuta.values()[Integer.parseInt(row.getFields().get("idValuta").toString())-1];
+            int idKorisnik = Integer.parseInt(row.getFields().get("idKorisnik").toString());
+            Korisnik korisnik = korisnici.stream().filter(k -> k.getIdKorisnik() == idKorisnik).findAny().orElse(null);
+            Banka banka = banke.get(Integer.parseInt(row.getFields().get("idBanka").toString())-1);
+            racuni.add(new Racun(
+                    tipRacuna,
+                    valuta,
+                    korisnik,
+                    banka
+            ));
+        }
+        return racuni;
+    }
+
+    private static List<Banka> ucitajBankeIzBaze(Database database, List<Kurs> kursevi) {
         List<Banka> banke = new ArrayList<>();
         List<Row> rows = database.readDataFromQuery("SELECT * FROM \"Banka\"");
         for (Row row : rows) {
