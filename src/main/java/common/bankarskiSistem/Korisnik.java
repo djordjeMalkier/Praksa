@@ -220,4 +220,16 @@ public class Korisnik {
                     + " " + racuni.get(i).getStanje() +  " "  + racuni.get(i).getValuta()));
         System.out.println("---******---");
     }
+
+    @Override
+    public String toString() {
+        return "Korisnik{" +
+                "ime='" + ime + '\'' +
+                ", prezime='" + prezime + '\'' +
+                ", jmbg='" + jmbg + '\'' +
+                ", adresa='" + adresa + '\'' +
+                ", ukupno racuna=" + racuni.size() +
+                ", idKorisnik=" + idKorisnik +
+                '}';
+    }
 }
