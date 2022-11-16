@@ -1,12 +1,7 @@
 package common.bankarskiSistem.database;
 
 import common.bankarskiSistem.database.settings.Settings;
-import common.bankarskiSistem.resources.DBNode;
 import common.bankarskiSistem.resources.data.Row;
-import common.bankarskiSistem.resources.enums.AttributeType;
-import common.bankarskiSistem.resources.implementation.Attribute;
-import common.bankarskiSistem.resources.implementation.Entity;
-import common.bankarskiSistem.resources.implementation.InformationResource;
 import lombok.Data;
 
 import java.sql.*;
@@ -45,80 +40,6 @@ public class PostgreRepository implements Repository{
         finally {
             connection = null;
         }
-    }
-
-
-    @Override
-    public DBNode getSchema() {
-
-        try{
-            this.initConnection();
-
-            DatabaseMetaData metaData = connection.getMetaData();
-            InformationResource ir = new InformationResource("Banka");
-
-            String tableType[] = {"TABLE"};
-            ResultSet tables = metaData.getTables(connection.getCatalog(), null, null, tableType);
-
-            while (tables.next()){
-
-                String tableName = tables.getString("TABLE_NAME");
-                if(tableName.contains("trace"))continue;
-                Entity newTable = new Entity(tableName, ir);
-                ir.addChild(newTable);
-
-                //Koje atribute imaja ova tabela?
-
-                ResultSet columns = metaData.getColumns(connection.getCatalog(), null, tableName, null);
-
-                while (columns.next()){
-
-                    String columnName = columns.getString("COLUMN_NAME");
-                    String columnType = columns.getString("TYPE_NAME");
-
-                    //System.out.println(columnType);
-
-                    int columnSize = Integer.parseInt(columns.getString("COLUMN_SIZE"));
-
-//                    ResultSet pkeys = metaData.getPrimaryKeys(connection.getCatalog(), null, tableName);
-//
-//                    while (pkeys.next()){
-//                        String pkColumnName = pkeys.getString("COLUMN_NAME");
-//                    }
-
-
-                    Attribute attribute = new Attribute(columnName, newTable,
-                            AttributeType.valueOf(
-                                    Arrays.stream(columnType.toUpperCase().split(" "))
-                                    .collect(Collectors.joining("_"))),
-                            columnSize);
-                    newTable.addChild(attribute);
-
-                }
-
-
-
-            }
-
-
-            //TODO Ogranicenja nad kolonama? Relacije?
-
-
-            return ir;
-            //String isNullable = columns.getString("IS_NULLABLE");
-            // ResultSet foreignKeys = metaData.getImportedKeys(connection.getCatalog(), null, table.getName());
-            // ResultSet primaryKeys = metaData.getPrimaryKeys(connection.getCatalog(), null, table.getName());
-
-        }
-        catch (SQLException e1) {
-            e1.printStackTrace();
-        }
-        catch (ClassNotFoundException e2){ e2.printStackTrace();}
-        finally {
-            this.closeConnection();
-        }
-
-        return null;
     }
 
     @Override
