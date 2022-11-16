@@ -133,7 +133,7 @@ public class Korisnik {
         //IZMENA
 
         BankarskiSistem.database.updateDataForQuery("UPDATE \"Racun\" SET stanje = " +
-                (Double)(racun.getStanje() + iznos) + " WHERE \"brojRacuna\" = " +
+                (racun.getStanje() + iznos) + " WHERE \"brojRacuna\" = " +
                 racun.getBrojRacuna());
 
         return racun.getStanje();
