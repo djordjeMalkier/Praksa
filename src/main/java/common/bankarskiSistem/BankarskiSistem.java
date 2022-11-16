@@ -25,14 +25,7 @@ public class BankarskiSistem {
             List<Racun> racuni = ucitajRacuneIzBaze(database, banke, korisnici);
             dodajRacune(racuni, banke);
 
-            for (Racun k: racuni
-                 ) {
-                System.out.println(k);
-            }
-
             Scanner sc = new Scanner(System.in);
-
-
 
             while(true) {
                 Banka banka = odabirBanke(banke, sc);

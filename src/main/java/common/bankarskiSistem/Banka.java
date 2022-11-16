@@ -102,8 +102,6 @@ public class Banka {
     }
 
     public void dodajRacunUListu(Racun racun, Korisnik korisnik) {
-        System.out.println("dodaje se racun " + racun);
-        System.out.println("korisnika " + korisnik);
         if(korisnici.contains(korisnik)) {
             korisnik.getRacuni().add(racun);
         }
