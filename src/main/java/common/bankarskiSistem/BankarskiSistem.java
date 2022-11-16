@@ -23,7 +23,7 @@ public class BankarskiSistem {
 
 
             List<Banka> banke = ucitajBankeIzBaze(database);
-
+            List<Korisnik> korisnici = ucitajKorisnikeIzBaze(database);
             Scanner sc = new Scanner(System.in);
 
 
@@ -103,6 +103,21 @@ public class BankarskiSistem {
                 }));
             }
             return kursevi;
+    }
+    private static List<Korisnik> ucitajKorisnikeIzBaze(Database database) {
+        List<Korisnik> korisnici = new ArrayList<>();
+
+        List<Row> rows = database.readDataFromQuery("SELECT * FROM \"Korisnik\"");
+        for (Row row : rows) {
+            korisnici.add(new Korisnik(
+                    row.getFields().get("jmbg").toString().trim(),
+                    row.getFields().get("ime").toString().trim(),
+                    row.getFields().get("prezime").toString().trim(),
+                    row.getFields().get("adresa").toString().trim(),
+                    Integer.parseInt(row.getFields().get("idKorisnik").toString())
+                    ));
+        }
+        return korisnici;
     }
 
     private static Banka odabirBanke(List<Banka> banke, Scanner sc) {
