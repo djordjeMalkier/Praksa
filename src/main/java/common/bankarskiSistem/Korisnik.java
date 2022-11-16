@@ -131,10 +131,7 @@ public class Korisnik {
         } else
             racun.setStanje((float) (racun.getStanje() + iznos));
         //IZMENA
-        System.out.println((Double)(racun.getStanje() + iznos));
-        System.out.println("UPDATE \"Racun\" SET stanje = " +
-                (Double)(racun.getStanje() + iznos) + " WHERE \"brojRacuna\" = " +
-                racun.getBrojRacuna());
+
         BankarskiSistem.database.updateDataForQuery("UPDATE \"Racun\" SET stanje = " +
                 (Double)(racun.getStanje() + iznos) + " WHERE \"brojRacuna\" = " +
                 racun.getBrojRacuna());
