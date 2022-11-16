@@ -1,5 +1,7 @@
 package common.bankarskiSistem;
 
+import common.bankarskiSistem.resources.data.Row;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -75,6 +77,14 @@ public class Banka {
         this.kurs = kurs;
     }
 
+    public int vratiID(Korisnik korisnik) {
+        String query = "Select \"idKorisnik\" from \"Korisnik\" where \"jmbg\" = '" + korisnik.getJmbg() + "'";
+        List<Row> idKorisnka = BankarskiSistem.database.readDataFromQuery(query);
+        int id = Integer.parseInt(idKorisnka.get(0).getFields().get("idKorisnik").toString());
+        System.out.println(id);
+        return id;
+    }
+
     /**
      *
      * @param racun - racun korisnika u banci koji se dodaje korisniku
@@ -89,7 +99,7 @@ public class Banka {
                     "'" + racun.getStanje() + "'" +
                     "," + (racun.getIdValuta()+1) + "," +
                     (racun.getIdTip()+1) + "," +
-                    (korisnik.getIdKorisnik()+1) + "," +
+                    (vratiID(korisnik)) + "," +
                     + idBanke + ")";
             BankarskiSistem.database.insertDataForQuery(query);
             System.out.println(query);
