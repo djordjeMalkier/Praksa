@@ -165,6 +165,7 @@ public class PostgreRepository implements Repository{
 
             Statement preparedStatement = connection.createStatement();
             preparedStatement.executeUpdate(query);
+
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -173,7 +174,7 @@ public class PostgreRepository implements Repository{
             this.closeConnection();
         }
 
-        String table = null;
+       String table = null;
 
         String[] splitted = query.split("\\s+");
         for (int i = 0; i< splitted.length; i++){
@@ -185,5 +186,6 @@ public class PostgreRepository implements Repository{
         }
 
         return get(table);
+
     }
 }
