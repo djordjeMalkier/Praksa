@@ -147,12 +147,21 @@ public class Banka {
     public void prebaciNovacKorisniku(Korisnik posiljalac, Racun racunPosiljalaca, Korisnik primalac,
                                       Racun racunPrimalaca, float iznos){
         if(racunPosiljalaca.getValuta() != racunPrimalaca.getValuta()){
-            iznos *= kurs.convert(racunPosiljalaca.getValuta(), racunPrimalaca.getValuta());
-            primalac.uplata(racunPrimalaca, iznos);
+            float iznos1=iznos;
+             iznos1 *= kurs.convert(racunPosiljalaca.getValuta(), racunPrimalaca.getValuta());
+            float stanje1=racunPosiljalaca.getStanje();
             posiljalac.isplata(racunPosiljalaca, iznos);
+
+            if(stanje1!=racunPosiljalaca.getStanje())
+                primalac.uplata(racunPrimalaca, iznos1);
+
         } else{
-            primalac.uplata(racunPrimalaca, iznos);
+            float stanje1=racunPosiljalaca.getStanje();
             posiljalac.isplata(racunPosiljalaca, iznos);
+
+            if(stanje1!=racunPosiljalaca.getStanje())
+                primalac.uplata(racunPrimalaca, iznos);
+
         }
 
     }
