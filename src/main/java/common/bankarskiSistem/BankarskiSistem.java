@@ -155,7 +155,7 @@ public class BankarskiSistem {
         List<Row> rows = database.readDataFromQuery("SELECT * FROM \"Kurs\"");
         for (Row row : rows) {
             kursevi.add(new Kurs(Integer.parseInt(row.getFields().get("idKurs").toString()), new float[][] {
-                    {1F, Float.parseFloat(row.getFields().get("EUR_RSD").toString()), Float.parseFloat(row.getFields().get("EUR_RSD").toString())},
+                    {1F, Float.parseFloat(row.getFields().get("EUR_RSD").toString()), Float.parseFloat(row.getFields().get("EUR_USD").toString())},
                     {Float.parseFloat(row.getFields().get("RSD_EUR").toString()), 1F, Float.parseFloat(row.getFields().get("RSD_USD").toString())},
                     {Float.parseFloat(row.getFields().get("USD_EUR").toString()), Float.parseFloat(row.getFields().get("USD_RSD").toString()), 1F}
             }));
