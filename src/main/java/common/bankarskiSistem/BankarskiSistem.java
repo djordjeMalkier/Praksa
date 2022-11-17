@@ -66,8 +66,7 @@ public class BankarskiSistem {
                         System.out.println();
                     }
                     case 8 -> {
-                        zatvoriRacun
-                                (database, banka, sc);
+                        zatvoriRacun(banka, sc);
                         System.out.println();
                     }
                     case 9 -> System.exit(1);
@@ -230,17 +229,24 @@ public class BankarskiSistem {
         System.out.println("Unesite jmbg: ");
         String jmbg = sc.nextLine();
         Korisnik korisnik = banka.nadjiKorisnika(jmbg);
-        int choice;
+        int idBrojRacunaUplata;
         if (korisnik != null) {
             korisnik.ispisiRacune();
             System.out.println("Izaberite racun za uplatu: ");
-            choice = ucitajInt(sc);
+            idBrojRacunaUplata = ucitajInt(sc);
+            Racun racunZaUplatu = korisnik.getRacuni().stream()
+                    .filter(r -> r.getBrojRacuna() == idBrojRacunaUplata)
+                    .findAny()
+                    .orElse(null);
+            if (racunZaUplatu == null) {
+                System.err.println("Nevalidan broj racuna");
+                return;
+            }
             System.out.println("Unesite iznos uplate: ");
             int iznos = ucitajInt(sc);
-            Racun racunZaUplatu = korisnik.getRacuni().stream().filter(r -> r.getBrojRacuna() == choice).findAny().orElse(null);
             korisnik.uplata(racunZaUplatu, iznos);
         }
-        else System.out.println("Ne postoji korisnik! ");
+        else System.err.println("Ne postoji korisnik! ");
     }
 
     private static void isplati(Banka banka, Scanner sc) {
@@ -287,15 +293,22 @@ public class BankarskiSistem {
         System.out.println("Unesite jmbg: ");
         String jmbg = sc.nextLine();
         Korisnik korisnik = banka.nadjiKorisnika(jmbg);
-        int choice;
+        int idRacunaOdabir;
         if (korisnik != null) {
             korisnik.ispisiRacune();
             System.out.println("Izaberite racun: ");
-            choice = ucitajInt(sc);
-            Racun racun = korisnik.getRacuni().stream().filter(r -> r.getBrojRacuna() == choice).findAny().orElse(null);
+            idRacunaOdabir = ucitajInt(sc);
+            Racun racun = korisnik.getRacuni().stream()
+                    .filter(r -> r.getBrojRacuna() == idRacunaOdabir)
+                    .findAny()
+                    .orElse(null);
+            if (racun == null) {
+                System.err.println("Nevalidan broj racuna");
+                return;
+            }
             System.out.println("Stanje je: " + korisnik.proveraStanja(racun,racun.getValuta()));
         }
-        else System.out.println("Ne postoji korisnik! ");
+        else System.err.println("Ne postoji korisnik! ");
 
 
     }
@@ -334,21 +347,26 @@ public class BankarskiSistem {
         banka.prebaciNovacKorisniku(korisnik, racun, primalac, racunZaTransfer, iznosTransfera);
     }
 
-    private static void zatvoriRacun(Database database, Banka banka, Scanner sc) {
+    private static void zatvoriRacun(Banka banka, Scanner sc) {
         System.out.println("Unesite jmbg: ");
         String jmbg = sc.nextLine();
         Korisnik korisnik = banka.nadjiKorisnika(jmbg);
 
-        int choice;
+        int idRacunaOdabir;
         if (korisnik != null) {
             korisnik.ispisiRacune();
             System.out.println("Izaberite racun za brisanje: ");
-            choice = ucitajInt(sc);
-            Racun racun = korisnik.getRacuni().stream().filter(r -> r.getBrojRacuna() == choice).findAny().orElse(null);
+            idRacunaOdabir = ucitajInt(sc);
+            Racun racun = korisnik.getRacuni().stream()
+                    .filter(r -> r.getBrojRacuna() == idRacunaOdabir)
+                    .findAny()
+                    .orElse(null);
+            if (racun == null) {
+                System.err.println("Nevalidan broj racuna");
+                return;
+            }
             korisnik.obrisiRacun(racun);
-        } else System.out.println("Ne postoji korisnik!");
-
-
+        } else System.err.println("Ne postoji korisnik!");
     }
 
     private static void napraviRacune(Korisnik korisnik, Banka banka, Scanner sc){

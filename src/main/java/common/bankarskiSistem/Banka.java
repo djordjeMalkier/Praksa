@@ -81,7 +81,6 @@ public class Banka {
         String query = "Select \"idKorisnik\" from \"Korisnik\" where \"jmbg\" = '" + korisnik.getJmbg() + "'";
         List<Row> idKorisnka = BankarskiSistem.database.readDataFromQuery(query);
         int id = Integer.parseInt(idKorisnka.get(0).getFields().get("idKorisnik").toString());
-        System.out.println(id);
         return id;
     }
 
@@ -99,7 +98,6 @@ public class Banka {
                     (racun.getIdTip()+1) + "," +
                     (vratiID(korisnik)) + "," +
                     + idBanke + ")";
-            System.out.println(query);
             List<Row> row = BankarskiSistem.database.insertDataForQuery(query);
             int brojRacuna = Integer.parseInt(row.get(row.size()-1).getFields().get("brojRacuna").toString());
             racun.setBrojRacuna(brojRacuna);

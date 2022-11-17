@@ -206,15 +206,13 @@ public class Korisnik {
      */
 
     public boolean obrisiRacun(Racun racun) {
-
         if (racun == null) throw new NullPointerException("Nije prosledjen racun");
-        //IZMENA
-        BankarskiSistem.database.deleteDataForQuery("DELETE FROM \"Racun\" WHERE \"brojRacuna\" = " + racun.getBrojRacuna());
+        BankarskiSistem.database.deleteDataForQuery(
+                "DELETE FROM \"Racun\" WHERE \"brojRacuna\" = " + racun.getBrojRacuna());
         return racuni.remove(racun);
     }
 
     public void ispisiRacune(){
-
         System.out.println("---Racuni---");
         IntStream.range(0, racuni.size())
                 .forEach(i ->
