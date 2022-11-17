@@ -97,7 +97,7 @@ public class Banka {
                     "," + (racun.getIdValuta()+1) + "," +
                     (racun.getIdTip()+1) + "," +
                     (vratiID(korisnik)) + "," +
-                    + idBanke + ")";
+                    idBanke + ")";
             List<Row> row = BankarskiSistem.database.insertDataForQuery(query);
             int brojRacuna = Integer.parseInt(row.get(row.size()-1).getFields().get("brojRacuna").toString());
             racun.setBrojRacuna(brojRacuna);
