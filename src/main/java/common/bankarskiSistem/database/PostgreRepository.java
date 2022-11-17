@@ -132,7 +132,6 @@ public class PostgreRepository implements Repository{
         for (int i = 0; i< splitted.length; i++){
             if (splitted[i].equalsIgnoreCase("INTO")) {
                 table = splitted[i+1];
-                System.out.println(table);
                 break;
             }
         }
@@ -178,7 +177,6 @@ public class PostgreRepository implements Repository{
         for (int i = 0; i< splitted.length; i++){
             if (splitted[i].equalsIgnoreCase("UPDATE")) {
                 table = splitted[i+1];
-                System.out.println(table);
                 break;
             }
         }

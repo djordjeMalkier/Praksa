@@ -339,22 +339,27 @@ public class BankarskiSistem {
             return;
         }
 
+        //naci sve racune koji postoje
+        for (Banka b : banke) {
+            for (Korisnik k : b.getKorisnici()) {
+                k.ispisiRacune();
+            }
+        }
         System.out.println("Unesite broj racuna na koji vrsite transfer: ");
-        int transferNaRacun = ucitajInt(sc);
+        Racun racunZaTransfer = null;
+        int idOdabirRacuna = ucitajInt(sc);
+        for (Banka b : banke) {
+            for (Korisnik k : b.getKorisnici()) {
+                for (Racun r : k.getRacuni())
+                    if (r.getBrojRacuna() == idOdabirRacuna)
+                        racunZaTransfer = r;
+            }
+        }
 
-        Racun racunZaTransfer = korisnik.getRacuni().stream().filter(r -> r.getBrojRacuna() == transferNaRacun).findAny().orElse(null);
         if (racunZaTransfer == null) {
             System.err.println("Ne postoji racun");
             return;
         }
-
-        for (Banka b : banke)
-            for (Korisnik k: b.getKorisnici())
-                for (Racun r: k.getRacuni())
-                    if (r.getBrojRacuna() == transferNaRacun) {
-                        racunZaTransfer = r;
-                        break;
-                    }
 
         System.out.println("Unesite iznos: ");
         float iznosTransfera = Float.parseFloat(sc.nextLine());
