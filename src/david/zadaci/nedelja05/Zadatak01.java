@@ -17,6 +17,9 @@ public class Zadatak01 {
     }
 
     private static int indexClosestToMean(int[] generatedArray, float mean) {
+        if (generatedArray == null)
+            throw new NullPointerException("Null array");
+
         float dist = Math.abs(generatedArray[0] - mean);
         int indexOfClosest = 0;
         for (int i = 0; i < generatedArray.length; i++) {
@@ -30,6 +33,10 @@ public class Zadatak01 {
     }
 
     private static float mean(int[] generatedArray) {
+        if (generatedArray == null)
+            throw new NullPointerException("Null array");
+        if (generatedArray.length == 0)
+            throw new ArithmeticException("Divide by zero");
         return (float)Arrays.stream(generatedArray).sum() / generatedArray.length;
     }
 
