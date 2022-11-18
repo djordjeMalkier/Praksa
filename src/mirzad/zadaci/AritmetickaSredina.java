@@ -1,4 +1,4 @@
-package mirzad;
+package mirzad.zadaci;
 
 import java.util.Random;
 
@@ -31,7 +31,8 @@ public class AritmetickaSredina {
         for (i = 0; i < 10; i++){
             int distance = Math.abs(sum - numbersArray[i]);
             if(distance < maxDistance) {
-                maxDistance = distance;
+                maxDistance =
+                        distance;
                 bestNumber = numbersArray[i];
             }
         }
