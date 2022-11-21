@@ -1,7 +1,11 @@
 package common.bankarskiSistem;
 
 import common.bankarskiSistem.resources.data.Row;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,12 +15,24 @@ import java.util.List;
  * Drugi konstruktor sa cetiri parametra  u koliko zelimo da napravimo banku sa korisnicima.
  * I default-ni konstruktor.
  */
+
+@Entity
+
+@Getter
+@Setter
 public class Banka {
+    @Id
+    @GeneratedValue
     private int idBanke;
+    @Column(name="idKurs")
     private int idKurs;
+    @Column(name="ime")
     private String ime;
+    @Column(name="adresa")
     private String adresa;
+    @ElementCollection
     private List<Korisnik> korisnici;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idBanke")
     private Kurs kurs;
 
     public Banka(int idBanke, String ime, String adresa, Kurs kurs) {
