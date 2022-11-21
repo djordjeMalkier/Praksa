@@ -17,12 +17,13 @@ import java.util.List;
  */
 
 @Entity
-
+@Table(name = "banka")
 @Getter
 @Setter
 public class Banka {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "idBanka", nullable = false)
     private int idBanke;
     @Column(name="idKurs")
     private int idKurs;
@@ -32,7 +33,7 @@ public class Banka {
     private String adresa;
     @ElementCollection
     private List<Korisnik> korisnici;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idBanke")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idBanka")
     private Kurs kurs;
 
     public Banka(int idBanke, String ime, String adresa, Kurs kurs) {
