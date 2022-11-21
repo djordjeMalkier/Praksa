@@ -1,6 +1,7 @@
 package common.bankarskiSistem;
 
 import javax.persistence.*;
+import java.util.List;
 
 /**
  * Tip racuna moze da bude dinarski sa valutom RSD
@@ -17,6 +18,9 @@ public enum Tip {
 
     @Column(name = "naziv", nullable = false)
     private String naziv;
+
+    @OneToMany(mappedBy = "idTip")
+    private List<Racun> racuni;
     public Long getId() {
         return id;
     }
