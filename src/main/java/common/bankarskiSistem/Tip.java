@@ -1,5 +1,7 @@
 package common.bankarskiSistem;
 
+import lombok.Getter;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -8,24 +10,19 @@ import java.util.List;
  * ili devizni sa deviznim valutama
  */
 @Entity
-@Table(name = "tip")
+@Table(name = "Tip")
+@Getter
 public enum Tip {
     DINARSKI,DEVIZNI;
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id", nullable = false)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "idTip", nullable = false)
+    private int idTip;
 
     @Column(name = "naziv", nullable = false)
     private String naziv;
 
     @OneToMany(mappedBy = "idTip")
     private List<Racun> racuni;
-    public Long getId() {
-        return id;
-    }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
 }
