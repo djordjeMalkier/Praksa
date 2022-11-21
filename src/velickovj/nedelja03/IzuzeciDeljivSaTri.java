@@ -1,4 +1,4 @@
-package velickovj.nedelja03;
+package src.velickovj.nedelja03;
 
 import java.util.ArrayList;
 import java.util.List;

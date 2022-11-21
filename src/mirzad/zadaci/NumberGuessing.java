@@ -1,4 +1,4 @@
-package mirzad;
+package mirzad.zadaci;
 
 import java.util.Random;
 import java.util.Scanner;

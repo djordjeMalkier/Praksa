@@ -1,4 +1,4 @@
-package velickovj.nedelja03;
+package src.velickovj.nedelja03;
 
 public class DeljenjeSaTri extends Exception {
     public DeljenjeSaTri(String poruka){
