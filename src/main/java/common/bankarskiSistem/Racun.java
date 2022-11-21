@@ -1,22 +1,51 @@
 package common.bankarskiSistem;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import javax.persistence.*;
+
 /**
  * Klasa racun sadrzi jedinstveni broj racuna koji pripada samo jednom {@link Korisnik}
  * i stanje raspolozovih sredstava u odredjenoj valuti.
  * Racun pipada samo jednoj banci i samo jednom korisniku i definisan je tip racuna
  * {@link Tip}
  */
-
+@Entity
+@Table (name = "Racun")
+@Getter
+@Setter
+@NoArgsConstructor
 public class Racun {
+    @Column(name = "stanje", nullable = false)
     private float stanje;
-    private int brojRacuna;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "brojRacuna", nullable = false)
+    private Integer brojRacuna;
 
+    @ManyToOne
+    @JoinColumn(name="idValuta")
     private Valuta valuta;
+    @ManyToOne
+    @JoinColumn(name="idTip")
     private Tip tipRacuna;
+    @ManyToOne
+    @JoinColumn(name="idKorisnik")
     private Korisnik korisnik;
-    private Banka banka;
 
-    private int idValuta, idTip, idKorisnik, idBanka;
+    @ManyToOne
+    @JoinColumn(name="idBanka")
+    private Banka banka;
+    @Column(name = "idValuta", nullable = false)
+    private int idValuta;
+    @Column(name = "idTip", nullable = false)
+    private int idTip;
+    @Column(name = "idKorisnik", nullable = false)
+    private int idKorisnik;
+    @Column(name = "idBanka", nullable = false)
+    private int idBanka;
 
     public Racun(Tip tipRacuna, Valuta valuta, Korisnik korisnik, Banka banka, int brojRacuna) {
         if(tipRacuna == null || valuta == null || korisnik == null || banka == null) {
@@ -39,69 +68,6 @@ public class Racun {
         this.stanje = stanje;
     }
 
-    public int getIdValuta() {
-        return idValuta;
-    }
-
-    public int getIdTip() {
-        return idTip;
-    }
-
-    public int getIdKorisnik() {
-        return idKorisnik;
-    }
-
-    public int getIdBanka() {
-        return idBanka;
-    }
-
-    public float getStanje() {
-        return stanje;
-    }
-
-    public void setStanje(float stanje) {
-        this.stanje = stanje;
-    }
-
-    public int getBrojRacuna() {
-        return brojRacuna;
-    }
-
-    public Valuta getValuta() {
-        return valuta;
-    }
-
-    public void setValuta(Valuta valuta) {
-        if(valuta == null) throw new NullPointerException("Prosledjena valuta je null");
-        this.valuta = valuta;
-    }
-
-    public Korisnik getKorisnik() {
-        return korisnik;
-    }
-
-    public void setKorisnik(Korisnik korisnik) {
-        if(korisnik == null) throw new NullPointerException("Prosledjen korisnik je null");
-        this.korisnik = korisnik;
-    }
-
-    public Banka getBanka() {
-        return banka;
-    }
-
-    public void setBanka(Banka banka) {
-        if(banka == null) throw new NullPointerException("Prosledjena banka je null");
-        this.banka = banka;
-    }
-
-    public Tip getTipRacuna() {
-        return tipRacuna;
-    }
-
-    public void setTipRacuna(Tip tipRacuna) {
-        if(tipRacuna == null) throw new NullPointerException("Prosledjen tip racuna je null");
-        this.tipRacuna = tipRacuna;
-    }
 
     @Override
     public String toString() {
@@ -117,9 +83,5 @@ public class Racun {
                 ", idKorisnik=" + idKorisnik +
                 ", idBanka=" + idBanka +
                 '}';
-    }
-
-    public void setBrojRacuna(int brojRacuna) {
-        this.brojRacuna = brojRacuna;
     }
 }

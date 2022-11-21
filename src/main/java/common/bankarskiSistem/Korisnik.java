@@ -1,29 +1,58 @@
 package common.bankarskiSistem;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.IntStream;
 
 /**
  * Klasa Korisnik u sebi sadrzi sve podatke u vezi sa njim i njegovim racunima.
  * {@link #Korisnik(String, String, String, String)} konstruktor bez racuna, ukoliko se kreira korisnik bez ikakvih racuna i bez id-a.
- * {@link #Korisnik(String, String, String, String, List, int)} konstruktor korisnika ukoliko korisnik vec ima neke racune
+ *  konstruktor korisnika ukoliko korisnik vec ima neke racune
  */
+@Entity
+@Table(name = "Korisnik")
+@NoArgsConstructor
+@Getter
+@Setter
 
 public class Korisnik {
-    private String ime;
-    private String prezime;
-    private String jmbg;
-    private String adresa;
-    private List<Racun> racuni;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "idKorisnik", nullable = false)
     private int idKorisnik;
+
+    @Column(name="ime", nullable = false)
+    private String ime;
+
+    @Column(name="prezime", nullable = false)
+    private String prezime;
+
+    @Column(name="jmbg", nullable = false)
+    private String jmbg;
+
+    @Column(name="iadresa", nullable = false)
+    private String adresa;
+
+    @OneToMany(mappedBy="idKorisnik")
+    private List<Racun> racuni;
+
+
+
+
 
     public Korisnik(String ime, String prezime, String adresa, String jmbg) {
         this.ime = ime;
         this.prezime = prezime;
         this.adresa = adresa;
         this.jmbg = jmbg;
-        this.racuni = new ArrayList<>();
+        this.racuni = new ArrayList<>() {
+        };
     }
 
     public Korisnik(String ime, String prezime, String adresa, String jmbg, int idKorisnik) {
@@ -44,52 +73,6 @@ public class Korisnik {
         this.idKorisnik = idKorisnik;
     }
 
-    public int getIdKorisnik() {
-        return idKorisnik;
-    }
-
-    public Korisnik(){
-        this.racuni = new ArrayList<>();
-    }
-
-    public String getIme() {
-        return ime;
-    }
-
-    public void setIme(String ime) {
-        this.ime = ime;
-    }
-
-    public String getPrezime() {
-        return prezime;
-    }
-
-    public void setPrezime(String prezime) {
-        this.prezime = prezime;
-    }
-
-    public String getJmbg() {
-        return jmbg;
-    }
-
-    public String getAdresa() {
-        return adresa;
-    }
-
-    public void setAdresa(String adresa) {
-        this.adresa = adresa;
-    }
-
-    public List<Racun> getRacuni() {
-        return racuni;
-    }
-
-    public void setRacuni(List<Racun> racuni) {
-        if (racuni != null)
-            this.racuni = racuni;
-        else
-            throw new NullPointerException("Prosledjen je null racun");
-    }
 
     /**
      * Metoda vraca iznos sredstava na svim korisnikovim racunima i prikazuje se u odredjenoj valuti.
