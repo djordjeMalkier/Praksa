@@ -24,8 +24,8 @@ import java.util.stream.IntStream;
 public class Korisnik {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "idKorisnik", nullable = false)
-    private int idKorisnik;
+    @Column(name="jmbg", nullable = false)
+    private String jmbg;
 
     @Column(name="ime", nullable = false)
     private String ime;
@@ -33,8 +33,7 @@ public class Korisnik {
     @Column(name="prezime", nullable = false)
     private String prezime;
 
-    @Column(name="jmbg", nullable = false)
-    private String jmbg;
+
 
     @Column(name="idAdresa", nullable = false)
     private String adresa;
@@ -55,22 +54,15 @@ public class Korisnik {
         };
     }
 
-    public Korisnik(String ime, String prezime, String adresa, String jmbg, int idKorisnik) {
-        this.ime = ime;
-        this.prezime = prezime;
-        this.adresa = adresa;
-        this.jmbg = jmbg;
-        this.racuni = new ArrayList<>();
-        this.idKorisnik = idKorisnik;
-    }
 
-    public Korisnik(String ime, String prezime, String jmbg, String adresa, List<Racun> racuni, int idKorisnik) {
+
+    public Korisnik(String ime, String prezime, String jmbg, String adresa, List<Racun> racuni) {
         this.ime = ime;
         this.prezime = prezime;
         this.jmbg = jmbg;
         this.adresa = adresa;
         this.racuni = racuni;
-        this.idKorisnik = idKorisnik;
+
     }
 
 
