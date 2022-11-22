@@ -50,7 +50,7 @@ public class Bank {
     }
 
     public Bank() {
-        this.exchangeRates = new ArrayList<>();
+        this.bankAccounts = new ArrayList<>();
     }
 
    /* public int vratiID(Racun racun) {
