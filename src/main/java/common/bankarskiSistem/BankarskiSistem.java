@@ -22,7 +22,7 @@ public class BankarskiSistem {
     public CommandLineRunner demo(UserRepository repository) {
         return (args) -> {
             // save a few users
-            //repository.save(new User("1002445874466", "Pera", "Petrovic", "Ulica i broj"));
+            repository.save(new User("1002445874466", "Pera", "Petrovic", "Ulica i broj"));
 
             // fetch all customers
             log.info("Users found with findAll():");

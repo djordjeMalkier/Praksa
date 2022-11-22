@@ -18,8 +18,7 @@ import java.util.List;
 
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name="personalId", nullable = false)
+    @Column(name="personal_id", nullable = false)
     private String personalId;
 
     @Column(name="name", nullable = false)
@@ -192,19 +191,17 @@ public class User {
                     + " " + racuni.get(i).getStanje() +  " "  + racuni.get(i).getValuta()));
         System.out.println("---******---");
     }
-
+*/
     @Override
     public String toString() {
-        return "Korisnik{" +
-                "ime='" + ime + '\'' +
-                ", prezime='" + prezime + '\'' +
-                ", jmbg='" + jmbg + '\'' +
-                ", adresa='" + adresa + '\'' +
-                ", ukupno racuna=" + racuni.size() +
-
+        return "User{" +
+                "name='" + name + '\'' +
+                ", surname='" + surname + '\'' +
+                ", ID='" + personalId + '\'' +
+                ", address='" + address + '\'' +
                 "}";
     }
-
+/*
     public void ispisiRacune(Banka banka) {
         System.out.println("---Racuni---");
         for (Racun racun : racuni) {
