@@ -1,7 +1,6 @@
 package common.bankarskiSistem.model;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -34,9 +33,9 @@ public class Banka {
     private List<Racun> racuni;
     @ManyToOne
     @JoinColumn(name = "idKurs")
-    private KursnaLista kurs;
+    private ExchangeRates kurs;
 
-    public Banka(int idBanke, String ime, String adresa, KursnaLista kurs) {
+    public Banka(int idBanke, String ime, String adresa, ExchangeRates kurs) {
         this.idBanke = idBanke;
         this.ime = ime;
         this.adresa = adresa;
@@ -45,7 +44,7 @@ public class Banka {
         //his.idKurs = kurs.getID();
     }
 
-    public Banka(int idBanke, String ime, String adresa, List<Racun> racuni, KursnaLista kurs) {
+    public Banka(int idBanke, String ime, String adresa, List<Racun> racuni, ExchangeRates kurs) {
         this.idBanke = idBanke;
         this.ime = ime;
         this.adresa = adresa;

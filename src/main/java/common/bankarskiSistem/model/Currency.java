@@ -10,16 +10,16 @@ import javax.persistence.*;
  * USD - americki dolar
  */
 @Entity
-@Table(name = "valuta")
+@Table(name = "currency")
 @Getter
-public enum Valuta {
+public enum Currency {
     EUR, RSD, USD;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "idValuta", nullable = false)
-    private int idValuta;
+    @Column(name = "idCurrency", nullable = false)
+    private int idCurrency;
 
-    @Column(name = "naziv", nullable = false)
-    private String naziv;
+    @Column(name = "name", nullable = false)
+    private String name;
 
 }

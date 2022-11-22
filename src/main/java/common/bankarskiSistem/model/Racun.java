@@ -10,7 +10,7 @@ import javax.persistence.*;
  * Klasa racun sadrzi jedinstveni broj racuna koji pripada samo jednom {@link Korisnik}
  * i stanje raspolozovih sredstava u odredjenoj valuti.
  * Racun pipada samo jednoj banci i samo jednom korisniku i definisan je tip racuna
- * {@link Tip}
+ * {@link AccountType}
  */
 @Entity
 @Table (name = "Racun")
@@ -27,10 +27,10 @@ public class Racun {
 
     @ManyToOne
     @JoinColumn(name="idValuta")
-    private Valuta valuta;
+    private Currency currency;
     @ManyToOne
     @JoinColumn(name="idTip")
-    private Tip tipRacuna;
+    private AccountType accountTypeRacuna;
     @ManyToOne
     @JoinColumn(name="jmbg")
     private Korisnik korisnik;
@@ -46,8 +46,8 @@ public class Racun {
     @Column(name = "idBanka", nullable = false)
     private int idBanka;
 */
-    public Racun(Tip tipRacuna, Valuta valuta, Korisnik korisnik, Banka banka, int brojRacuna) {
-        if(tipRacuna == null || valuta == null || korisnik == null || banka == null) {
+    public Racun(AccountType accountTypeRacuna, Currency currency, Korisnik korisnik, Banka banka, int brojRacuna) {
+        if(accountTypeRacuna == null || currency == null || korisnik == null || banka == null) {
             throw new NullPointerException("Konstruktor ne prima null vrednosti");
         }
 /*        this.idValuta = valuta.ordinal();
@@ -55,16 +55,16 @@ public class Racun {
         this.idKorisnik = korisnik.getIdKorisnik();
         this.idBanka = banka.getIdBanke();
  */
-        this.tipRacuna = tipRacuna;
+        this.accountTypeRacuna = accountTypeRacuna;
         this.stanje = 0;
-        this.valuta = valuta;
+        this.currency = currency;
         this.brojRacuna = brojRacuna;
         this.korisnik = korisnik;
         this.banka = banka;
     }
 
-    public Racun(Tip tipRacuna, Valuta valuta, Korisnik korisnik, Banka banka, float stanje, int brojRacuna) {
-        this(tipRacuna,valuta,korisnik,banka, brojRacuna);
+    public Racun(AccountType accountTypeRacuna, Currency currency, Korisnik korisnik, Banka banka, float stanje, int brojRacuna) {
+        this(accountTypeRacuna, currency,korisnik,banka, brojRacuna);
         this.stanje = stanje;
     }
 
@@ -74,8 +74,8 @@ public class Racun {
         return "Racun{" +
                 "stanje=" + stanje +
                 ", brojRacuna=" + brojRacuna +
-                ", valuta=" + valuta +
-                ", tipRacuna=" + tipRacuna +
+                ", valuta=" + currency +
+                ", tipRacuna=" + accountTypeRacuna +
                 ", korisnik=" + korisnik +
                 ", banka=" + banka +
 /*                ", idValuta=" + idValuta +
