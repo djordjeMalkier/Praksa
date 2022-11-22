@@ -19,7 +19,7 @@ import java.util.List;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name="personalId", nullable = false)
+    @Column(name="personal_id", nullable = false)
     private String personalId;
 
     @Column(name="name", nullable = false)
@@ -39,7 +39,7 @@ public class User {
         this.name = name;
         this.surname = surname;
         this.address = address;
-        this.bankAccounts = new ArrayList<>();
+
     }
 
 /*  public Korisnik(String ime, String prezime, String adresa, String jmbg) {
@@ -193,17 +193,17 @@ public class User {
         System.out.println("---******---");
     }
 
-    @Override
+  */  @Override
     public String toString() {
         return "Korisnik{" +
-                "ime='" + ime + '\'' +
-                ", prezime='" + prezime + '\'' +
-                ", jmbg='" + jmbg + '\'' +
-                ", adresa='" + adresa + '\'' +
-                ", ukupno racuna=" + racuni.size() +
+                "ime='" + name + '\'' +
+                ", prezime='" + surname+ '\'' +
+                ", jmbg='" + personalId + '\'' +
+                ", adresa='" + address + '\'' +
+         //       ", ukupno racuna=" + racuni.size() +
 
                 "}";
-    }
+    }/*
 
     public void ispisiRacune(Banka banka) {
         System.out.println("---Racuni---");
