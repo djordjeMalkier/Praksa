@@ -38,7 +38,7 @@ public class Korisnik {
     @Column(name="idAdresa", nullable = false)
     private String adresa;
 
-    @OneToMany(mappedBy="idKorisnik")
+    @OneToMany(mappedBy="jmbg")
     private List<Racun> racuni;
 
 
@@ -204,8 +204,8 @@ public class Korisnik {
                 ", jmbg='" + jmbg + '\'' +
                 ", adresa='" + adresa + '\'' +
                 ", ukupno racuna=" + racuni.size() +
-                ", idKorisnik=" + idKorisnik +
-                '}';
+
+                "}";
     }
 
     public void ispisiRacune(Banka banka) {
