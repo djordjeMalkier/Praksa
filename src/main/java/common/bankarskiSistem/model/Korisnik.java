@@ -1,20 +1,14 @@
 package common.bankarskiSistem.model;
 
-import common.bankarskiSistem.BankarskiSistem;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.IntStream;
 
-/**
- * Klasa Korisnik u sebi sadrzi sve podatke u vezi sa njim i njegovim racunima.
- * {@link #Korisnik(String, String, String, String)} konstruktor bez racuna, ukoliko se kreira korisnik bez ikakvih racuna i bez id-a.
- *  konstruktor korisnika ukoliko korisnik vec ima neke racune
- */
+
+
 @Entity
 @Table(name = "Korisnik")
 @NoArgsConstructor

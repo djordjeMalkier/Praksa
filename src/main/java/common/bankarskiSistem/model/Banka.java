@@ -1,10 +1,5 @@
 package common.bankarskiSistem.model;
 
-import common.bankarskiSistem.BankarskiSistem;
-import common.bankarskiSistem.model.Korisnik;
-import common.bankarskiSistem.model.KursnaLista;
-import common.bankarskiSistem.model.Racun;
-import common.bankarskiSistem.resources.data.Row;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -48,7 +43,7 @@ public class Banka {
         this.adresa = adresa;
         this.racuni = new ArrayList<>();
         this.kurs = kurs;
-        this.idKurs = kurs.getID();
+        //his.idKurs = kurs.getID();
     }
 
     public Banka(int idBanke, String ime, String adresa, List<Racun> racuni, KursnaLista kurs) {
@@ -57,7 +52,7 @@ public class Banka {
         this.adresa = adresa;
         this.racuni = racuni;
         this.kurs = kurs;
-        this.idKurs = kurs.getID();
+        //this.idKurs = kurs.getID();
     }
 
     public Banka() {
