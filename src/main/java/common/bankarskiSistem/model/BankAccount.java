@@ -13,7 +13,7 @@ import javax.persistence.*;
  * {@link Tip}
  */
 @Entity
-@Table (name = "account")
+@Table (name = "bankAccount")
 @Getter
 @Setter
 @NoArgsConstructor
