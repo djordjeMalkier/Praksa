@@ -24,16 +24,14 @@ public class Banka {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "idBanka", nullable = false)
     private int idBanke;
-    @Column(name="idKurs")
-    private int idKurs;
-    @Column(name="ime")
+    @Column(name="ime", nullable = false)
     private String ime;
-    @Column(name="adresa")
+    @Column(name="adresa", nullable = false)
     private String adresa;
     @OneToMany(mappedBy = "brojRacuna")
     private List<Racun> racuni;
     @ManyToOne
-    @JoinColumn(name = "idKurs")
+    @JoinColumn(name = "id")
     private KursnaLista kurs;
 
     public Banka(int idBanke, String ime, String adresa, KursnaLista kurs) {
