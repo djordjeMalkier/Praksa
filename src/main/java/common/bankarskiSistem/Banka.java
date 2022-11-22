@@ -2,7 +2,6 @@ package common.bankarskiSistem;
 
 import common.bankarskiSistem.resources.data.Row;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -34,9 +33,9 @@ public class Banka {
     @ElementCollection
     private List<Korisnik> korisnici;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idBanka")
-    private Kurs kurs;
+    private KursnaLista kurs;
 
-    public Banka(int idBanke, String ime, String adresa, Kurs kurs) {
+    public Banka(int idBanke, String ime, String adresa, KursnaLista kurs) {
         this.idBanke = idBanke;
         this.ime = ime;
         this.adresa = adresa;
@@ -45,7 +44,7 @@ public class Banka {
         this.idKurs = kurs.getID();
     }
 
-    public Banka(int idBanke, String ime, String adresa, List<Korisnik> korisnici, Kurs kurs) {
+    public Banka(int idBanke, String ime, String adresa, List<Korisnik> korisnici, KursnaLista kurs) {
         this.idBanke = idBanke;
         this.ime = ime;
         this.adresa = adresa;
@@ -86,11 +85,11 @@ public class Banka {
         this.korisnici = korisnici;
     }
 
-    public Kurs getKurs() {
+    public KursnaLista getKurs() {
         return kurs;
     }
 
-    public void setKurs(Kurs kurs) {
+    public void setKurs(KursnaLista kurs) {
         this.kurs = kurs;
     }
 

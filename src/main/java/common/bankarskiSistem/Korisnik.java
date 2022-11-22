@@ -93,12 +93,12 @@ public class Korisnik {
      * @return - stanje racuna u valuti
      */
 
-    public float proveraStanja(Racun racun, Valuta valuta) {
+ public float proveraStanja(Racun racun, Valuta valuta) {
         if (racun == null) throw new NullPointerException("Prosledjen je null racun");
         if (valuta == null) throw new NullPointerException("Nije prosledjena validna valuta");
-
-        return racun.getStanje() * racun.getBanka().getKurs().convert(racun.getValuta(), valuta);
-    }
+        return 0;
+        //return racun.getStanje() * racun.getBanka().getKurs().convert(racun.getValuta(), valuta);
+    } //TODO:Promeniti ovo za konverziju
 
     /**
      * Uplata sredstava na korisnikov racun
@@ -160,9 +160,9 @@ public class Korisnik {
             System.out.println("Iznos za uplatu mora biti pozitivan");
         } else if (saRacuna.getValuta() != naRacun.getValuta()) {
                 isplata(saRacuna, iznos);
-                float konvertovanaValuta = saRacuna.getBanka().getKurs().convert(saRacuna.getValuta(), naRacun.getValuta());
+              /*  float konvertovanaValuta = saRacuna.getBanka().getKurs().convert(saRacuna.getValuta(), naRacun.getValuta());
                 iznos *= konvertovanaValuta;
-                uplata(naRacun, iznos);
+                uplata(naRacun, iznos);*/ //TODO: Ovde se poziva convert, promeniti
             } else {
                 isplata(saRacuna, iznos);
                 uplata(naRacun, iznos);
