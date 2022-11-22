@@ -22,7 +22,7 @@ public enum Tip {
     @Column(name = "naziv", nullable = false)
     private String naziv;
 
-    @OneToMany(mappedBy = "idTip")
+    @OneToMany(mappedBy = "brojRacuna")
     private List<Racun> racuni;
 
 }
