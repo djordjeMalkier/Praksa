@@ -12,7 +12,7 @@ import java.util.stream.IntStream;
 
 /**
  * Klasa Korisnik u sebi sadrzi sve podatke u vezi sa njim i njegovim racunima.
- * {@link #Korisnik(String, String, String, String)} konstruktor bez racuna, ukoliko se kreira korisnik bez ikakvih racuna i bez id-a.
+ * {@link #(String, String, String, String)} konstruktor bez racuna, ukoliko se kreira korisnik bez ikakvih racuna i bez id-a.
  *  konstruktor korisnika ukoliko korisnik vec ima neke racune
  */
 @Entity
