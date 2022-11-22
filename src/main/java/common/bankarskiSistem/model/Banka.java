@@ -30,7 +30,6 @@ public class Banka {
     private String ime;
     @Column(name="adresa")
     private String adresa;
-
     @OneToMany(mappedBy = "brojRacuna")
     private List<Racun> racuni;
     @ManyToOne
