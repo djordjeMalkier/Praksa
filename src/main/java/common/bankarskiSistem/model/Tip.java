@@ -1,4 +1,4 @@
-package common.bankarskiSistem;
+package common.bankarskiSistem.model;
 
 import lombok.Getter;
 

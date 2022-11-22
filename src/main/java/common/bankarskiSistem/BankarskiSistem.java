@@ -5,6 +5,7 @@ import common.bankarskiSistem.database.DatabaseImplementation;
 import common.bankarskiSistem.database.PostgreRepository;
 import common.bankarskiSistem.database.settings.Settings;
 import common.bankarskiSistem.database.settings.SettingsImplementation;
+import common.bankarskiSistem.model.*;
 import common.bankarskiSistem.resources.data.Row;
 import common.bankarskiSistem.utils.Constants;
 

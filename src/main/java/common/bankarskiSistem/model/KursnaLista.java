@@ -1,12 +1,12 @@
-package common.bankarskiSistem;
+package common.bankarskiSistem.model;
 
+import common.bankarskiSistem.model.Konverzija;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.List;
 
 /**
  * Kurs klasa u sebi sadrzi tabelu kurseva za EUR,RSD i USD.
@@ -23,13 +23,16 @@ public class KursnaLista {
     @Id
     private int id;
 
+    @Column(name = "name")
+    private String name;
+
+    @OneToMany(mappedBy = "idKonverzije")
+    private List<Konverzija> konverzije;
+
 
     public KursnaLista(int idKurs) {
         this.id = idKurs;
     }
 
 
-    public int getID() {
-        return id;
-    }
 }

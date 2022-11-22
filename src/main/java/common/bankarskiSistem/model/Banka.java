@@ -1,5 +1,9 @@
-package common.bankarskiSistem;
+package common.bankarskiSistem.model;
 
+import common.bankarskiSistem.BankarskiSistem;
+import common.bankarskiSistem.model.Korisnik;
+import common.bankarskiSistem.model.KursnaLista;
+import common.bankarskiSistem.model.Racun;
 import common.bankarskiSistem.resources.data.Row;
 import lombok.Getter;
 import lombok.Setter;
