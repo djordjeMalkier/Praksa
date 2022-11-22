@@ -23,7 +23,7 @@ public class Banka {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "idBanka", nullable = false)
-    private int idBanke;
+    private Integer idBanke;
     @Column(name="ime", nullable = false)
     private String ime;
     @Column(name="adresa", nullable = false)
@@ -32,23 +32,23 @@ public class Banka {
     private List<Racun> racuni;
     @ManyToOne
     @JoinColumn(name = "id")
-    private KursnaLista kurs;
+    private KursnaLista kursnaLista;
 
-    public Banka(int idBanke, String ime, String adresa, KursnaLista kurs) {
+    public Banka(int idBanke, String ime, String adresa, KursnaLista kursnaLista) {
         this.idBanke = idBanke;
         this.ime = ime;
         this.adresa = adresa;
         this.racuni = new ArrayList<>();
-        this.kurs = kurs;
+        this.kursnaLista = kursnaLista;
         //his.idKurs = kurs.getID();
     }
 
-    public Banka(int idBanke, String ime, String adresa, List<Racun> racuni, KursnaLista kurs) {
+    public Banka(int idBanke, String ime, String adresa, List<Racun> racuni, KursnaLista kursnaLista) {
         this.idBanke = idBanke;
         this.ime = ime;
         this.adresa = adresa;
         this.racuni = racuni;
-        this.kurs = kurs;
+        this.kursnaLista = kursnaLista;
         //this.idKurs = kurs.getID();
     }
 
