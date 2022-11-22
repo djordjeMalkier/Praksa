@@ -1,6 +1,7 @@
 package common.bankarskiSistem.model;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -22,34 +23,32 @@ public class Banka {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "idBanka", nullable = false)
-    private int idBanke;
-    @Column(name="idKurs")
-    private int idKurs;
-    @Column(name="ime")
+    private Integer idBanke;
+    @Column(name="ime", nullable = false)
     private String ime;
-    @Column(name="adresa")
+    @Column(name="adresa", nullable = false)
     private String adresa;
     @OneToMany(mappedBy = "brojRacuna")
     private List<Racun> racuni;
     @ManyToOne
-    @JoinColumn(name = "idKurs")
-    private ExchangeRates kurs;
+    @JoinColumn(name = "id")
+    private KursnaLista kursnaLista;
 
-    public Banka(int idBanke, String ime, String adresa, ExchangeRates kurs) {
+    public Banka(int idBanke, String ime, String adresa, KursnaLista kursnaLista) {
         this.idBanke = idBanke;
         this.ime = ime;
         this.adresa = adresa;
         this.racuni = new ArrayList<>();
-        this.kurs = kurs;
+        this.kursnaLista = kursnaLista;
         //his.idKurs = kurs.getID();
     }
 
-    public Banka(int idBanke, String ime, String adresa, List<Racun> racuni, ExchangeRates kurs) {
+    public Banka(int idBanke, String ime, String adresa, List<Racun> racuni, KursnaLista kursnaLista) {
         this.idBanke = idBanke;
         this.ime = ime;
         this.adresa = adresa;
         this.racuni = racuni;
-        this.kurs = kurs;
+        this.kursnaLista = kursnaLista;
         //this.idKurs = kurs.getID();
     }
 
