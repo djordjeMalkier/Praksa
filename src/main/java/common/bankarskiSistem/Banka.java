@@ -31,31 +31,33 @@ public class Banka {
     private String ime;
     @Column(name="adresa")
     private String adresa;
-    @ElementCollection
-    private List<Korisnik> korisnici;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idBanka")
+
+    @OneToMany(mappedBy = "brojRacuna")
+    private List<Racun> racuni;
+    @ManyToOne
+    @JoinColumn(name = "idKurs")
     private Kurs kurs;
 
     public Banka(int idBanke, String ime, String adresa, Kurs kurs) {
         this.idBanke = idBanke;
         this.ime = ime;
         this.adresa = adresa;
-        this.korisnici = new ArrayList<>();
+        this.racuni = new ArrayList<>();
         this.kurs = kurs;
         this.idKurs = kurs.getID();
     }
 
-    public Banka(int idBanke, String ime, String adresa, List<Korisnik> korisnici, Kurs kurs) {
+    public Banka(int idBanke, String ime, String adresa, List<Racun> racuni, Kurs kurs) {
         this.idBanke = idBanke;
         this.ime = ime;
         this.adresa = adresa;
-        this.korisnici = korisnici;
+        this.racuni = racuni;
         this.kurs = kurs;
         this.idKurs = kurs.getID();
     }
 
     public Banka() {
-        this.korisnici = new ArrayList<>();
+        this.racuni = new ArrayList<>();
     }
 
     public String getIme() {
@@ -78,12 +80,12 @@ public class Banka {
         this.adresa = adresa;
     }
 
-    public List<Korisnik> getKorisnici() {
-        return korisnici;
+    public List<Racun> getRacuni() {
+        return racuni;
     }
 
-    public void setKorisnici(List<Korisnik> korisnici) {
-        this.korisnici = korisnici;
+    public void setRacuni(List<Racun> racuni) {
+        this.racuni = racuni;
     }
 
     public Kurs getKurs() {
@@ -94,10 +96,10 @@ public class Banka {
         this.kurs = kurs;
     }
 
-    public int vratiID(Korisnik korisnik) {
-        String query = "Select \"idKorisnik\" from \"Korisnik\" where \"jmbg\" = '" + korisnik.getJmbg() + "'";
-        List<Row> idKorisnka = BankarskiSistem.database.readDataFromQuery(query);
-        int id = Integer.parseInt(idKorisnka.get(0).getFields().get("idKorisnik").toString());
+    public int vratiID(Racun racun) {
+        String query = "Select \"brojRacuna\" from \"Racun\" where \"brojRacuna\" = '" + racun.getBrojRacuna() + "'";
+        List<Row> brojRacuna = BankarskiSistem.database.readDataFromQuery(query);
+        int id = Integer.parseInt(brojRacuna.get(0).getFields().get("brojRacuna").toString());
         return id;
     }
 
@@ -108,7 +110,7 @@ public class Banka {
      * @param korisnik - korisnik kojem se dodaje racun
      */
     public void dodajRacun(Racun racun, Korisnik korisnik) {
-        if(korisnici.contains(korisnik)) {
+        if(racuni.contains(racun.getKorisnik().getIdKorisnik())) {
             String query = "Insert into \"Racun\" (\"stanje\", \"idValuta\", \"idTip\", \"idKorisnik\", \"idBanka\") values(" +
                     racun.getStanje() +
                     "," + (racun.getIdValuta()+1) + "," +
@@ -126,6 +128,24 @@ public class Banka {
             korisnici.add(korisnik);
             korisnik.getRacuni().add(racun);
         }
+        /*if(korisnici.contains(korisnik)) {
+            String query = "Insert into \"Racun\" (\"stanje\", \"idValuta\", \"idTip\", \"idKorisnik\", \"idBanka\") values(" +
+                    racun.getStanje() +
+                    "," + (racun.getIdValuta()+1) + "," +
+                    (racun.getIdTip()+1) + "," +
+                    (vratiID(korisnik)) + "," +
+                    idBanke + ")";
+            List<Row> row = BankarskiSistem.database.insertDataForQuery(query);
+            int brojRacuna = Integer.parseInt(row.get(row.size()-1).getFields().get("brojRacuna").toString());
+            racun.setBrojRacuna(brojRacuna);
+            korisnik.getRacuni().add(racun);
+
+        }
+        else {
+
+            korisnici.add(korisnik);
+            korisnik.getRacuni().add(racun);
+        }*/
     }
 
     public void dodajRacunUListu(Racun racun, Korisnik korisnik) {
