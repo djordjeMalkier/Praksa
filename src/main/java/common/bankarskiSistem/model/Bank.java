@@ -5,6 +5,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Ova klasa je zaduzena za sve u vezi sa Bankma. Klasa se pravi sa dva konstruktora.
@@ -38,7 +39,6 @@ public class Bank {
         this.address = address;
         this.bankAccounts = new ArrayList<>();
         this.exchangeRates = exchangeRates;
-        //his.idKurs = kurs.getID();
     }
 
     public Bank(int idBank, String name, String address, List<BankAccount> bankAccounts, ExchangeRates exchangeRates) {
@@ -47,11 +47,10 @@ public class Bank {
         this.address = address;
         this.bankAccounts = bankAccounts;
         this.exchangeRates = exchangeRates;
-        //this.idKurs = kurs.getID();
     }
 
     public Bank() {
-        this.exchangeRates = new ArrayList<>();
+        this.bankAccounts = new ArrayList<>();
     }
 
    /* public int vratiID(Racun racun) {
