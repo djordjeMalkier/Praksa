@@ -32,7 +32,7 @@ public class Racun {
     @JoinColumn(name="idTip")
     private Tip tipRacuna;
     @ManyToOne
-    @JoinColumn(name="idKorisnik")
+    @JoinColumn(name="jmbg")
     private Korisnik korisnik;
     @ManyToOne
     @JoinColumn(name="idBanka")

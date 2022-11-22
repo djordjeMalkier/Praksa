@@ -38,14 +38,14 @@ public class Korisnik {
     @Column(name="idAdresa", nullable = false)
     private String adresa;
 
-    @OneToMany(mappedBy="idKorisnik")
+    @OneToMany
     private List<Racun> racuni;
 
 
 
 
 
-    public Korisnik(String ime, String prezime, String adresa, String jmbg) {
+  /*  public Korisnik(String ime, String prezime, String adresa, String jmbg) {
         this.ime = ime;
         this.prezime = prezime;
         this.adresa = adresa;
@@ -72,7 +72,7 @@ public class Korisnik {
      * @return - sumirana raspoloziva sredstva korisnika u odredjenoj valuti.
      */
 
-    public float stanjeSvihRacuna(Valuta valuta) {
+  /*  public float stanjeSvihRacuna(Valuta valuta) {
         return racuni.stream()
                 .map(racun -> proveraStanja(racun, valuta))
                 .reduce((float) 0, Float::sum);
@@ -85,12 +85,12 @@ public class Korisnik {
      * @return - stanje racuna u valuti
      */
 
- public float proveraStanja(Racun racun, Valuta valuta) {
+/* public float proveraStanja(Racun racun, Valuta valuta) {
         if (racun == null) throw new NullPointerException("Prosledjen je null racun");
         if (valuta == null) throw new NullPointerException("Nije prosledjena validna valuta");
         return 0;
         //return racun.getStanje() * racun.getBanka().getKurs().convert(racun.getValuta(), valuta);
-    } //TODO:Promeniti ovo za konverziju
+    }
 
     /**
      * Uplata sredstava na korisnikov racun
@@ -98,7 +98,7 @@ public class Korisnik {
      * @param iznos - iznos koji se upacujue
      * @return - stanje nakon uplate
      */
-    public float uplata(Racun racun, float iznos) {
+/*    public float uplata(Racun racun, float iznos) {
         if (racun == null) throw new NullPointerException("Prosledjen je null racun");
 
         if (iznos <= 0) {
@@ -120,7 +120,7 @@ public class Korisnik {
      * @param iznos - iznos koji se skida
      * @return - stanje nakon isplate
      */
-    public float isplata(Racun racun, float iznos) {
+  /*  public float isplata(Racun racun, float iznos) {
         if (racun == null) throw new NullPointerException("Prosledjen je null racun");
 
         if(iznos > racun.getStanje())
@@ -145,7 +145,7 @@ public class Korisnik {
      * @param iznos - iznos koji se prebacuje
      * Metoda vodi racuna o knvertovanju valute ukoliko su racuni razlicitih valuta.
      */
-    public void transferIzmedjuRacuna(Racun saRacuna, Racun naRacun, float iznos) {
+  /*  public void transferIzmedjuRacuna(Racun saRacuna, Racun naRacun, float iznos) {
         if (saRacuna == null || naRacun == null) throw new NullPointerException("Prosledjen je null racun");
 
         if (iznos <= 0) {
@@ -154,7 +154,7 @@ public class Korisnik {
                 isplata(saRacuna, iznos);
               /*  float konvertovanaValuta = saRacuna.getBanka().getKurs().convert(saRacuna.getValuta(), naRacun.getValuta());
                 iznos *= konvertovanaValuta;
-                uplata(naRacun, iznos);*/ //TODO: Ovde se poziva convert, promeniti
+                uplata(naRacun, iznos);
             } else {
                 isplata(saRacuna, iznos);
                 uplata(naRacun, iznos);
@@ -166,7 +166,7 @@ public class Korisnik {
      * @param tipRacuna - tip racuna koji korisnik zeli da zatvori
      */
 
-    public void zatvoriSveRacune(Tip tipRacuna) {
+   /* public void zatvoriSveRacune(Tip tipRacuna) {
         if (tipRacuna == null) throw new NullPointerException("Prosledjen je null tip racuna");
 
         racuni = racuni.stream()
@@ -180,7 +180,7 @@ public class Korisnik {
      * @return - uspesnost brisanja racuna
      */
 
-    public boolean obrisiRacun(Racun racun) {
+   /* public boolean obrisiRacun(Racun racun) {
         if (racun == null) throw new NullPointerException("Nije prosledjen racun");
         BankarskiSistem.database.deleteDataForQuery(
                 "DELETE FROM \"Racun\" WHERE \"brojRacuna\" = " + racun.getBrojRacuna());
@@ -216,5 +216,5 @@ public class Korisnik {
                         + " " + racun.getStanje() +  " "  + racun.getValuta());
         }
         System.out.println("---******---");
-    }
+    }*/
 }
