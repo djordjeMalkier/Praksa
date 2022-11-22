@@ -10,30 +10,30 @@ import java.util.List;
 
 
 @Entity
-@Table(name = "Korisnik")
+@Table(name = "users")
 @NoArgsConstructor
 @Getter
 @Setter
 
-public class Korisnik {
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name="jmbg", nullable = false)
-    private String jmbg;
+    @Column(name="personalId", nullable = false)
+    private String personalId;
 
-    @Column(name="ime", nullable = false)
-    private String ime;
+    @Column(name="name", nullable = false)
+    private String name;
 
-    @Column(name="prezime", nullable = false)
-    private String prezime;
+    @Column(name="surname", nullable = false)
+    private String surname;
 
 
 
-    @Column(name="idAdresa", nullable = false)
-    private String adresa;
+    @Column(name="adress", nullable = false)
+    private String adress;
 
     @OneToMany
-    private List<Racun> racuni;
+    private List<BankAccount> bankAccounts;
 
 
 
