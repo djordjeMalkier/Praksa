@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -27,19 +28,21 @@ public class User {
     @Column(name="surname", nullable = false)
     private String surname;
 
-
-
     @Column(name="address", nullable = false)
     private String address;
 
     @OneToMany
     private List<BankAccount> bankAccounts;
 
+    public User(String personalId, String name, String surname, String address) {
+        this.personalId = personalId;
+        this.name = name;
+        this.surname = surname;
+        this.address = address;
+        this.bankAccounts = new ArrayList<>();
+    }
 
-
-
-
-  /*  public Korisnik(String ime, String prezime, String adresa, String jmbg) {
+/*  public Korisnik(String ime, String prezime, String adresa, String jmbg) {
         this.ime = ime;
         this.prezime = prezime;
         this.adresa = adresa;
