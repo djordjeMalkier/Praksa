@@ -1,6 +1,5 @@
 package common.bankarskiSistem.model;
 
-import common.bankarskiSistem.model.Konverzija;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -15,24 +14,20 @@ import java.util.List;
  */
 
 @Entity
-@Table(name = "kursnaLista")
+@Table(name = "exchangeRates")
 @Getter
 @Setter
 @NoArgsConstructor
-public class KursnaLista {
+public class ExchangeRates {
     @Id
-    private int id;
+    private Integer idExchangeRates;
 
     @Column(name = "name")
     private String name;
 
-    @OneToMany(mappedBy = "idKonverzije")
-    private List<Konverzija> konverzije;
+    @OneToMany(mappedBy = "idConversion")
+    private List<Conversion> conversions;
 
-
-    public KursnaLista(int idKurs) {
-        this.id = idKurs;
-    }
 
 
 }
