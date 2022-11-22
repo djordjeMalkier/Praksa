@@ -10,19 +10,19 @@ import java.util.List;
  * ili devizni sa deviznim valutama
  */
 @Entity
-@Table(name = "Tip")
+@Table(name = "type")
 @Getter
-public enum Tip {
-    DINARSKI,DEVIZNI;
+public enum AccountType {
+    DINAR, FOREIGN ;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "idTip", nullable = false)
-    private int idTip;
+    @Column(name = "idType", nullable = false)
+    private int idType;
 
-    @Column(name = "naziv", nullable = false)
-    private String naziv;
+    @Column(name = "name", nullable = false)
+    private String name;
 
-    @OneToMany(mappedBy = "brojRacuna")
-    private List<Racun> racuni;
+    @OneToMany(mappedBy = "idAccount")
+    private List<BankAccount> idAccount;
 
 }

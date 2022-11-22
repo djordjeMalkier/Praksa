@@ -10,17 +10,17 @@ import javax.persistence.*;
 @Getter
 @Setter
 @NoArgsConstructor
-public class Konverzija {
+public class Conversion {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "idKonverzije", nullable = false)
     private Long idKonverzije;
 
     @OneToOne
-    private Valuta from;
+    private Currency from;
 
     @OneToOne
-    private Valuta to;
+    private Currency to;
 
     @Column(name = "value", nullable = false)
     private double value;
