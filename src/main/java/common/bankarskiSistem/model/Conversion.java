@@ -13,8 +13,8 @@ import javax.persistence.*;
 public class Conversion {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "idKonverzije", nullable = false)
-    private Long idKonverzije;
+    @Column(name = "idConversion", nullable = false)
+    private Long idConversion;
 
     @OneToOne
     private Currency from;
@@ -24,5 +24,9 @@ public class Conversion {
 
     @Column(name = "value", nullable = false)
     private double value;
+
+    @ManyToOne
+    @JoinColumn(name = "idExchangeRates")
+    private ExchangeRates exchangeRates;
 
 }
