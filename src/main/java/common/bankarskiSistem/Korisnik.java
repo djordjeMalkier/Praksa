@@ -219,7 +219,7 @@ public class Korisnik {
     public void ispisiRacune(Banka banka) {
         System.out.println("---Racuni---");
         for (Racun racun : racuni) {
-            if (racun.getIdBanka() == banka.getIdBanke())
+            if (racun.getBanka().getIdBanke() == banka.getIdBanke())
                 System.out.println(racun.getBrojRacuna() + " " + racun.getTipRacuna()
                         + " " + racun.getStanje() +  " "  + racun.getValuta());
         }
