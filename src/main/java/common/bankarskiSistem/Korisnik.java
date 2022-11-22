@@ -36,7 +36,7 @@ public class Korisnik {
     @Column(name="jmbg", nullable = false)
     private String jmbg;
 
-    @Column(name="iadresa", nullable = false)
+    @Column(name="idAdresa", nullable = false)
     private String adresa;
 
     @OneToMany(mappedBy="idKorisnik")
