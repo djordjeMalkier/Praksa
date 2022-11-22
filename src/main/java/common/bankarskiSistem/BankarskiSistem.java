@@ -19,8 +19,8 @@ public class BankarskiSistem {
            database = new DatabaseImplementation(new PostgreRepository(settings));
 
             //INICIJALIZACIJA IZ BAZE
-            List<Kurs> kursevi = ucitajKurseveIzBaze(database);
-            List<Banka> banke = ucitajBankeIzBaze(database, kursevi);
+            //List<KursnaLista> kursevi = ucitajKurseveIzBaze(database); TODO: KURSEVI IZ MAINA
+            List<Banka> banke = ucitajBankeIzBaze(database);
             List<Korisnik> korisnici = ucitajKorisnikeIzBaze(database);
             List<Racun> racuni = ucitajRacuneIzBaze(database, banke, korisnici);
             dodajRacune(racuni, banke);
@@ -137,31 +137,31 @@ public class BankarskiSistem {
         return racuni;
     }
 
-    private static List<Banka> ucitajBankeIzBaze(Database database, List<Kurs> kursevi) {
+    private static List<Banka> ucitajBankeIzBaze(Database database) {
         List<Banka> banke = new ArrayList<>();
         List<Row> rows = database.readDataFromQuery("SELECT * FROM \"Banka\"");
         for (Row row : rows) {
             banke.add(new Banka(Integer.parseInt(row.getFields().get("idBanka").toString()),
                     row.getFields().get("ime").toString().trim(),
-                    row.getFields().get("adresa").toString().trim(),
-                    kursevi.get(Integer.parseInt(row.getFields().get("idKurs").toString())-1)));
+                    row.getFields().get("adresa").toString().trim(),null));
+                   // kursevi.get(Integer.parseInt(row.getFields().get("idKurs").toString())-1)));
         }
         return banke;
     }
 
-    private static List<Kurs> ucitajKurseveIzBaze(Database database) {
-        List<Kurs> kursevi = new ArrayList<>();
+   /* private static List<KursnaLista> ucitajKurseveIzBaze(Database database) { TODO: Promeniti ucitavanje iz baze
+        List<KursnaLista> kursevi = new ArrayList<>();
 
-        List<Row> rows = database.readDataFromQuery("SELECT * FROM \"Kurs\"");
+       List<Row> rows = database.readDataFromQuery("SELECT * FROM \"Kurs\"");
         for (Row row : rows) {
-            kursevi.add(new Kurs(Integer.parseInt(row.getFields().get("idKurs").toString()), new float[][] {
+            kursevi.add(new KursnaLista(Integer.parseInt(row.getFields().get("idKurs").toString()), new float[][] {
                     {1F, Float.parseFloat(row.getFields().get("EUR_RSD").toString()), Float.parseFloat(row.getFields().get("EUR_USD").toString())},
                     {Float.parseFloat(row.getFields().get("RSD_EUR").toString()), 1F, Float.parseFloat(row.getFields().get("RSD_USD").toString())},
                     {Float.parseFloat(row.getFields().get("USD_EUR").toString()), Float.parseFloat(row.getFields().get("USD_RSD").toString()), 1F}
             }));
         }
         return kursevi;
-    }
+    }*/
 
     private static Banka odabirBanke(List<Banka> banke, Scanner sc) {
         for (Banka banka : banke) {

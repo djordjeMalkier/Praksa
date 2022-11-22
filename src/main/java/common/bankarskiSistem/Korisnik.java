@@ -24,8 +24,8 @@ import java.util.stream.IntStream;
 public class Korisnik {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "idKorisnik", nullable = false)
-    private int idKorisnik;
+    @Column(name="jmbg", nullable = false)
+    private String jmbg;
 
     @Column(name="ime", nullable = false)
     private String ime;
@@ -33,10 +33,9 @@ public class Korisnik {
     @Column(name="prezime", nullable = false)
     private String prezime;
 
-    @Column(name="jmbg", nullable = false)
-    private String jmbg;
 
-    @Column(name="iadresa", nullable = false)
+
+    @Column(name="idAdresa", nullable = false)
     private String adresa;
 
     @OneToMany(mappedBy="idKorisnik")
@@ -55,22 +54,15 @@ public class Korisnik {
         };
     }
 
-    public Korisnik(String ime, String prezime, String adresa, String jmbg, int idKorisnik) {
-        this.ime = ime;
-        this.prezime = prezime;
-        this.adresa = adresa;
-        this.jmbg = jmbg;
-        this.racuni = new ArrayList<>();
-        this.idKorisnik = idKorisnik;
-    }
 
-    public Korisnik(String ime, String prezime, String jmbg, String adresa, List<Racun> racuni, int idKorisnik) {
+
+    public Korisnik(String ime, String prezime, String jmbg, String adresa, List<Racun> racuni) {
         this.ime = ime;
         this.prezime = prezime;
         this.jmbg = jmbg;
         this.adresa = adresa;
         this.racuni = racuni;
-        this.idKorisnik = idKorisnik;
+
     }
 
 
@@ -93,12 +85,12 @@ public class Korisnik {
      * @return - stanje racuna u valuti
      */
 
-    public float proveraStanja(Racun racun, Valuta valuta) {
+ public float proveraStanja(Racun racun, Valuta valuta) {
         if (racun == null) throw new NullPointerException("Prosledjen je null racun");
         if (valuta == null) throw new NullPointerException("Nije prosledjena validna valuta");
-
-        return racun.getStanje() * racun.getBanka().getKurs().convert(racun.getValuta(), valuta);
-    }
+        return 0;
+        //return racun.getStanje() * racun.getBanka().getKurs().convert(racun.getValuta(), valuta);
+    } //TODO:Promeniti ovo za konverziju
 
     /**
      * Uplata sredstava na korisnikov racun
@@ -160,9 +152,9 @@ public class Korisnik {
             System.out.println("Iznos za uplatu mora biti pozitivan");
         } else if (saRacuna.getValuta() != naRacun.getValuta()) {
                 isplata(saRacuna, iznos);
-                float konvertovanaValuta = saRacuna.getBanka().getKurs().convert(saRacuna.getValuta(), naRacun.getValuta());
+              /*  float konvertovanaValuta = saRacuna.getBanka().getKurs().convert(saRacuna.getValuta(), naRacun.getValuta());
                 iznos *= konvertovanaValuta;
-                uplata(naRacun, iznos);
+                uplata(naRacun, iznos);*/ //TODO: Ovde se poziva convert, promeniti
             } else {
                 isplata(saRacuna, iznos);
                 uplata(naRacun, iznos);
@@ -212,14 +204,14 @@ public class Korisnik {
                 ", jmbg='" + jmbg + '\'' +
                 ", adresa='" + adresa + '\'' +
                 ", ukupno racuna=" + racuni.size() +
-                ", idKorisnik=" + idKorisnik +
-                '}';
+
+                "}";
     }
 
     public void ispisiRacune(Banka banka) {
         System.out.println("---Racuni---");
         for (Racun racun : racuni) {
-            if (racun.getIdBanka() == banka.getIdBanke())
+            if (racun.getBanka().getIdBanke() == banka.getIdBanke())
                 System.out.println(racun.getBrojRacuna() + " " + racun.getTipRacuna()
                         + " " + racun.getStanje() +  " "  + racun.getValuta());
         }

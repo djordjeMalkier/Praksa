@@ -36,9 +36,9 @@ public class Banka {
     private List<Racun> racuni;
     @ManyToOne
     @JoinColumn(name = "idKurs")
-    private Kurs kurs;
+    private KursnaLista kurs;
 
-    public Banka(int idBanke, String ime, String adresa, Kurs kurs) {
+    public Banka(int idBanke, String ime, String adresa, KursnaLista kurs) {
         this.idBanke = idBanke;
         this.ime = ime;
         this.adresa = adresa;
@@ -47,7 +47,7 @@ public class Banka {
         this.idKurs = kurs.getID();
     }
 
-    public Banka(int idBanke, String ime, String adresa, List<Racun> racuni, Kurs kurs) {
+    public Banka(int idBanke, String ime, String adresa, List<Racun> racuni, KursnaLista kurs) {
         this.idBanke = idBanke;
         this.ime = ime;
         this.adresa = adresa;
@@ -60,48 +60,12 @@ public class Banka {
         this.racuni = new ArrayList<>();
     }
 
-    public String getIme() {
-        return ime;
-    }
-
-    public int getIdBanke() {
-        return idBanke;
-    }
-
-    public void setIme(String ime) {
-        this.ime = ime;
-    }
-
-    public String getAdresa() {
-        return adresa;
-    }
-
-    public void setAdresa(String adresa) {
-        this.adresa = adresa;
-    }
-
-    public List<Racun> getRacuni() {
-        return racuni;
-    }
-
-    public void setRacuni(List<Racun> racuni) {
-        this.racuni = racuni;
-    }
-
-    public Kurs getKurs() {
-        return kurs;
-    }
-
-    public void setKurs(Kurs kurs) {
-        this.kurs = kurs;
-    }
-
-    public int vratiID(Racun racun) {
+   /* public int vratiID(Racun racun) {
         String query = "Select \"brojRacuna\" from \"Racun\" where \"brojRacuna\" = '" + racun.getBrojRacuna() + "'";
         List<Row> brojRacuna = BankarskiSistem.database.readDataFromQuery(query);
         int id = Integer.parseInt(brojRacuna.get(0).getFields().get("brojRacuna").toString());
         return id;
-    }
+    }*/
 
     /**
      *
@@ -110,24 +74,6 @@ public class Banka {
      * @param korisnik - korisnik kojem se dodaje racun
      */
     public void dodajRacun(Racun racun, Korisnik korisnik) {
-        if(racuni.contains(racun.getKorisnik().getIdKorisnik())) {
-            String query = "Insert into \"Racun\" (\"stanje\", \"idValuta\", \"idTip\", \"idKorisnik\", \"idBanka\") values(" +
-                    racun.getStanje() +
-                    "," + (racun.getIdValuta()+1) + "," +
-                    (racun.getIdTip()+1) + "," +
-                    (vratiID(korisnik)) + "," +
-                    idBanke + ")";
-            List<Row> row = BankarskiSistem.database.insertDataForQuery(query);
-            int brojRacuna = Integer.parseInt(row.get(row.size()-1).getFields().get("brojRacuna").toString());
-            racun.setBrojRacuna(brojRacuna);
-            korisnik.getRacuni().add(racun);
-
-        }
-        else {
-
-            korisnici.add(korisnik);
-            korisnik.getRacuni().add(racun);
-        }
         /*if(korisnici.contains(korisnik)) {
             String query = "Insert into \"Racun\" (\"stanje\", \"idValuta\", \"idTip\", \"idKorisnik\", \"idBanka\") values(" +
                     racun.getStanje() +
@@ -149,13 +95,13 @@ public class Banka {
     }
 
     public void dodajRacunUListu(Racun racun, Korisnik korisnik) {
-        if(korisnici.contains(korisnik)) {
+        /*if(korisnici.contains(korisnik)) {
             korisnik.getRacuni().add(racun);
         }
         else {
             korisnici.add(korisnik);
             korisnik.getRacuni().add(racun);
-        }
+        }*/
     }
 
     /**
@@ -163,12 +109,12 @@ public class Banka {
      * @param racun - racun koji se brise iz banke
      */
     public void obrisiRacun(Racun racun) {
-        Korisnik korisnik = racun.getKorisnik();
+        /*Korisnik korisnik = racun.getKorisnik();
         try {
             korisnik.getRacuni().remove(racun);
         } catch (NullPointerException exception) {
             System.out.println("Ne postoji korisnik.");
-        }
+        }*/
     }
 
     /**
@@ -183,7 +129,7 @@ public class Banka {
 
     public void prebaciNovacKorisniku(Korisnik posiljalac, Racun racunPosiljalaca, Korisnik primalac,
                                       Racun racunPrimalaca, float iznos){
-        if(racunPosiljalaca.getValuta() != racunPrimalaca.getValuta()){
+       /* if(racunPosiljalaca.getValuta() != racunPrimalaca.getValuta()){
             float iznos1=iznos;
              iznos1 *= kurs.convert(racunPosiljalaca.getValuta(), racunPrimalaca.getValuta());
             float stanje1=racunPosiljalaca.getStanje();
@@ -199,7 +145,7 @@ public class Banka {
             if(stanje1!=racunPosiljalaca.getStanje())
                 primalac.uplata(racunPrimalaca, iznos);
 
-        }
+        }*/
 
     }
 
@@ -209,16 +155,15 @@ public class Banka {
      * @return - Korisnik sa unetim jmbg-om.
      */
 
-    public Korisnik nadjiKorisnika(String jmbg){
+    /*public Korisnik nadjiKorisnika(String jmbg){
         return korisnici.stream()
                 .filter(korisnik -> korisnik.getJmbg().equals(jmbg))
                 .findAny()
                 .orElse(null);
-    }
+    }*/
 
-    @Override
-    public String toString() {
+    /*public String toString() {
         return "ID: "+ idBanke + " Banka: " + ime + " na adresi: " + adresa + " broj korisnika=" + korisnici.size();
         //+ "\nKursna lista: " + getKurs().toString();
-    }
+    }*/
 }

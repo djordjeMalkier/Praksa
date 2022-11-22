@@ -34,11 +34,10 @@ public class Racun {
     @ManyToOne
     @JoinColumn(name="idKorisnik")
     private Korisnik korisnik;
-
     @ManyToOne
     @JoinColumn(name="idBanka")
     private Banka banka;
-    @Column(name = "idValuta", nullable = false)
+/*    @Column(name = "idValuta", nullable = false)
     private int idValuta;
     @Column(name = "idTip", nullable = false)
     private int idTip;
@@ -46,15 +45,16 @@ public class Racun {
     private int idKorisnik;
     @Column(name = "idBanka", nullable = false)
     private int idBanka;
-
+*/
     public Racun(Tip tipRacuna, Valuta valuta, Korisnik korisnik, Banka banka, int brojRacuna) {
         if(tipRacuna == null || valuta == null || korisnik == null || banka == null) {
             throw new NullPointerException("Konstruktor ne prima null vrednosti");
         }
-        this.idValuta = valuta.ordinal();
+/*        this.idValuta = valuta.ordinal();
         this.idTip = tipRacuna.ordinal();
         this.idKorisnik = korisnik.getIdKorisnik();
         this.idBanka = banka.getIdBanke();
+ */
         this.tipRacuna = tipRacuna;
         this.stanje = 0;
         this.valuta = valuta;
@@ -78,10 +78,10 @@ public class Racun {
                 ", tipRacuna=" + tipRacuna +
                 ", korisnik=" + korisnik +
                 ", banka=" + banka +
-                ", idValuta=" + idValuta +
+/*                ", idValuta=" + idValuta +
                 ", idTip=" + idTip +
                 ", idKorisnik=" + idKorisnik +
-                ", idBanka=" + idBanka +
+                ", idBanka=" + idBanka +*/
                 '}';
     }
 }
