@@ -1,7 +1,7 @@
-package common.bankarskiSistem;
+package common.bankarskiSistem.model;
 
-import common.bankarskiSistem.resources.data.Row;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -30,75 +30,40 @@ public class Banka {
     private String ime;
     @Column(name="adresa")
     private String adresa;
-    @ElementCollection
-    private List<Korisnik> korisnici;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idBanka")
+    @OneToMany(mappedBy = "brojRacuna")
+    private List<Racun> racuni;
+    @ManyToOne
+    @JoinColumn(name = "idKurs")
     private KursnaLista kurs;
 
     public Banka(int idBanke, String ime, String adresa, KursnaLista kurs) {
         this.idBanke = idBanke;
         this.ime = ime;
         this.adresa = adresa;
-        this.korisnici = new ArrayList<>();
+        this.racuni = new ArrayList<>();
         this.kurs = kurs;
-        this.idKurs = kurs.getID();
+        //his.idKurs = kurs.getID();
     }
 
-    public Banka(int idBanke, String ime, String adresa, List<Korisnik> korisnici, KursnaLista kurs) {
+    public Banka(int idBanke, String ime, String adresa, List<Racun> racuni, KursnaLista kurs) {
         this.idBanke = idBanke;
         this.ime = ime;
         this.adresa = adresa;
-        this.korisnici = korisnici;
+        this.racuni = racuni;
         this.kurs = kurs;
-        this.idKurs = kurs.getID();
+        //this.idKurs = kurs.getID();
     }
 
     public Banka() {
-        this.korisnici = new ArrayList<>();
+        this.racuni = new ArrayList<>();
     }
 
-    public String getIme() {
-        return ime;
-    }
-
-    public int getIdBanke() {
-        return idBanke;
-    }
-
-    public void setIme(String ime) {
-        this.ime = ime;
-    }
-
-    public String getAdresa() {
-        return adresa;
-    }
-
-    public void setAdresa(String adresa) {
-        this.adresa = adresa;
-    }
-
-    public List<Korisnik> getKorisnici() {
-        return korisnici;
-    }
-
-    public void setKorisnici(List<Korisnik> korisnici) {
-        this.korisnici = korisnici;
-    }
-
-    public KursnaLista getKurs() {
-        return kurs;
-    }
-
-    public void setKurs(KursnaLista kurs) {
-        this.kurs = kurs;
-    }
-
-    public int vratiID(Korisnik korisnik) {
-        String query = "Select \"idKorisnik\" from \"Korisnik\" where \"jmbg\" = '" + korisnik.getJmbg() + "'";
-        List<Row> idKorisnka = BankarskiSistem.database.readDataFromQuery(query);
-        int id = Integer.parseInt(idKorisnka.get(0).getFields().get("idKorisnik").toString());
+   /* public int vratiID(Racun racun) {
+        String query = "Select \"brojRacuna\" from \"Racun\" where \"brojRacuna\" = '" + racun.getBrojRacuna() + "'";
+        List<Row> brojRacuna = BankarskiSistem.database.readDataFromQuery(query);
+        int id = Integer.parseInt(brojRacuna.get(0).getFields().get("brojRacuna").toString());
         return id;
-    }
+    }*/
 
     /**
      *
@@ -107,7 +72,7 @@ public class Banka {
      * @param korisnik - korisnik kojem se dodaje racun
      */
     public void dodajRacun(Racun racun, Korisnik korisnik) {
-        if(korisnici.contains(korisnik)) {
+        /*if(korisnici.contains(korisnik)) {
             String query = "Insert into \"Racun\" (\"stanje\", \"idValuta\", \"idTip\", \"idKorisnik\", \"idBanka\") values(" +
                     racun.getStanje() +
                     "," + (racun.getIdValuta()+1) + "," +
@@ -124,17 +89,17 @@ public class Banka {
 
             korisnici.add(korisnik);
             korisnik.getRacuni().add(racun);
-        }
+        }*/
     }
 
     public void dodajRacunUListu(Racun racun, Korisnik korisnik) {
-        if(korisnici.contains(korisnik)) {
+        /*if(korisnici.contains(korisnik)) {
             korisnik.getRacuni().add(racun);
         }
         else {
             korisnici.add(korisnik);
             korisnik.getRacuni().add(racun);
-        }
+        }*/
     }
 
     /**
@@ -142,12 +107,12 @@ public class Banka {
      * @param racun - racun koji se brise iz banke
      */
     public void obrisiRacun(Racun racun) {
-        Korisnik korisnik = racun.getKorisnik();
+        /*Korisnik korisnik = racun.getKorisnik();
         try {
             korisnik.getRacuni().remove(racun);
         } catch (NullPointerException exception) {
             System.out.println("Ne postoji korisnik.");
-        }
+        }*/
     }
 
     /**
@@ -162,7 +127,7 @@ public class Banka {
 
     public void prebaciNovacKorisniku(Korisnik posiljalac, Racun racunPosiljalaca, Korisnik primalac,
                                       Racun racunPrimalaca, float iznos){
-        if(racunPosiljalaca.getValuta() != racunPrimalaca.getValuta()){
+       /* if(racunPosiljalaca.getValuta() != racunPrimalaca.getValuta()){
             float iznos1=iznos;
              iznos1 *= kurs.convert(racunPosiljalaca.getValuta(), racunPrimalaca.getValuta());
             float stanje1=racunPosiljalaca.getStanje();
@@ -178,7 +143,7 @@ public class Banka {
             if(stanje1!=racunPosiljalaca.getStanje())
                 primalac.uplata(racunPrimalaca, iznos);
 
-        }
+        }*/
 
     }
 
@@ -188,16 +153,15 @@ public class Banka {
      * @return - Korisnik sa unetim jmbg-om.
      */
 
-    public Korisnik nadjiKorisnika(String jmbg){
+    /*public Korisnik nadjiKorisnika(String jmbg){
         return korisnici.stream()
                 .filter(korisnik -> korisnik.getJmbg().equals(jmbg))
                 .findAny()
                 .orElse(null);
-    }
+    }*/
 
-    @Override
-    public String toString() {
+    /*public String toString() {
         return "ID: "+ idBanke + " Banka: " + ime + " na adresi: " + adresa + " broj korisnika=" + korisnici.size();
         //+ "\nKursna lista: " + getKurs().toString();
-    }
+    }*/
 }
