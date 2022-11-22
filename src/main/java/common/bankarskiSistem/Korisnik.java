@@ -38,7 +38,7 @@ public class Korisnik {
     @Column(name="idAdresa", nullable = false)
     private String adresa;
 
-    @OneToMany(mappedBy="idKorisnik")
+    @OneToMany(mappedBy="jmbg")
     private List<Racun> racuni;
 
 
