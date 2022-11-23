@@ -25,9 +25,10 @@ public class ExchangeRates {
     @Column(name = "name")
     private String name;
 
-    @OneToMany
+    @OneToMany(mappedBy = "idConversion")
     private List<Conversion> conversions;
 
-
+    @OneToMany(mappedBy = "idBank")
+    private List<Bank> banks;
 
 }

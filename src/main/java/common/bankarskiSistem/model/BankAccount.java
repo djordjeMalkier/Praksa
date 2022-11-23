@@ -20,11 +20,9 @@ public class BankAccount {
     @Column(name = "idAccount", nullable = false)
     private Integer idAccount;
 
-    @ManyToOne
-    @JoinColumn(name="idCurrency")
+    @Enumerated(EnumType.STRING)
     private Currency currency;
-    @ManyToOne
-    @JoinColumn(name="idType")
+    @Enumerated(EnumType.STRING)
     private AccountType accountType;
     @ManyToOne
     @JoinColumn(name="personalId")

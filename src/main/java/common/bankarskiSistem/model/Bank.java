@@ -30,7 +30,7 @@ public class Bank {
     @OneToMany(mappedBy = "idAccount")
     private List<BankAccount> bankAccounts;
     @ManyToOne
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "idExchangeRates")
     private ExchangeRates exchangeRates;
 
     public Bank(int idBank, String name, String address, ExchangeRates exchangeRates) {
