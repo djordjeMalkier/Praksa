@@ -94,21 +94,7 @@ public class User {
      * @param iznos - iznos koji se upacujue
      * @return - stanje nakon uplate
      */
-/*    public float uplata(Racun racun, float iznos) {
-        if (racun == null) throw new NullPointerException("Prosledjen je null racun");
-
-        if (iznos <= 0) {
-            System.out.println("Iznos za uplatu mora biti pozitivan");
-        } else {
-            racun.setStanje(racun.getStanje() + iznos);
-            //IZMENA
-            BankarskiSistem.database.updateDataForQuery("UPDATE \"Racun\" SET stanje = " +
-                    (racun.getStanje()) + " WHERE \"brojRacuna\" = " +
-                    racun.getBrojRacuna());
-        }
-
-        return racun.getStanje();
-    }
+/*
 
     /**
      * Isplata sredstava na korisnikov racun
