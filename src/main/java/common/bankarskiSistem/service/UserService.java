@@ -1,6 +1,5 @@
 package common.bankarskiSistem.service;
 
-import common.bankarskiSistem.model.Bank;
 import common.bankarskiSistem.model.BankAccount;
 import common.bankarskiSistem.model.User;
 import common.bankarskiSistem.repository.UserRepository;
@@ -24,40 +23,54 @@ public class UserService {
     }
 
     // UPDATE user
-    public void update(User user) {
-        userRepository
-                .findById(user.getPersonalId()) // returns Optional<User>
-                .ifPresent(userUpdated -> {
-                    userUpdated.setName(user.getName());
-                    userUpdated.setSurname(user.getSurname());
-                    userUpdated.setAddress(user.getAddress());
+    public void updateUser(User user) {
+        User existingUser
+                = userRepository.findById(user.getPersonalId())
+                .orElse(null);
+        if (existingUser == null)
+            throw new NullPointerException("No such user exists!");
 
-                    userRepository.save(userUpdated);
-                });
-    }
+        existingUser.setName(user.getName());
+        existingUser.setSurname(user.getSurname());
+        existingUser.setAddress(user.getAddress());
+        userRepository.save(existingUser);
 
-    // DELETE user by personal id (jmbg)
-    public void deleteByPersonalId(String id) {
-        if(userRepository.existsByPersonalId(id)){
-            userRepository.deleteById(id);
-        }
     }
 
     // CREATE user
-    public User save(User user) {
-        return userRepository.save(user);
+    public User saveUser(User user) {
+        User existingUser
+                = userRepository.findById(user.getPersonalId())
+                .orElse(null);
+        if (existingUser == null)
+            return userRepository.save(user);
+
+        throw new NullPointerException("This user already exists!");
+    }
+
+    // DELETE user by personal id (jmbg)
+    public void deleteUserByPersonalId(String id) {
+        User existingUser
+                = userRepository.findById(id)
+                .orElse(null);
+        if (existingUser == null)
+            throw new NullPointerException("No such user exists!");
+
+        userRepository.deleteById(id);
     }
 
     //CREATE ACCOUNT for user
-    public void createBankAccount(User user, BankAccount bankAccount) {
-        userRepository
-                .findById(user.getPersonalId()) // returns Optional<User>
-                .ifPresent(userUpdated -> {
-                    List<BankAccount> accounts = user.getBankAccounts();
-                    accounts.add(bankAccount);
-                    userUpdated.setBankAccounts(accounts);
-                    userRepository.save(userUpdated);
-                });
-    }
+    public BankAccount createBankAccount(User user, BankAccount bankAccount) {
+        User existingUser
+                = userRepository.findById(user.getPersonalId())
+                .orElse(null);
+        if (existingUser == null)
+            throw new NullPointerException("This bank account already exists!");
 
+        List<BankAccount> accounts = user.getBankAccounts();
+        accounts.add(bankAccount);
+        user.setBankAccounts(accounts);
+        userRepository.save(user);
+        return bankAccount;
+    }
 }
