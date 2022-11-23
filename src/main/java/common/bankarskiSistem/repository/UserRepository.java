@@ -3,6 +3,8 @@ package common.bankarskiSistem.repository;
 import common.bankarskiSistem.model.User;
 import org.springframework.data.repository.CrudRepository;
 
+import java.util.Optional;
+
 public interface UserRepository extends CrudRepository<User, String> {
-    User findByPersonalId(String personalId);
+    boolean existsByPersonalId(String personalId);
 }
