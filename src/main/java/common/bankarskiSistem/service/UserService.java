@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 public class UserService {
@@ -39,6 +40,14 @@ public class UserService {
     public List<BankAccount> getAllAccounts(String personalId){
         Optional<User> user = userRepository.findById(personalId);
         return user.map(User::getBankAccounts).orElse(null);
+    }
+
+    public BankAccount getBankAccountByID(String personalId, Integer accountId){
+        Optional<User> user = userRepository.findById(personalId);
+        user.ifPresent(u -> {
+            return u.getBankAccounts().stream().filter(u -> u.getIdAccount().equals(accountId));
+        });
+        return null;
     }
 
 
