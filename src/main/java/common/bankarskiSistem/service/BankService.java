@@ -21,22 +21,14 @@ public class BankService {
 
     /**
      *
-     * @param name of the bank
-     * @param address of the bank
+     * @param bank the bank
      * @return bank that was created
      * @throws NameOfTheBankAlreadyExistException
      */
-    public Bank createBank(String name, String address) throws NameOfTheBankAlreadyExistException {
-        if (name == null)
-            throw new NullPointerException("The name is null.");
-        if (address == null)
-            throw new NullPointerException("The address is null.");
-
-        Bank bank = new Bank();
-        bank.setName(name);
-        bank.setAddress(address);
-
-        if(bankRepository.findByName(bank.getName()).isPresent())
+    public Bank createBank(Bank bank) throws NameOfTheBankAlreadyExistException {
+        if(bank == null)
+            throw new NullPointerException("The bank is null.");
+        if(bankRepository.findByName(bank.getName()).isEmpty())
             throw new NameOfTheBankAlreadyExistException("Name of the bank already exists.");
         return bankRepository.save(bank);
     }
@@ -59,7 +51,7 @@ public class BankService {
     public void updateBankName(String name, Integer idBank) {
         if (name == null)
             throw new NullPointerException("The name is null.");
-        if(bankRepository.findById(idBank).isPresent())
+        if(bankRepository.findById(idBank).isEmpty())
             throw new NullPointerException("The bank does not exist.");
         bankRepository.getReferenceById(idBank).setName(name);
     }
@@ -72,7 +64,7 @@ public class BankService {
     public void updateBankAddress(String address, Integer idBank) {
         if (address == null)
             throw new NullPointerException("The address is null.");
-        if(bankRepository.findById(idBank).isPresent())
+        if(bankRepository.findById(idBank).isEmpty())
             throw new NullPointerException("The bank does not exist.");
         bankRepository.getReferenceById(idBank).setAddress(address);
     }
@@ -92,7 +84,7 @@ public class BankService {
      * @param bank of bank
      * @return exchange rates
      */
-    public Optional<ExchangeRates> getExcangeRates(Bank bank) {
+    public Optional<ExchangeRates> getExchangeRates(Bank bank) {
         if (bank == null)
             throw new NullPointerException("The bank is null.");
         return bankRepository.getExchangeRates(bank);
@@ -114,9 +106,8 @@ public class BankService {
         if (bank == null)
             throw new NullPointerException("The bank is null.");
         List<User> users = new ArrayList<>();
-        if (bankRepository.getBankAccounts(bank) == null)
-            throw new NullPointerException("There is no accounts in this bank.");
-        for (BankAccount account: bankRepository.getBankAccounts(bank)) {
+
+        for (BankAccount account: bank.getBankAccounts()) {
             users.add(account.getUser());
         }
         return users;
