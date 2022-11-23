@@ -84,7 +84,7 @@ public class BankService {
      */
     public ExchangeRates createExchangeRates(ExchangeRates exchangeRates) {
         if(exchangeRates == null)
-            throw new NullPointerException("The excenge rate is null.");
+            throw new NullPointerException("The exchange rate is null.");
         return exchangeRatesRepository.save(exchangeRates);
     }
 
