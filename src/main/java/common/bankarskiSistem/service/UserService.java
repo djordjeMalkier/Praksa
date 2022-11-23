@@ -16,6 +16,8 @@ public class UserService {
     private UserRepository userRepository;
 
     public User getUserByPersonalId(String id) throws NullPointerException {
+        if(id == null)
+            throw new NullPointerException("Null personal id");
         Optional<User> userOptional = userRepository.findById(id);
         if (userOptional.isEmpty())
             throw new NullPointerException("User [" + id + "] not found");
@@ -24,6 +26,8 @@ public class UserService {
 
     // UPDATE user
     public void updateUser(User user) {
+        if(user == null)
+            throw new NullPointerException("Null user");
         User existingUser
                 = userRepository.findById(user.getPersonalId())
                 .orElse(null);
@@ -34,11 +38,12 @@ public class UserService {
         existingUser.setSurname(user.getSurname());
         existingUser.setAddress(user.getAddress());
         userRepository.save(existingUser);
-
     }
 
     // CREATE user
     public User saveUser(User user) {
+        if(user == null)
+            throw new NullPointerException("Null user");
         User existingUser
                 = userRepository.findById(user.getPersonalId())
                 .orElse(null);
@@ -50,6 +55,8 @@ public class UserService {
 
     // DELETE user by personal id (jmbg)
     public void deleteUserByPersonalId(String id) {
+        if(id == null)
+            throw new NullPointerException("Null personal id");
         User existingUser
                 = userRepository.findById(id)
                 .orElse(null);
@@ -59,8 +66,12 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
-    //CREATE ACCOUNT for user
+    //CREATE BANK ACCOUNT for user
     public BankAccount createBankAccount(User user, BankAccount bankAccount) {
+        if(user == null)
+            throw new NullPointerException("Null user");
+        if(bankAccount == null)
+            throw new NullPointerException("Null bank account");
         User existingUser
                 = userRepository.findById(user.getPersonalId())
                 .orElse(null);
