@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 public class UserService {
@@ -21,33 +20,39 @@ public class UserService {
     }
 
     public boolean deleteAccount(String personalId, BankAccount bankAccount){
-        Optional<User> user = userRepository.findById(personalId);
-        if(user.
-                isEmpty()) return false;
-        user.ifPresent(u -> u.getBankAccounts().remove(bankAccount));
-        user.ifPresent(u -> userRepository.save(u));
-        return true;
+        User user = getUserByPersonalID(personalId);
+        if(bankAccount != null) {
+            user.getBankAccounts().remove(bankAccount);
+            userRepository.save(user);
+            return true;
+        } else throw new NullPointerException("The bank account does not exist!");
     }
 
     public boolean deleteAllAccount(String personalId){
-        Optional<User> user = userRepository.findById(personalId);
-        if(user.isEmpty()) return false;
-        user.ifPresent(u -> u.setBankAccounts(new ArrayList<BankAccount>()));
-        user.ifPresent(u -> userRepository.save(u));
+        User user = getUserByPersonalID(personalId);
+        user.setBankAccounts(new ArrayList<BankAccount>());
+        userRepository.save(user);
         return true;
     }
 
     public List<BankAccount> getAllAccounts(String personalId){
-        Optional<User> user = userRepository.findById(personalId);
-        return user.map(User::getBankAccounts).orElse(null);
+        User user = getUserByPersonalID(personalId);
+        return user.getBankAccounts();
     }
 
     public BankAccount getBankAccountByID(String personalId, Integer accountId){
-        Optional<User> user = userRepository.findById(personalId);
-        user.ifPresent(u -> {
-            return u.getBankAccounts().stream().filter(u -> u.getIdAccount().equals(accountId));
-        });
+        User user = getUserByPersonalID(personalId);
+        for (BankAccount bankAccount : user.getBankAccounts()){
+            if(bankAccount.getIdAccount().equals(accountId)) return bankAccount;
+        }
         return null;
+    }
+
+    public User getUserByPersonalID(String personalID) throws NullPointerException {
+        Optional<User> userOptional = userRepository.findById(personalID);
+        if (userOptional.isEmpty())
+            throw new NullPointerException("User [" + personalID + "] not found");
+        return userOptional.get();
     }
 
 
