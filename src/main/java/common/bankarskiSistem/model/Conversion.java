@@ -14,13 +14,15 @@ public class Conversion {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "idConversion", nullable = false)
-    private Long idConversion;
+    private Integer idConversion;
 
-    @OneToOne
-    private Currency from;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "currencyFrom", nullable = false)
+    private Currency currencyFrom;
 
-    @OneToOne
-    private Currency to;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "currencyTo", nullable = false)
+    private Currency currencyTo;
 
     @Column(name = "value", nullable = false)
     private double value;
