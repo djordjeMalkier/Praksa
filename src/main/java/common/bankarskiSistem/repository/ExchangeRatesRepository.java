@@ -7,4 +7,5 @@ import java.util.Optional;
 
 public interface ExchangeRatesRepository extends JpaRepository<ExchangeRates, Integer> {
     Optional<ExchangeRates> getByName(String name);
+    Optional<ExchangeRates> findExchangeRatesByBankId(Integer idBank);
 }
