@@ -17,15 +17,6 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    public User getUserByPersonalId(String id) throws NullPointerException {
-        if(id == null)
-            throw new NullPointerException("Null personal id");
-        Optional<User> userOptional = userRepository.findById(id);
-        if (userOptional.isEmpty())
-            throw new NullPointerException("User [" + id + "] not found");
-        return userOptional.get();
-    }
-
     // UPDATE user
     public void updateUser(User user) {
         if(user == null)
@@ -193,6 +184,8 @@ public class UserService {
     }
 
     public User getUserByPersonalID(String personalID) throws NullPointerException {
+        if(personalID == null)
+            throw new NullPointerException("Null personal id");
         Optional<User> userOptional = userRepository.findById(personalID);
         if (userOptional.isEmpty())
             throw new NullPointerException("User [" + personalID + "] not found");
