@@ -13,4 +13,5 @@ public interface BankRepository extends JpaRepository<Bank, Integer> {
     Optional<ExchangeRates> getExchangeRates(Bank bank);
     List<BankAccount> getBankAccounts(Bank bank);
 
+    Optional<Bank> findByName(String name);
 }
