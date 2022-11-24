@@ -54,7 +54,7 @@ public class BankService {
             throw new NullPointerException("The name is null.");
         if(bankRepository.findById(idBank).isEmpty())
             throw new NullPointerException("The bank does not exist.");
-        bankRepository.getReferenceById(idBank).setName(name);
+        bankRepository.findById(idBank).get().setName(name);
     }
 
     /**
@@ -67,7 +67,7 @@ public class BankService {
             throw new NullPointerException("The address is null.");
         if(bankRepository.findById(idBank).isEmpty())
             throw new NullPointerException("The bank does not exist.");
-        bankRepository.getReferenceById(idBank).setAddress(address);
+        bankRepository.findById(idBank).get().setAddress(address);
     }
 
     /**

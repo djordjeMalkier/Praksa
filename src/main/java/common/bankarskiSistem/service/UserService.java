@@ -80,7 +80,7 @@ public class UserService {
         return bankAccount;
     }
 
-    public float payIn(String personalID, BankAccount account, float payment) {
+    public double payIn(String personalID, BankAccount account, float payment) {
         if (account == null) throw new NullPointerException("No account");
 
         if (payment <= 0)
@@ -94,7 +94,7 @@ public class UserService {
         return bankAccount.getBalance();
     }
 
-    public float payOut(String personalID, BankAccount account, float payment) {
+    public double payOut(String personalID, BankAccount account, float payment) {
         if (account == null) throw new NullPointerException("No account");
 
         if (payment <= 0)
@@ -130,7 +130,7 @@ public class UserService {
         }
     }
 
-    public float getBalance(String personalID, BankAccount account) {
+    public double getBalance(String personalID, BankAccount account) {
         //TODO currency
         if (account == null) throw new NullPointerException("No account");
         User user = getUserByPersonalID(personalID);
@@ -148,12 +148,12 @@ public class UserService {
         return bankAccountOptional.get();
     }
 
-    public float getAllBalance(String personalID) {
+    public double getAllBalance(String personalID) {
         //TODO currency
         User user = getUserByPersonalID(personalID);
         return user.getBankAccounts().stream()
                 .map(account -> getBalance(personalID, account))
-                .reduce((float) 0, Float::sum);
+                .reduce((double) 0, Double::sum);
     }
 
     public boolean deleteAccount(String personalId, BankAccount bankAccount){
