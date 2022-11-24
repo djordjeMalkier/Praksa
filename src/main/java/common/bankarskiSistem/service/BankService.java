@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 @Service
 public class BankService {
     @Autowired
@@ -92,10 +91,11 @@ public class BankService {
      * @param bank of bank
      * @return exchange rates
      */
-    public Optional<ExchangeRates> getExchangeRates(Bank bank) {
+    public ExchangeRates getExchangeRates(Bank bank) {
         if (bank == null)
             throw new NullPointerException("The bank is null.");
-        return bankRepository.getExchangeRates(bank);
+
+        return bank.getExchangeRates();
     }
 
     /**
