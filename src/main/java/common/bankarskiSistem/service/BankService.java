@@ -29,7 +29,7 @@ public class BankService {
     public Bank createBank(Bank bank) throws NameOfTheBankAlreadyExistException {
         if(bank == null)
             throw new NullPointerException("The bank is null.");
-        if(bankRepository.findByName(bank.getName()).isEmpty())
+        if(!bankRepository.findByName(bank.getName()).isEmpty())
             throw new NameOfTheBankAlreadyExistException("Name of the bank already exists.");
         return bankRepository.save(bank);
     }

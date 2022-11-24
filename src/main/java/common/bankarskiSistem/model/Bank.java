@@ -33,8 +33,7 @@ public class Bank {
     @JoinColumn(name = "idExchangeRates")
     private ExchangeRates exchangeRates;
 
-    public Bank(int idBank, String name, String address, ExchangeRates exchangeRates) {
-        this.idBank = idBank;
+    public Bank(String name, String address, ExchangeRates exchangeRates) {
         this.name = name;
         this.address = address;
         this.bankAccounts = new ArrayList<>();
@@ -52,4 +51,6 @@ public class Bank {
     public Bank() {
         this.bankAccounts = new ArrayList<>();
     }
+
+
 }
