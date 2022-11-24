@@ -57,9 +57,9 @@ public class ConversionService {
         return conversionRepository.save(existingConversion);
     }
 
-    public boolean deleteConversion(Conversion conversion){
+    public Conversion deleteConversion(Conversion conversion){
         if (conversion == null) throw new NullPointerException("Conversion does not exist");
         conversionRepository.delete(conversion);
-        return true;
+        return conversion;
     }
 }
