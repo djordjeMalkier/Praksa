@@ -30,4 +30,18 @@ public class ConversionService {
 
         return conversion.getValue();
     }
+
+    public void updateConversion(Conversion conversion) {
+        if(conversion == null)
+            throw new NullPointerException("Null conversion");
+        Conversion existingConversion
+                = conversionRepository.findById(conversion.getIdConversion())
+                .orElseThrow(() -> new NullPointerException("No such conversion exists!"));
+
+        existingConversion.setCurrencyFrom(conversion.getCurrencyFrom());
+        existingConversion.setCurrencyTo(conversion.getCurrencyTo());
+        existingConversion.setValue(conversion.getValue());
+        conversionRepository.save(existingConversion);
+    }
+
 }
