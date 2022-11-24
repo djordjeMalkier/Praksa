@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,24 +35,20 @@ public class UserController {
         } catch (NullPointerException exception) {
             return badRequest().build();
         }
-
         return ok(mapper.usertoUserDTO(savedUser));
     }
 
-    @GetMapping("/get/{id}")
-    public ResponseEntity<UserDTO> getUserById(@PathVariable("id") String personalID) {
+    @GetMapping("/get/{personalId}")
+    public ResponseEntity<UserDTO> getUserById(@PathVariable String personalId) {
         UserMapper mapper = new UserMapperImpl();
         User user = null;
         try{
-            user = userService.getUserByPersonalID(personalID);
-            log.info("NEMA");
-
+            user = userService.getUserByPersonalID(personalId);
         } catch (NullPointerException exception) {
             return notFound().build();
         }
-        log.info(user.getName());
-        return ok(mapper.usertoUserDTO(user));
-
+         return new ResponseEntity<>(mapper.usertoUserDTO(userService.getUserByPersonalID(personalId)),
+                 HttpStatus.OK);
     }
 
 

@@ -9,13 +9,21 @@ public class UserMapperImpl implements UserMapper{
             return null;
         }
 
-        return new UserDTO(
+        UserDTO userDTO = new UserDTO();
+
+        userDTO.setPersonalId(user.getPersonalId());
+        userDTO.setName(user.getName());
+        userDTO.setSurname(user.getSurname());
+        userDTO.setAddress(user.getAddress());
+        return userDTO;
+
+       /* return new UserDTO(
                 user.getPersonalId(),
                 user.getName(),
                 user.getSurname(),
                 user.getAddress(),
                 user.getBankAccounts()
-        );
+        );*/
     }
 
     @Override
@@ -24,13 +32,14 @@ public class UserMapperImpl implements UserMapper{
             return null;
         }
 
-        return new User(
-                userDTO.getPersonalId(),
-                userDTO.getName(),
-                userDTO.getSurname(),
-                userDTO.getAddress(),
-                userDTO.getBankAccounts()
-        );
+        User user = new User();
+
+        user.setPersonalId(user.getPersonalId());
+        user.setName(user.getName());
+        user.setSurname(user.getSurname());
+        user.setAddress(user.getAddress());
+        return user;
+
     }
 
 }
