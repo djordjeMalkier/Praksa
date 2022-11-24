@@ -12,7 +12,7 @@ import java.util.List;
 @Getter
 @Setter
 @AllArgsConstructor
-public class UserDto {
+public class UserDTO {
 
     private String personalId;
 
