@@ -14,7 +14,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 public class BankAccount {
     @Column(name = "balance", nullable = false)
-    private float balance;
+    private double balance;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "idAccount", nullable = false)
@@ -47,7 +47,6 @@ public class BankAccount {
         this(accountType, currency, user, bank, idAccount);
         this.balance = balance;
     }
-
 
     @Override
     public String toString() {

@@ -8,11 +8,12 @@ import common.bankarskiSistem.model.User;
 import common.bankarskiSistem.repository.BankRepository;
 import common.bankarskiSistem.repository.ExchangeRatesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
+@Service
 public class BankService {
     @Autowired
     private BankRepository bankRepository;

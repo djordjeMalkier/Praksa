@@ -1,8 +1,14 @@
 package common.bankarskiSistem.repository;
 
 import common.bankarskiSistem.model.Conversion;
-import org.springframework.data.jpa.repository.JpaRepository;
+import common.bankarskiSistem.model.Currency;
+import common.bankarskiSistem.model.ExchangeRates;
+import org.springframework.data.repository.CrudRepository;
 
-public interface ConversionRepository extends JpaRepository<Conversion, Integer> {
+import java.util.Optional;
+
+public interface ConversionRepository extends CrudRepository<Conversion, Integer> {
+    public Optional<Conversion> findByCurrencyFromAndCurrencyToAndExchangeRates(
+            Currency currencyFrom, Currency currencyTo, ExchangeRates exchangeRates);
 
 }

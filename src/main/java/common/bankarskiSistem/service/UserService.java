@@ -16,6 +16,8 @@ public class UserService {
 
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private ConversionService conversionService;
 
     // UPDATE user
     public void updateUser(User user) {
@@ -116,10 +118,10 @@ public class UserService {
 
         if (accountFrom.getCurrency() != accountTo.getCurrency()) {
             payOut(personalID, accountFrom, payment);
-            float convertedCurrency = 1;/*TODO accountFrom
-                    .getBank()
-                    .getExchangeRates()
-                    .convert(accountFrom.getCurrency(), accountTo.getCurrency());*/
+            double convertedCurrency = conversionService.convert(
+                    accountFrom.getCurrency(),
+                    accountTo.getCurrency(),
+                    accountFrom.getBank());
             payment *= convertedCurrency;
             payIn(personalID, accountTo, payment);
         } else {
