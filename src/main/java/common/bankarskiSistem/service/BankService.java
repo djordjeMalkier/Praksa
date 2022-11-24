@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+
 @Service
 public class BankService {
     @Autowired
@@ -43,6 +44,10 @@ public class BankService {
         bankRepository.deleteById(bank.getIdBank());
 
         return bank;
+    }
+
+    public Bank findById(Integer idBank){
+        return bankRepository.findById(idBank).get();
     }
 
     /**
@@ -126,5 +131,6 @@ public class BankService {
         }
         return users;
     }
+
 
 }
