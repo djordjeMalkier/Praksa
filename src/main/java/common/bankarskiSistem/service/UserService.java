@@ -157,20 +157,21 @@ public class UserService {
                 .reduce((double) 0, Double::sum);
     }
 
-    public boolean deleteAccount(String personalId, BankAccount bankAccount){
+    public BankAccount deleteAccount(String personalId, BankAccount bankAccount){
         User user = getUserByPersonalID(personalId);
         if(bankAccount != null) {
             user.getBankAccounts().remove(bankAccount);
             userRepository.save(user);
-            return true;
+            return bankAccount;
         } else throw new NullPointerException("The bank account does not exist!");
     }
 
-    public boolean deleteAllAccounts(String personalId){
+    public List<BankAccount> deleteAllAccounts(String personalId){
         User user = getUserByPersonalID(personalId);
+        List<BankAccount> bankAccounts = user.getBankAccounts();
         user.setBankAccounts(new ArrayList<BankAccount>());
         userRepository.save(user);
-        return true;
+        return bankAccounts;
     }
 
     public List<BankAccount> getAllAccounts(String personalId){
