@@ -30,4 +30,10 @@ public class ConversionService {
 
         return conversion.getValue();
     }
+
+    public boolean deleteConversion(Conversion conversion){
+        if (conversion == null) throw new NullPointerException("Conversion does not exist");
+        conversionRepository.delete(conversion);
+        return true;
+    }
 }
