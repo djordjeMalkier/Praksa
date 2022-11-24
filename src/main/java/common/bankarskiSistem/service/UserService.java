@@ -20,7 +20,7 @@ public class UserService {
     private ConversionService conversionService;
 
     // UPDATE user
-    public void updateUser(User user) {
+    public User updateUser(User user) {
         if(user == null)
             throw new NullPointerException("Null user");
         User existingUser
@@ -32,7 +32,7 @@ public class UserService {
         existingUser.setName(user.getName());
         existingUser.setSurname(user.getSurname());
         existingUser.setAddress(user.getAddress());
-        userRepository.save(existingUser);
+        return userRepository.save(existingUser);
     }
 
     // CREATE user
@@ -49,7 +49,7 @@ public class UserService {
     }
 
     // DELETE user by personal id (jmbg)
-    public void deleteUserByPersonalId(String id) {
+    public User deleteUserByPersonalId(String id) {
         if(id == null)
             throw new NullPointerException("Null personal id");
         User existingUser
@@ -59,6 +59,7 @@ public class UserService {
             throw new NullPointerException("No such user exists!");
 
         userRepository.deleteById(id);
+        return  existingUser;
     }
 
     //CREATE BANK ACCOUNT for user
