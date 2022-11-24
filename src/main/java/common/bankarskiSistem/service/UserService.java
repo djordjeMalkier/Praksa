@@ -190,7 +190,7 @@ public class UserService {
     public User getUserByPersonalID(String personalID) throws NullPointerException {
         if(personalID == null)
             throw new NullPointerException("Null personal id");
-        Optional<User> userOptional = userRepository.findById(personalID);
+        Optional<User> userOptional = userRepository.findByPersonalId(personalID);
         if (userOptional.isEmpty())
             throw new NullPointerException("User [" + personalID + "] not found");
         return userOptional.get();

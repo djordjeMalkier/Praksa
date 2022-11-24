@@ -7,8 +7,5 @@ import java.util.List;
 import java.util.Optional;
 
 public interface UserRepository extends CrudRepository<User, String> {
-    Optional<User> getAllByName(String name);
-    Optional<User> getAllBySurname(String surname);
-    Optional<User> getAllByNameAndSurname(String name, String surname);
-    boolean existsByPersonalId(String personalId);
+    Optional<User> findByPersonalId(String personalId);
 }

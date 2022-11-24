@@ -1,5 +1,6 @@
 package common.bankarskiSistem.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -13,7 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
-
+@AllArgsConstructor
 public class User {
     @Id
     @Column(name="personal_id", nullable = false)
