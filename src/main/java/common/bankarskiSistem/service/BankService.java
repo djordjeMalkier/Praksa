@@ -1,17 +1,16 @@
 package common.bankarskiSistem.service;
 
 import common.bankarskiSistem.exceptions.NameOfTheBankAlreadyExistException;
-import common.bankarskiSistem.model.Bank;
-import common.bankarskiSistem.model.BankAccount;
-import common.bankarskiSistem.model.ExchangeRates;
-import common.bankarskiSistem.model.User;
+import common.bankarskiSistem.model.*;
 import common.bankarskiSistem.repository.BankRepository;
+import common.bankarskiSistem.repository.ConversionRepository;
 import common.bankarskiSistem.repository.ExchangeRatesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 @Service
 public class BankService {
@@ -20,6 +19,8 @@ public class BankService {
     @Autowired
     private ExchangeRatesRepository exchangeRatesRepository;
 
+    @Autowired
+    private ConversionRepository conversionRepository;
     /**
      *
      * @param bank the bank
@@ -92,11 +93,12 @@ public class BankService {
 
     }
 
-   /* public void updateExchangeRates(Integer idConversion,ExchangeRates exchangeRates, double value ) {
-        exchangeRates.getConversions().get(idConversion).setValue(value);
-    }*/
-
-    //public createConvert();
+    public void updateExchangeRates(ExchangeRates exchangeRates) {
+        for(Conversion conversion: exchangeRates.getConversions()) {
+            if(conversion.getExchangeRates().getIdExchangeRates() == exchangeRates.getIdExchangeRates())
+                conversionRepository.updateConversion(conversion);
+        }
+    }
 
     /**
      *
