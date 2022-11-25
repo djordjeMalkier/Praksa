@@ -39,7 +39,7 @@ public class BankService {
      * @param bank of the bank to be deleted
      */
     public Bank deleteBank(Bank bank) {
-        if(bankRepository.findById(bank.getIdBank()).isPresent())
+        if(bankRepository.findById(bank.getIdBank()).isEmpty())
             throw new NullPointerException("The bank does not exist.");
         bankRepository.deleteById(bank.getIdBank());
 
@@ -47,7 +47,7 @@ public class BankService {
     }
 
     public Bank findById(Integer idBank){
-        return bankRepository.findById(idBank).get();
+        return bankRepository.findByIdBank(idBank).get();
     }
 
     /**
@@ -58,9 +58,9 @@ public class BankService {
     public Bank updateBankName(String name, Bank bank) {
         if (name == null)
             throw new NullPointerException("The name is null.");
-        if(bankRepository.findById(bank.getIdBank()).isEmpty())
+        if(bankRepository.findByIdBank(bank.getIdBank()).isEmpty())
             throw new NullPointerException("The bank does not exist.");
-        bankRepository.findById(bank.getIdBank()).get().setName(name);
+        bankRepository.findByIdBank(bank.getIdBank()).get().setName(name);
 
         return bank;
     }
