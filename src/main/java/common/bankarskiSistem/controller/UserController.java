@@ -49,5 +49,23 @@ public class UserController {
         }
     }
 
+    /*
+    * updateUser
+    * deleteUserByPersonalId
+    * createBankAccountForUser
+    *
+    * payInUserBankAccount
+    * payOutUserBankAccount
+    * transferFromUserAccountToAnotherAccount
+    * getAccountBalance
+    * getAllBankAccountBalance
+    *
+    * deleteOneAccount
+    * deleteAllAccount
+    * getAllAccounts
+    * getBankAccountById
+    *
+    * */
+
 
 }
