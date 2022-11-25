@@ -54,14 +54,10 @@ public class BankController {
         Bank bank;
         try{
             bank = bankService.findById(idBank);
-            log.info("NEMA");
-
         } catch (NullPointerException exception) {
             return notFound().build();
         }
-        log.info(bank.getName());
         return ok(mapper.convertToDTO(bank));
-
     }
 
     @PutMapping("/put/{idBank}")

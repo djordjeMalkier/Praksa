@@ -47,7 +47,7 @@ public class BankService {
     }
 
     public Bank findById(Integer idBank){
-        return bankRepository.findById(idBank).get();
+        return bankRepository.findByIdBank(idBank).get();
     }
 
     /**

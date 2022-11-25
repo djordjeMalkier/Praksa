@@ -1,5 +1,6 @@
 package common.bankarskiSistem.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -25,10 +26,12 @@ public class BankAccount {
     @Enumerated(EnumType.STRING)
     private AccountType accountType;
     @ManyToOne
-    @JoinColumn(name="personalId")
+    @JoinColumn(name="personal_id")
+    @JsonIgnore
     private User user;
     @ManyToOne
     @JoinColumn(name="idBank")
+    @JsonIgnore
     private Bank bank;
 
     public BankAccount(AccountType accountType, Currency currency, User user, Bank bank, int idAccount) {

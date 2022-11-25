@@ -29,7 +29,7 @@ public class User {
     @Column(name="address", nullable = false)
     private String address;
 
-    @OneToMany(mappedBy = "idAccount")
+    @OneToMany(mappedBy = "user")
     private List<BankAccount> bankAccounts;
 
     public User(String personalId, String name, String surname, String address) {
