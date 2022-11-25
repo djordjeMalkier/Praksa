@@ -27,7 +27,7 @@ public class Bank {
     private String name;
     @Column(name="address", nullable = false)
     private String address;
-    @OneToMany(mappedBy = "bank")
+    @OneToMany(mappedBy = "bank", cascade = CascadeType.ALL)
     private List<BankAccount> bankAccounts;
     @ManyToOne
     @JoinColumn(name = "idExchangeRates")
