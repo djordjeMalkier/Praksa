@@ -1,5 +1,6 @@
 package common.bankarskiSistem.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -29,6 +30,7 @@ public class Conversion {
 
     @ManyToOne
     @JoinColumn(name = "idExchangeRates")
+    @JsonIgnore
     private ExchangeRates exchangeRates;
 
 }
