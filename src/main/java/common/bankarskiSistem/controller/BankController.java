@@ -1,22 +1,18 @@
 package common.bankarskiSistem.controller;
 
 import common.bankarskiSistem.BankarskiSistem;
-import common.bankarskiSistem.controller.dto.*;
+import common.bankarskiSistem.controller.dto.BankDto;
+import common.bankarskiSistem.controller.dto.BankMapper;
 import common.bankarskiSistem.exceptions.NameOfTheBankAlreadyExistException;
 import common.bankarskiSistem.model.Bank;
-import common.bankarskiSistem.model.User;
 import common.bankarskiSistem.service.BankService;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import org.mapstruct.factory.Mappers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.Set;
 
 import static org.springframework.http.ResponseEntity.*;
 
@@ -27,10 +23,10 @@ public class BankController {
 
     private static final Logger log = LoggerFactory.getLogger(BankarskiSistem.class);
     @NonNull
+    @Autowired
     private final BankService bankService;
 
-    private BankMapper mapper
-            = Mappers.getMapper(BankMapper.class);
+    private final BankMapper mapper = BankMapper.INSTANCE;
 
     @PostMapping
     public ResponseEntity<BankDto> saveBank(@RequestBody BankDto bankDto) {
