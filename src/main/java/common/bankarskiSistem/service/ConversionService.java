@@ -24,7 +24,7 @@ public class ConversionService {
                 conversionRepository.findByCurrencyFromAndCurrencyToAndExchangeRates(
                         currencyFrom, currencyTo, bank.getExchangeRates());
         if(conversionOptional.isEmpty())
-            throw new NullPointerException("Conversion not found");
+            throw new NullPointerException("Conversion " + currencyFrom + " to " + currencyTo + " not found");
 
         Conversion conversion = conversionOptional.get();
 
