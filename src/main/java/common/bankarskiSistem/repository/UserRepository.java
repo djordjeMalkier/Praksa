@@ -8,4 +8,5 @@ import java.util.Optional;
 
 public interface UserRepository extends CrudRepository<User, String> {
     Optional<User> findByPersonalId(String personalId);
+    Optional<User> deleteByPersonalId(String personalId);
 }

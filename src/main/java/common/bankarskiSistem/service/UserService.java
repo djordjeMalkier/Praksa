@@ -1,10 +1,16 @@
 package common.bankarskiSistem.service;
 
+import common.bankarskiSistem.BankarskiSistem;
+import common.bankarskiSistem.exceptions.EntityAlreadyExistsException;
+import common.bankarskiSistem.exceptions.EntityNotFoundException;
 import common.bankarskiSistem.model.BankAccount;
 import common.bankarskiSistem.model.User;
 import common.bankarskiSistem.repository.UserRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -12,22 +18,25 @@ import java.util.Objects;
 import java.util.Optional;
 
 @Service
+@Transactional
 public class UserService {
 
+    private static final Logger log = LoggerFactory.getLogger(BankarskiSistem.class);
     @Autowired
     private UserRepository userRepository;
     @Autowired
     private ConversionService conversionService;
 
+
     // UPDATE user
-    public User updateUser(User user) {
+    public User updateUser(User user) throws EntityNotFoundException {
         if(user == null)
             throw new NullPointerException("Null user");
         User existingUser
                 = userRepository.findById(user.getPersonalId())
                 .orElse(null);
         if (existingUser == null)
-            throw new NullPointerException("No such user exists!");
+            throw new EntityNotFoundException("User not found!");
 
         existingUser.setName(user.getName());
         existingUser.setSurname(user.getSurname());
@@ -36,48 +45,51 @@ public class UserService {
     }
 
     // CREATE user
-    public User saveUser(User user) {
+    public User saveUser(User user) throws EntityAlreadyExistsException {
         if(user == null)
             throw new NullPointerException("Null user");
         User existingUser
                 = userRepository.findByPersonalId(user.getPersonalId())
                 .orElse(null);
-        if (existingUser == null)
+        if (existingUser == null) {
+            if(!user.getBankAccounts().isEmpty()){
+                for(BankAccount account : user.getBankAccounts()){
+                    account.setUser(user);
+                }
+            }
             return userRepository.save(user);
+        }
 
-        throw new NullPointerException("This user already exists!");
+        throw new EntityAlreadyExistsException("This user already exists!");
     }
 
     // DELETE user by personal id (jmbg)
-    public User deleteUserByPersonalId(String id) {
+    public User deleteUserByPersonalId(String id) throws EntityNotFoundException {
         if(id == null)
             throw new NullPointerException("Null personal id");
         User existingUser
-                = userRepository.findById(id)
+                = userRepository.findByPersonalId(id)
                 .orElse(null);
         if (existingUser == null)
-            throw new NullPointerException("No such user exists!");
+            throw new EntityNotFoundException("User not found!");
 
-        userRepository.deleteById(id);
-        return  existingUser;
+        userRepository.deleteByPersonalId(id);
+        return existingUser;
     }
 
     //CREATE BANK ACCOUNT for user
-    public BankAccount createBankAccount(User user, BankAccount bankAccount) {
-        if(user == null)
-            throw new NullPointerException("Null user");
+    public BankAccount createBankAccount(BankAccount bankAccount) throws EntityAlreadyExistsException {
         if(bankAccount == null)
             throw new NullPointerException("Null bank account");
-        User existingUser
-                = userRepository.findById(user.getPersonalId())
-                .orElse(null);
+        User existingUser = bankAccount.getUser();
+        log.info(bankAccount.getUser().toString());
         if (existingUser == null)
-            throw new NullPointerException("This bank account already exists!");
+            throw new EntityAlreadyExistsException("This bank account already exists!");
 
-        List<BankAccount> accounts = user.getBankAccounts();
+        List<BankAccount> accounts = existingUser.getBankAccounts();
         accounts.add(bankAccount);
-        user.setBankAccounts(accounts);
-        userRepository.save(user);
+        existingUser.setBankAccounts(accounts);
+        userRepository.save(existingUser);
         return bankAccount;
     }
 

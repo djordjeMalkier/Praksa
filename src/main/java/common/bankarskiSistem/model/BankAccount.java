@@ -46,6 +46,17 @@ public class BankAccount {
         this.bank = bank;
     }
 
+    public BankAccount(AccountType accountType, Currency currency, Bank bank, int idAccount) {
+        if(accountType == null || currency == null || user == null || bank == null) {
+            throw new NullPointerException("Null value while creating account");
+        }
+        this.accountType = accountType;
+        this.balance = 0;
+        this.currency = currency;
+        this.idAccount = idAccount;
+        this.bank = bank;
+    }
+
     public BankAccount(AccountType accountType, Currency currency, User user, Bank bank, float balance, int idAccount) {
         this(accountType, currency, user, bank, idAccount);
         this.balance = balance;
