@@ -1,5 +1,6 @@
 package common.bankarskiSistem.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -25,10 +26,11 @@ public class ExchangeRates {
     @Column(name = "name")
     private String name;
 
-    @OneToMany(mappedBy = "idConversion")
+    @OneToMany(mappedBy = "exchangeRates")
     private List<Conversion> conversions;
 
-    @OneToMany(mappedBy = "idBank")
+    @OneToMany(mappedBy = "exchangeRates")
+    @JsonIgnore
     private List<Bank> banks;
 
 }
