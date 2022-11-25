@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.transaction.Transactional;
 import java.util.List;
 
 /**
@@ -19,8 +20,11 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
+@Transactional
 public class ExchangeRates {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "idExchangeRates", nullable = false)
     private Integer idExchangeRates;
 
     @Column(name = "name")
@@ -29,7 +33,7 @@ public class ExchangeRates {
     @OneToMany(mappedBy = "exchangeRates")
     private List<Conversion> conversions;
 
-    @OneToMany(mappedBy = "exchangeRates")
+    @OneToMany(mappedBy = "exchangeRates", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<Bank> banks;
 

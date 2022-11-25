@@ -28,7 +28,7 @@ public class Conversion {
     @Column(name = "value", nullable = false)
     private double value;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "idExchangeRates")
     @JsonIgnore
     private ExchangeRates exchangeRates;

@@ -14,7 +14,7 @@ public interface BankMapper {
     @Mapping(source = "name", target = "name")
     @Mapping(source = "address", target = "address")
     @Mapping(source = "bankAccounts", target = "bankAccounts")
-    @Mapping(source = "exchangeRates", target = "exchangeRates")
+    @Mapping(source = "exchangeRates", target = "exchangeRatesDTO")
     BankDto convertToDTO(Bank bank);
 
     @InheritInverseConfiguration

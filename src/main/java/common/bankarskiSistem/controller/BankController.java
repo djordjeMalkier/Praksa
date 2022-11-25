@@ -1,12 +1,10 @@
 package common.bankarskiSistem.controller;
 
 import common.bankarskiSistem.BankarskiSistem;
-import common.bankarskiSistem.controller.dto.BankDto;
-import common.bankarskiSistem.controller.dto.BankMapper;
-import common.bankarskiSistem.controller.dto.UserDTO;
-import common.bankarskiSistem.controller.dto.UserMapper;
+import common.bankarskiSistem.controller.dto.*;
 import common.bankarskiSistem.exceptions.NameOfTheBankAlreadyExistException;
 import common.bankarskiSistem.model.Bank;
+import common.bankarskiSistem.model.ExchangeRates;
 import common.bankarskiSistem.model.User;
 import common.bankarskiSistem.service.BankService;
 import lombok.RequiredArgsConstructor;
@@ -37,16 +35,18 @@ public class BankController {
 
     private final UserMapper mapperUser=UserMapper.INSTANCE;
 
+    private final ExchangeRatesMapper mapperER = ExchangeRatesMapper.INSTANCE;
+
     @PostMapping
     public ResponseEntity<BankDto> saveBank(@RequestBody BankDto bankDto) {
         Bank savedBank;
         try {
-            savedBank = bankService.createBank(mapper.convertToEntity(bankDto));
+            savedBank =  bankService.createBank(mapper.convertToEntity(bankDto));
 
         } catch (NullPointerException | NameOfTheBankAlreadyExistException exception) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, exception.getMessage(), exception);
         }
-        //
+
         return ok(mapper.convertToDTO(savedBank));
     }
 
@@ -103,21 +103,7 @@ public class BankController {
         return ok(mapper.convertToDTO(bank));
     }
 
-    /*@PostMapping("/postER")
-    public ResponseEntity<BankDto> saveExchangeRates(@RequestBody BankDto bankDto) {
-        ExchangeRates savedExchangeRates;
-        ExchangeRates exchangeRates=bankDto.getExchangeRates();
-        Bank bank=mapper.convertToEntity(bankDto);
-        try {
-            savedExchangeRates = bankService.createExchangeRates(exchangeRates);
-            bank.setExchangeRates(savedExchangeRates);
 
-        } catch (NullPointerException exception) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, exception.getMessage(), exception);
-        }
-        //
-        return ok(mapper.convertToDTO(bank));
-    }*/
 
     @GetMapping("/getAllUsers/{idBank}")
     public ResponseEntity<List<UserDTO>> getAllUsers(@PathVariable Integer idBank) {
@@ -132,7 +118,19 @@ public class BankController {
         return ok(users);
     }
 
+    @GetMapping("/getExchangeRates/{idBank}")
+    public ResponseEntity<ExchangeRatesDTO> getExchangeRates(@PathVariable Integer idBank) {
+        Bank bank;
+        ExchangeRates exchangeRates;
+        try{
+            bank=bankService.findById(idBank);
+            exchangeRates=bank.getExchangeRates();
 
+        } catch (NullPointerException exception) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, exception.getMessage(), exception);
+        }
+        return ok(mapperER.convertToDTO(exchangeRates));
+    }
 
 
 }
