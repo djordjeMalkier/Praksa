@@ -40,7 +40,7 @@ public class UserService {
         if(user == null)
             throw new NullPointerException("Null user");
         User existingUser
-                = userRepository.findById(user.getPersonalId())
+                = userRepository.findByPersonalId(user.getPersonalId())
                 .orElse(null);
         if (existingUser == null)
             return userRepository.save(user);

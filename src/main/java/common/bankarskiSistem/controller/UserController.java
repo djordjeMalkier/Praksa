@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import static org.springframework.http.ResponseEntity.*;
 
 @RestController
-@RequestMapping(value = "/users", method = RequestMethod.GET)
+@RequestMapping(value = "/users")
 public class UserController {
     private static final Logger log = LoggerFactory.getLogger(BankarskiSistem.class);
     @Autowired
@@ -35,7 +35,10 @@ public class UserController {
         } catch (NullPointerException exception) {
             return badRequest().build();
         }
-        return ok(mapper.usertoUserDTO(savedUser));
+        //return ok(mapper.usertoUserDTO(savedUser));
+
+        return new ResponseEntity<>(mapper.usertoUserDTO(userService.saveUser(savedUser)),
+                HttpStatus.OK);
     }
 
     @GetMapping("/get/{personalId}")
