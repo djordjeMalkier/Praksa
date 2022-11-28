@@ -49,4 +49,9 @@ public class User {
                 ", address='" + address + '\'' +
                 "}";
     }
+
+    public void addAccount(BankAccount bankAccount) {
+        bankAccounts.add(bankAccount);
+        bankAccount.setUser(this);
+    }
 }

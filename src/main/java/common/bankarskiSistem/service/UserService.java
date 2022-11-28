@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Objects;
@@ -27,6 +29,8 @@ public class UserService {
     @Autowired
     private ConversionService conversionService;
 
+    @PersistenceContext
+    private EntityManager entityManager;
 
     // UPDATE user
     public User updateUser(User user) throws EntityNotFoundException {
@@ -67,30 +71,25 @@ public class UserService {
     public User deleteUserByPersonalId(String id) throws EntityNotFoundException {
         if(id == null)
             throw new NullPointerException("Null personal id");
-        User existingUser
-                = userRepository.findByPersonalId(id)
-                .orElse(null);
-        if (existingUser == null)
+        if (userRepository.findByPersonalId(id).isEmpty())
             throw new EntityNotFoundException("User not found!");
 
         userRepository.deleteByPersonalId(id);
-        return existingUser;
+        return userRepository.findByPersonalId(id).get();
     }
 
     //CREATE BANK ACCOUNT for user
     public BankAccount createBankAccount(BankAccount bankAccount) throws EntityAlreadyExistsException {
         if(bankAccount == null)
             throw new NullPointerException("Null bank account");
-        User existingUser = bankAccount.getUser();
-        log.info(bankAccount.getUser().toString());
+        User existingUser = getUserByPersonalID(bankAccount.getUser().getPersonalId());
         if (existingUser == null)
             throw new EntityAlreadyExistsException("This bank account already exists!");
 
-        List<BankAccount> accounts = existingUser.getBankAccounts();
-        accounts.add(bankAccount);
-        existingUser.setBankAccounts(accounts);
+        BankAccount bankAccountMerged = entityManager.merge(bankAccount);
+        existingUser.addAccount(bankAccountMerged);
         userRepository.save(existingUser);
-        return bankAccount;
+        return bankAccountMerged;
     }
 
     public double payIn(String personalID, BankAccount account, float payment) {

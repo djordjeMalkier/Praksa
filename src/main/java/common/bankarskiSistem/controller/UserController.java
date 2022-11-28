@@ -81,10 +81,9 @@ public class UserController {
     }
 
     @PostMapping("/addBankAccountForUser")
-    public ResponseEntity<BankAccountDTO> createBankAccountForUser(@RequestBody BankAccountDTO bankAccountDTO) {
+    public ResponseEntity<BankAccountDTO> addBankAccountForUser(@RequestBody BankAccountDTO bankAccountDTO) {
         BankAccount savedBankAccount;
         try {
-
             BankAccount bankAccount = mapBankAccount.convertToEntity(bankAccountDTO);
             savedBankAccount = userService.createBankAccount(bankAccount);
         } catch (EntityAlreadyExistsException exception) {
