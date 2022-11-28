@@ -5,7 +5,6 @@ import common.bankarskiSistem.controller.dto.*;
 import common.bankarskiSistem.exceptions.NameOfTheBankAlreadyExistException;
 import common.bankarskiSistem.model.Bank;
 import common.bankarskiSistem.model.ExchangeRates;
-import common.bankarskiSistem.model.User;
 import common.bankarskiSistem.service.BankService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -16,8 +15,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import static org.springframework.http.ResponseEntity.ok;
 
@@ -106,16 +105,15 @@ public class BankController {
 
 
     @GetMapping("/getAllUsers/{idBank}")
-    public ResponseEntity<List<UserDTO>> getAllUsers(@PathVariable Integer idBank) {
-        List<UserDTO> users=new ArrayList<>();
+    public ResponseEntity<Set<UserDTO>> getAllUsers(@PathVariable Integer idBank) {
+        Set<UserDTO> users = new HashSet<>();
         try{
-            for(User user: bankService.getAllUsers(bankService.findById(idBank))){
-                users.add(mapperUser.userToUserDTO(user));
-            }
-        } catch (NullPointerException exception) {
+            users = mapperUser.usersTOUsersDTO(bankService.getAllUsers(bankService.findById(idBank)));
+                return ok(users);
+
+            } catch (NullPointerException exception) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, exception.getMessage(), exception);
         }
-        return ok(users);
     }
 
     @GetMapping("/getExchangeRates/{idBank}")

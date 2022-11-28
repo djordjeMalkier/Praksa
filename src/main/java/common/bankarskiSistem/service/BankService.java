@@ -12,8 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Service
 @Transactional
@@ -137,10 +137,10 @@ public class BankService {
      * @param bank object
      * @return list of users
      */
-    public List<User> getAllUsers(Bank bank) {
+    public Set<User> getAllUsers(Bank bank) {
         if (bank == null)
             throw new NullPointerException("The bank is null.");
-        List<User> users = new ArrayList<>();
+        Set<User> users = new HashSet<>();
 
         for (BankAccount account: bank.getBankAccounts()) {
             users.add(account.getUser());
