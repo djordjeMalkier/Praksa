@@ -8,10 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import static org.springframework.http.ResponseEntity.ok;
@@ -35,4 +32,21 @@ public class ExchangeRatesController {
         }
         return ok(mapperER.convertToDTO(savedExchangeRates));
     }
+
+    @PutMapping("/put/{idExchangeRates}")
+    public ResponseEntity<ExchangeRatesDTO> updateExchangeRates(@PathVariable Integer idExchangeRates, @RequestBody ExchangeRatesDTO updatedExchangeRates){
+        ExchangeRates exchangeRates;
+        try{
+             exchangeRates = bankService.findByIdExchangeRates(idExchangeRates);
+             bankService.updateExchangeRates(exchangeRates,updatedExchangeRates.getName());
+
+
+
+        } catch (NullPointerException exception) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, exception.getMessage(), exception);
+        }
+
+        return ok(mapperER.convertToDTO(exchangeRates));
+    }
+
 }

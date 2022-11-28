@@ -1,12 +1,12 @@
 package common.bankarskiSistem.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import javax.transaction.Transactional;
 import java.util.List;
 
 /**
@@ -20,10 +20,10 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-@Transactional
+@AllArgsConstructor
 public class ExchangeRates {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    //@GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idExchangeRates", nullable = false)
     private Integer idExchangeRates;
 
@@ -33,7 +33,8 @@ public class ExchangeRates {
     @OneToMany(mappedBy = "exchangeRates")
     private List<Conversion> conversions;
 
-    @OneToMany(mappedBy = "exchangeRates", cascade = CascadeType.ALL)
+    //@OneToMany(mappedBy = "exchangeRates", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "exchangeRates")
     @JsonIgnore
     private List<Bank> banks;
 

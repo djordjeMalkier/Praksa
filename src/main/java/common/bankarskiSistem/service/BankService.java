@@ -1,7 +1,10 @@
 package common.bankarskiSistem.service;
 
 import common.bankarskiSistem.exceptions.NameOfTheBankAlreadyExistException;
-import common.bankarskiSistem.model.*;
+import common.bankarskiSistem.model.Bank;
+import common.bankarskiSistem.model.BankAccount;
+import common.bankarskiSistem.model.ExchangeRates;
+import common.bankarskiSistem.model.User;
 import common.bankarskiSistem.repository.BankRepository;
 import common.bankarskiSistem.repository.ConversionRepository;
 import common.bankarskiSistem.repository.ExchangeRatesRepository;
@@ -11,7 +14,6 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 @Service
 @Transactional
@@ -33,19 +35,10 @@ public class BankService {
             throw new NullPointerException("The bank is null.");
         if(!bankRepository.findByName(bank.getName()).isEmpty())
             throw new NameOfTheBankAlreadyExistException("Name of the bank already exists.");
-        bank.setExchangeRates(exchangeRatesRepository.findById(bank.getExchangeRates().getIdExchangeRates()).get());
+        //bank.setExchangeRates(exchangeRatesRepository.findById(bank.getExchangeRates().getIdExchangeRates()).get());
        return bankRepository.save(bank);
 
     }
-
-    /*public Bank createBankWithER(Bank bank, ExchangeRates exchangeRates) throws NameOfTheBankAlreadyExistException {
-        if(bank == null)
-            throw new NullPointerException("The bank is null.");
-        if(!bankRepository.findByName(bank.getName()).isEmpty())
-            throw new NameOfTheBankAlreadyExistException("Name of the bank already exists.");
-        addExchangeRates(bank,exchangeRates);
-        return bankRepository.save(bank);
-    }*/
 
     public Bank deleteBank(Bank bank) {
         if(bankRepository.findByIdBank(bank.getIdBank()).isEmpty())
@@ -118,16 +111,24 @@ public class BankService {
         return bank.getExchangeRates();
     }
 
+    public ExchangeRates findByIdExchangeRates(Integer idExchangeRates) {
+        if(exchangeRatesRepository.findByIdExchangeRates(idExchangeRates).isEmpty())
+            throw new NullPointerException("The exchange rates do not exist.");
+        return exchangeRatesRepository.findByIdExchangeRates(idExchangeRates).get();
+    }
+
     /**
      *
      * @param exchangeRates object of ExchangeRates
      * @return exchange rates
      */
-    public ExchangeRates updateExchangeRates(ExchangeRates exchangeRates) {
-        for(Conversion conversion: exchangeRates.getConversions()) {
-            if(Objects.equals(conversion.getExchangeRates().getIdExchangeRates(), exchangeRates.getIdExchangeRates()))
-                conversionRepository.save(conversion);
-        }
+    public ExchangeRates updateExchangeRates(ExchangeRates exchangeRates,String name) {
+        if(exchangeRatesRepository.findByIdExchangeRates(exchangeRates.getIdExchangeRates()).isEmpty())
+            throw new NullPointerException("The exchanges rates do not exist.");
+        ExchangeRates updatedExchangeRates = exchangeRatesRepository.findByIdExchangeRates(exchangeRates.getIdExchangeRates()).get();
+        exchangeRatesRepository.save(updatedExchangeRates);
+        updatedExchangeRates.setName(name);
+
         return exchangeRates;
     }
 
