@@ -4,6 +4,7 @@ import common.bankarskiSistem.BankarskiSistem;
 import common.bankarskiSistem.exceptions.EntityAlreadyExistsException;
 import common.bankarskiSistem.exceptions.EntityNotFoundException;
 import common.bankarskiSistem.model.BankAccount;
+import common.bankarskiSistem.model.Currency;
 import common.bankarskiSistem.model.User;
 import common.bankarskiSistem.repository.UserRepository;
 import org.slf4j.Logger;
@@ -92,27 +93,28 @@ public class UserService {
         return bankAccountMerged;
     }
 
-    public double payIn(String personalID, BankAccount account, float payment) {
-        if (account == null) throw new NullPointerException("No account");
+    public double payIn(String personalID, Integer idAccount, double payment) {
+        if (idAccount == null) throw new NullPointerException("No account");
 
         if (payment <= 0)
             throw new IllegalArgumentException("Payment must be positive");
 
         User user = getUserByPersonalID(personalID);
-        BankAccount bankAccount = getBankAccountByIdAccount(user, account.getIdAccount());
+        BankAccount bankAccount = getBankAccountByIdAccount(user, idAccount);
         bankAccount.setBalance(bankAccount.getBalance() + payment);
         userRepository.save(user);
 
         return bankAccount.getBalance();
     }
 
-    public double payOut(String personalID, BankAccount account, float payment) {
-        if (account == null) throw new NullPointerException("No account");
+    public double payOut(String personalID, Integer idAccount, double payment)
+                                throws IllegalArgumentException, ArithmeticException {
+        if (idAccount == null) throw new NullPointerException("No account");
 
         if (payment <= 0)
             throw new IllegalArgumentException("Payout must be positive");
         User user = getUserByPersonalID(personalID);
-        BankAccount bankAccount = getBankAccountByIdAccount(user, account.getIdAccount());
+        BankAccount bankAccount = getBankAccountByIdAccount(user, idAccount);
         if (payment > bankAccount.getBalance())
             throw new ArithmeticException("Payout is greater than balance");
         bankAccount.setBalance(bankAccount.getBalance() - payment);
@@ -121,33 +123,46 @@ public class UserService {
         return bankAccount.getBalance();
     }
 
-    public void transfer(String personalID, BankAccount accountFrom, BankAccount accountTo, float payment) {
-        if (accountFrom == null || accountTo == null)
+    public double transfer(String personalID, Integer idAccountFrom, Integer idAccountTo, double payment) {
+        if (idAccountFrom == null || idAccountTo == null)
             throw new NullPointerException("No accounts");
 
         if (payment <= 0)
             throw new IllegalArgumentException("Payout must be positive");
 
+        BankAccount accountFrom = getBankAccountByID(personalID, idAccountFrom);
+        BankAccount accountTo = getBankAccountByID(personalID, idAccountTo);
+
+
         if (accountFrom.getCurrency() != accountTo.getCurrency()) {
-            payOut(personalID, accountFrom, payment);
+            payOut(personalID, accountFrom.getIdAccount(), payment);
             double convertedCurrency = conversionService.convert(
                     accountFrom.getCurrency(),
                     accountTo.getCurrency(),
                     accountFrom.getBank());
             payment *= convertedCurrency;
-            payIn(personalID, accountTo, payment);
+            payIn(personalID, accountTo.getIdAccount(), payment);
+            return payment;
         } else {
-            payOut(personalID, accountFrom, payment);
-            payIn(personalID, accountTo, payment);
+            payOut(personalID, accountFrom.getIdAccount(), payment);
+            payIn(personalID, accountTo.getIdAccount(), payment);
+            return payment;
         }
     }
 
-    public double getBalance(String personalID, BankAccount account) {
-        //TODO currency
-        if (account == null) throw new NullPointerException("No account");
+    public double getBalance(String personalID, Integer idAccount, Optional<Currency> currencyTo) {
+        if (idAccount == null) throw new NullPointerException("No account");
         User user = getUserByPersonalID(personalID);
-        BankAccount bankAccount = getBankAccountByIdAccount(user, account.getIdAccount());
-        return bankAccount.getBalance();
+        BankAccount bankAccount = getBankAccountByIdAccount(user, idAccount);
+        double conversionRate = 1;
+
+        if (currencyTo.isPresent()) {
+            if (!currencyTo.get().equals(bankAccount.getCurrency()))
+                conversionRate = conversionService.convert(bankAccount.getCurrency(),
+                    currencyTo.get(),
+                    bankAccount.getBank());
+        }
+        return bankAccount.getBalance() * conversionRate;
     }
 
     private BankAccount getBankAccountByIdAccount(User user, Integer idAccount) {
@@ -160,11 +175,11 @@ public class UserService {
         return bankAccountOptional.get();
     }
 
-    public double getAllBalance(String personalID) {
-        //TODO currency
+    public double getAllBalance(String personalID, Optional<Currency> currencyTo) {
         User user = getUserByPersonalID(personalID);
+        Optional<Currency> finalCurrencyTo = currencyTo.isEmpty() ?  Optional.of(Currency.EUR) : currencyTo;
         return user.getBankAccounts().stream()
-                .map(account -> getBalance(personalID, account))
+                .map(account -> getBalance(personalID, account.getIdAccount(), finalCurrencyTo))
                 .reduce((double) 0, Double::sum);
     }
 
