@@ -174,24 +174,8 @@ public class UserController {
         }
         return ok(mapBankAccount.convertToDTO(savedBankAccount));
     }
-    /*
-    TODO
-    * updateUser
-    * deleteUserByPersonalId
-    * createBankAccountForUser
-    *
-    * payInUserBankAccount
-    * payOutUserBankAccount
-    * transferFromUserAccountToAnotherAccount
-    * getAccountBalance
-    * getAllBankAccountBalance
-    *
-    * deleteOneAccount
-    * deleteAllAccount
-    * getAllAccounts
-    * getBankAccountById
-    *
-    * */
+
+
 
 
 }
