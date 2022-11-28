@@ -33,6 +33,13 @@ public class Bank {
     @JoinColumn(name = "idExchangeRates")
     private ExchangeRates exchangeRates;
 
+    public Bank(Integer idBank, String name, String address){
+        this.idBank = idBank;
+        this.name = name;
+        this.address = address;
+        this.bankAccounts = new ArrayList<>();
+    }
+
     public Bank(String name, String address, ExchangeRates exchangeRates) {
         this.name = name;
         this.address = address;

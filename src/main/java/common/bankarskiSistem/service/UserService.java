@@ -1,33 +1,47 @@
 package common.bankarskiSistem.service;
 
+import common.bankarskiSistem.BankarskiSistem;
+import common.bankarskiSistem.exceptions.EntityAlreadyExistsException;
+import common.bankarskiSistem.exceptions.EntityNotFoundException;
 import common.bankarskiSistem.model.BankAccount;
+import common.bankarskiSistem.model.Currency;
 import common.bankarskiSistem.model.User;
 import common.bankarskiSistem.repository.UserRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Optional;
 
 @Service
+@Transactional
 public class UserService {
 
+    private static final Logger log = LoggerFactory.getLogger(BankarskiSistem.class);
     @Autowired
     private UserRepository userRepository;
     @Autowired
     private ConversionService conversionService;
 
+    @PersistenceContext
+    private EntityManager entityManager;
+
     // UPDATE user
-    public User updateUser(User user) {
+    public User updateUser(User user) throws EntityNotFoundException {
         if(user == null)
             throw new NullPointerException("Null user");
         User existingUser
                 = userRepository.findById(user.getPersonalId())
                 .orElse(null);
         if (existingUser == null)
-            throw new NullPointerException("No such user exists!");
+            throw new EntityNotFoundException("User not found!");
 
         existingUser.setName(user.getName());
         existingUser.setSurname(user.getSurname());
@@ -36,72 +50,71 @@ public class UserService {
     }
 
     // CREATE user
-    public User saveUser(User user) {
+    public User saveUser(User user) throws EntityAlreadyExistsException {
         if(user == null)
             throw new NullPointerException("Null user");
         User existingUser
                 = userRepository.findByPersonalId(user.getPersonalId())
                 .orElse(null);
-        if (existingUser == null)
+        if (existingUser == null) {
+            if(!user.getBankAccounts().isEmpty()){
+                for(BankAccount account : user.getBankAccounts()){
+                    account.setUser(user);
+                }
+            }
             return userRepository.save(user);
+        }
 
-        throw new NullPointerException("This user already exists!");
+        throw new EntityAlreadyExistsException("This user already exists!");
     }
 
     // DELETE user by personal id (jmbg)
-    public User deleteUserByPersonalId(String id) {
+    public User deleteUserByPersonalId(String id) throws EntityNotFoundException {
         if(id == null)
             throw new NullPointerException("Null personal id");
-        User existingUser
-                = userRepository.findById(id)
-                .orElse(null);
-        if (existingUser == null)
-            throw new NullPointerException("No such user exists!");
+        if (userRepository.findByPersonalId(id).isEmpty())
+            throw new EntityNotFoundException("User not found!");
 
-        userRepository.deleteById(id);
-        return  existingUser;
+        userRepository.deleteByPersonalId(id);
+        return userRepository.findByPersonalId(id).get();
     }
 
     //CREATE BANK ACCOUNT for user
-    public BankAccount createBankAccount(User user, BankAccount bankAccount) {
-        if(user == null)
-            throw new NullPointerException("Null user");
+    public BankAccount createBankAccount(BankAccount bankAccount) throws EntityAlreadyExistsException {
         if(bankAccount == null)
             throw new NullPointerException("Null bank account");
-        User existingUser
-                = userRepository.findById(user.getPersonalId())
-                .orElse(null);
+        User existingUser = getUserByPersonalID(bankAccount.getUser().getPersonalId());
         if (existingUser == null)
-            throw new NullPointerException("This bank account already exists!");
+            throw new EntityAlreadyExistsException("This bank account already exists!");
 
-        List<BankAccount> accounts = user.getBankAccounts();
-        accounts.add(bankAccount);
-        user.setBankAccounts(accounts);
-        userRepository.save(user);
-        return bankAccount;
+        BankAccount bankAccountMerged = entityManager.merge(bankAccount);
+        existingUser.addAccount(bankAccountMerged);
+        userRepository.save(existingUser);
+        return bankAccountMerged;
     }
 
-    public double payIn(String personalID, BankAccount account, float payment) {
-        if (account == null) throw new NullPointerException("No account");
+    public double payIn(String personalID, Integer idAccount, double payment) {
+        if (idAccount == null) throw new NullPointerException("No account");
 
         if (payment <= 0)
             throw new IllegalArgumentException("Payment must be positive");
 
         User user = getUserByPersonalID(personalID);
-        BankAccount bankAccount = getBankAccountByIdAccount(user, account.getIdAccount());
+        BankAccount bankAccount = getBankAccountByIdAccount(user, idAccount);
         bankAccount.setBalance(bankAccount.getBalance() + payment);
         userRepository.save(user);
 
         return bankAccount.getBalance();
     }
 
-    public double payOut(String personalID, BankAccount account, float payment) {
-        if (account == null) throw new NullPointerException("No account");
+    public double payOut(String personalID, Integer idAccount, double payment)
+                                throws IllegalArgumentException, ArithmeticException {
+        if (idAccount == null) throw new NullPointerException("No account");
 
         if (payment <= 0)
             throw new IllegalArgumentException("Payout must be positive");
         User user = getUserByPersonalID(personalID);
-        BankAccount bankAccount = getBankAccountByIdAccount(user, account.getIdAccount());
+        BankAccount bankAccount = getBankAccountByIdAccount(user, idAccount);
         if (payment > bankAccount.getBalance())
             throw new ArithmeticException("Payout is greater than balance");
         bankAccount.setBalance(bankAccount.getBalance() - payment);
@@ -110,33 +123,46 @@ public class UserService {
         return bankAccount.getBalance();
     }
 
-    public void transfer(String personalID, BankAccount accountFrom, BankAccount accountTo, float payment) {
-        if (accountFrom == null || accountTo == null)
+    public double transfer(String personalID, Integer idAccountFrom, Integer idAccountTo, double payment) {
+        if (idAccountFrom == null || idAccountTo == null)
             throw new NullPointerException("No accounts");
 
         if (payment <= 0)
             throw new IllegalArgumentException("Payout must be positive");
 
+        BankAccount accountFrom = getBankAccountByID(personalID, idAccountFrom);
+        BankAccount accountTo = getBankAccountByID(personalID, idAccountTo);
+
+
         if (accountFrom.getCurrency() != accountTo.getCurrency()) {
-            payOut(personalID, accountFrom, payment);
+            payOut(personalID, accountFrom.getIdAccount(), payment);
             double convertedCurrency = conversionService.convert(
                     accountFrom.getCurrency(),
                     accountTo.getCurrency(),
                     accountFrom.getBank());
             payment *= convertedCurrency;
-            payIn(personalID, accountTo, payment);
+            payIn(personalID, accountTo.getIdAccount(), payment);
+            return payment;
         } else {
-            payOut(personalID, accountFrom, payment);
-            payIn(personalID, accountTo, payment);
+            payOut(personalID, accountFrom.getIdAccount(), payment);
+            payIn(personalID, accountTo.getIdAccount(), payment);
+            return payment;
         }
     }
 
-    public double getBalance(String personalID, BankAccount account) {
-        //TODO currency
-        if (account == null) throw new NullPointerException("No account");
+    public double getBalance(String personalID, Integer idAccount, Optional<Currency> currencyTo) {
+        if (idAccount == null) throw new NullPointerException("No account");
         User user = getUserByPersonalID(personalID);
-        BankAccount bankAccount = getBankAccountByIdAccount(user, account.getIdAccount());
-        return bankAccount.getBalance();
+        BankAccount bankAccount = getBankAccountByIdAccount(user, idAccount);
+        double conversionRate = 1;
+
+        if (currencyTo.isPresent()) {
+            if (!currencyTo.get().equals(bankAccount.getCurrency()))
+                conversionRate = conversionService.convert(bankAccount.getCurrency(),
+                    currencyTo.get(),
+                    bankAccount.getBank());
+        }
+        return bankAccount.getBalance() * conversionRate;
     }
 
     private BankAccount getBankAccountByIdAccount(User user, Integer idAccount) {
@@ -149,11 +175,11 @@ public class UserService {
         return bankAccountOptional.get();
     }
 
-    public double getAllBalance(String personalID) {
-        //TODO currency
+    public double getAllBalance(String personalID, Optional<Currency> currencyTo) {
         User user = getUserByPersonalID(personalID);
+        Optional<Currency> finalCurrencyTo = currencyTo.isEmpty() ?  Optional.of(Currency.EUR) : currencyTo;
         return user.getBankAccounts().stream()
-                .map(account -> getBalance(personalID, account))
+                .map(account -> getBalance(personalID, account.getIdAccount(), finalCurrencyTo))
                 .reduce((double) 0, Double::sum);
     }
 
