@@ -25,17 +25,27 @@ public class BankService {
 
     @Autowired
     private ConversionRepository conversionRepository;
+
+    public Bank createBankWithoutExchangeRates(Bank bank) throws NameOfTheBankAlreadyExistException {
+        if(bank == null)
+            throw new NullPointerException("The bank is null.");
+        if(!bankRepository.findByName(bank.getName()).isEmpty())
+            throw new NameOfTheBankAlreadyExistException("Name of the bank already exists.");
+        return bankRepository.save(bank);
+
+    }
+
     /**
      *
      * @param bank the bank
      * @return bank that was created
      */
-    public Bank createBank(Bank bank) throws NameOfTheBankAlreadyExistException {
+    public Bank createBankWithExchangeRates(Bank bank) throws NameOfTheBankAlreadyExistException {
         if(bank == null)
             throw new NullPointerException("The bank is null.");
         if(!bankRepository.findByName(bank.getName()).isEmpty())
             throw new NameOfTheBankAlreadyExistException("Name of the bank already exists.");
-        //bank.setExchangeRates(exchangeRatesRepository.findById(bank.getExchangeRates().getIdExchangeRates()).get());
+       bank.setExchangeRates(exchangeRatesRepository.findByIdExchangeRates(bank.getExchangeRates().getIdExchangeRates()).get());
        return bankRepository.save(bank);
 
     }
@@ -59,12 +69,16 @@ public class BankService {
      * @param name of the bank
      * @param bank of the bank
      */
-    public Bank updateBankName(String name, Bank bank) {
+    public Bank updateBankName(String name, Bank bank) throws NameOfTheBankAlreadyExistException {
         if (name == null)
             throw new NullPointerException("The name is null.");
         if(bankRepository.findByIdBank(bank.getIdBank()).isEmpty())
             throw new NullPointerException("The bank does not exist.");
+        if(bankRepository.findByName(name).isPresent()) {
+            throw new NameOfTheBankAlreadyExistException("Name already exist.");
+        }
         Bank updatedBank = bankRepository.findByIdBank(bank.getIdBank()).get();
+
         updatedBank.setName(name);
         bankRepository.save(updatedBank);
 

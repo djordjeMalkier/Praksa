@@ -1,21 +1,17 @@
 package common.bankarskiSistem.controller;
 
-import common.bankarskiSistem.BankarskiSistem;
 import common.bankarskiSistem.controller.dto.*;
 import common.bankarskiSistem.exceptions.NameOfTheBankAlreadyExistException;
 import common.bankarskiSistem.model.Bank;
 import common.bankarskiSistem.model.ExchangeRates;
 import common.bankarskiSistem.service.BankService;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.HashSet;
 import java.util.Set;
 
 import static org.springframework.http.ResponseEntity.ok;
@@ -24,8 +20,6 @@ import static org.springframework.http.ResponseEntity.ok;
 @RequiredArgsConstructor
 @RestController
 public class BankController {
-
-    private static final Logger log = LoggerFactory.getLogger(BankarskiSistem.class);
 
     @Autowired
     private final BankService bankService;
@@ -37,10 +31,22 @@ public class BankController {
     private final ExchangeRatesMapper mapperER = ExchangeRatesMapper.INSTANCE;
 
     @PostMapping
-    public ResponseEntity<BankDto> saveBank(@RequestBody BankDto bankDto) {
+    public ResponseEntity<BankDto> saveBankWithoutExchangeRates(@RequestBody BankDto bankDto) {
         Bank savedBank;
         try {
-            savedBank =  bankService.createBank(mapper.convertToEntity(bankDto));
+            savedBank =  bankService.createBankWithoutExchangeRates(mapper.convertToEntity(bankDto));
+
+        } catch (NullPointerException | NameOfTheBankAlreadyExistException exception) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, exception.getMessage(), exception);
+        }
+
+        return ok(mapper.convertToDTO(savedBank));
+    }
+    @PostMapping("/postWithExchangeRates")
+    public ResponseEntity<BankDto> saveBankWithExchangeRates(@RequestBody BankDto bankDto) {
+        Bank savedBank;
+        try {
+            savedBank =  bankService.createBankWithExchangeRates(mapper.convertToEntity(bankDto));
 
         } catch (NullPointerException | NameOfTheBankAlreadyExistException exception) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, exception.getMessage(), exception);
@@ -79,9 +85,10 @@ public class BankController {
             bank = bankService.findById(idBank);
             bankService.updateBankName(updatedBank.getName(), bank);
 
-
         } catch (NullPointerException exception) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, exception.getMessage(), exception);
+        } catch (NameOfTheBankAlreadyExistException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
         }
 
         return ok(mapper.convertToDTO(bank));
@@ -106,7 +113,7 @@ public class BankController {
 
     @GetMapping("/getAllUsers/{idBank}")
     public ResponseEntity<Set<UserDTO>> getAllUsers(@PathVariable Integer idBank) {
-        Set<UserDTO> users = new HashSet<>();
+        Set<UserDTO> users;
         try{
             users = mapperUser.usersTOUsersDTO(bankService.getAllUsers(bankService.findById(idBank)));
                 return ok(users);

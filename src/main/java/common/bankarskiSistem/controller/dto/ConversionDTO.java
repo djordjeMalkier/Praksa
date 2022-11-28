@@ -15,7 +15,7 @@ public class ConversionDTO {
     private Currency currencyFrom;
     private Currency currencyTo;
     private double value;
-    private ExchangeRatesDTO exchangeRatesDTO;
+    private ExchangeRatesDTO exchangeRates;
 
     @Override
     public String toString() {
@@ -24,7 +24,7 @@ public class ConversionDTO {
                 ", currencyFrom=" + currencyFrom +
                 ", currencyTo=" + currencyTo +
                 ", value=" + value +
-                ", exchangeRates=" + exchangeRatesDTO +
+                ", exchangeRates=" + exchangeRates +
                 '}';
     }
 }
