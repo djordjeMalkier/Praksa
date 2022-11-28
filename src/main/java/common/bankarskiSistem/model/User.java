@@ -29,15 +29,15 @@ public class User {
     @Column(name="address", nullable = false)
     private String address;
 
-    @OneToMany(mappedBy = "user")
-    private List<BankAccount> bankAccounts;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<BankAccount> bankAccounts = new ArrayList<>();
 
     public User(String personalId, String name, String surname, String address) {
         this.personalId = personalId;
         this.name = name;
         this.surname = surname;
         this.address = address;
-        this.bankAccounts = new ArrayList<>();
+       /* this.bankAccounts = new ArrayList<>();*/
     }
 
     @Override
@@ -48,5 +48,10 @@ public class User {
                 ", ID='" + personalId + '\'' +
                 ", address='" + address + '\'' +
                 "}";
+    }
+
+    public void addAccount(BankAccount bankAccount) {
+        bankAccounts.add(bankAccount);
+        bankAccount.setUser(this);
     }
 }
