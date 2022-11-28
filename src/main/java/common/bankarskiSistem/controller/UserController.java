@@ -49,6 +49,19 @@ public class UserController {
         }
     }
 
+    @PostMapping
+    public ResponseEntity<UserDTO> deleteAccount(@RequestBody UserDTO userDto) {
+        User savedUser = null;
+        try {
+            User user = mapper.userDTOtoUser(userDto);
+            savedUser = userService.saveUser(user);
+
+        } catch (NullPointerException exception) {
+            return badRequest().build();
+        }
+        return ok(mapper.userToUserDTO(savedUser));
+    }
+
     /*
     * updateUser
     * deleteUserByPersonalId
