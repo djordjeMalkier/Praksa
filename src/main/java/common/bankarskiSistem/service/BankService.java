@@ -1,21 +1,15 @@
 package common.bankarskiSistem.service;
 
-import common.bankarskiSistem.BankarskiSistem;
 import common.bankarskiSistem.exceptions.NameOfTheBankAlreadyExistException;
 import common.bankarskiSistem.model.Bank;
 import common.bankarskiSistem.model.BankAccount;
 import common.bankarskiSistem.model.ExchangeRates;
 import common.bankarskiSistem.model.User;
 import common.bankarskiSistem.repository.BankRepository;
-import common.bankarskiSistem.repository.ConversionRepository;
 import common.bankarskiSistem.repository.ExchangeRatesRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 import java.util.HashSet;
 import java.util.Set;
@@ -27,14 +21,6 @@ public class BankService {
     private BankRepository bankRepository;
     @Autowired
     private ExchangeRatesRepository exchangeRatesRepository;
-
-    @Autowired
-    private ConversionRepository conversionRepository;
-
-    @PersistenceContext
-    private EntityManager entityManager;
-
-    private static final Logger log = LoggerFactory.getLogger(BankarskiSistem.class);
 
 
     /**
@@ -105,16 +91,11 @@ public class BankService {
     }
 
     public Bank addExchangeRates(Integer idExchangeRates, Bank bank) {
-      /*  if (exchangeRates == null)
-            throw new NullPointerException("The exchange rates is null.");*/
         if(bankRepository.findByIdBank(bank.getIdBank()).isEmpty())
             throw new NullPointerException("The bank does not exist.");
         Bank updatedBank = bankRepository.findByIdBank(bank.getIdBank()).get();
-      //  ExchangeRates exchangeRatesMerged = entityManager.merge(exchangeRates);
         updatedBank.setExchangeRates(exchangeRatesRepository.findByIdExchangeRates(idExchangeRates).get());
         return bankRepository.save(updatedBank);
-
-     //   return updatedBank;
 
     }
     /**
@@ -125,19 +106,7 @@ public class BankService {
     public ExchangeRates createExchangeRates(ExchangeRates exchangeRates) {
         if(exchangeRates == null)
             throw new NullPointerException("The bank is null.");
-        //ExchangeRates mergedExchangeRates = entityManager.merge(exchangeRates);
         return exchangeRatesRepository.save(exchangeRates);
-    }
-
-    /**
-     * @param bank of bank
-     * @return exchange rates
-     */
-    public ExchangeRates getExchangeRates(Bank bank) {
-        if (bank == null)
-            throw new NullPointerException("The bank is null.");
-
-        return bank.getExchangeRates();
     }
 
     public ExchangeRates findByIdExchangeRates(Integer idExchangeRates) {

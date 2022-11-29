@@ -23,7 +23,7 @@ import java.util.List;
 @AllArgsConstructor
 public class ExchangeRates {
     @Id
-    //@GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "idExchangeRates", nullable = false)
     private Integer idExchangeRates;
 

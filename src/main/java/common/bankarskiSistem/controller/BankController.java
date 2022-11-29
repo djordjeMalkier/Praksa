@@ -43,13 +43,10 @@ public class BankController {
         return ok(mapper.convertToDTO(savedBank));
     }
 
-    //addExchangeRates
     @PutMapping("/putExchangeRates/{idBank}")
     public ResponseEntity<BankDto> addExchangeRates(@PathVariable Integer idBank, @RequestBody ExchangeRatesDTO exchangeRatesDTO){
         Bank bank;
-        try{
-
-
+        try {
             bank = bankService.findById(idBank);
             bankService.addExchangeRates(mapperER.convertToEntity(exchangeRatesDTO).getIdExchangeRates(),bank);
 
