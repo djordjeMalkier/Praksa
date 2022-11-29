@@ -1,5 +1,6 @@
 package common.bankarskiSistem.service;
 
+import common.bankarskiSistem.BankarskiSistem;
 import common.bankarskiSistem.exceptions.NameOfTheBankAlreadyExistException;
 import common.bankarskiSistem.model.Bank;
 import common.bankarskiSistem.model.BankAccount;
@@ -8,9 +9,13 @@ import common.bankarskiSistem.model.User;
 import common.bankarskiSistem.repository.BankRepository;
 import common.bankarskiSistem.repository.ConversionRepository;
 import common.bankarskiSistem.repository.ExchangeRatesRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 import java.util.HashSet;
 import java.util.Set;
@@ -26,28 +31,25 @@ public class BankService {
     @Autowired
     private ConversionRepository conversionRepository;
 
-    public Bank createBankWithoutExchangeRates(Bank bank) throws NameOfTheBankAlreadyExistException {
-        if(bank == null)
-            throw new NullPointerException("The bank is null.");
-        if(!bankRepository.findByName(bank.getName()).isEmpty())
-            throw new NameOfTheBankAlreadyExistException("Name of the bank already exists.");
-        return bankRepository.save(bank);
+    @PersistenceContext
+    private EntityManager entityManager;
 
-    }
+    private static final Logger log = LoggerFactory.getLogger(BankarskiSistem.class);
+
 
     /**
      *
      * @param bank the bank
      * @return bank that was created
      */
-    public Bank createBankWithExchangeRates(Bank bank) throws NameOfTheBankAlreadyExistException {
+    public Bank createBank(Bank bank) throws NameOfTheBankAlreadyExistException {
         if(bank == null)
             throw new NullPointerException("The bank is null.");
-        if(!bankRepository.findByName(bank.getName()).isEmpty())
+        if(bankRepository.findByName(bank.getName()).isPresent())
             throw new NameOfTheBankAlreadyExistException("Name of the bank already exists.");
-       bank.setExchangeRates(exchangeRatesRepository.findByIdExchangeRates(bank.getExchangeRates().getIdExchangeRates()).get());
-       return bankRepository.save(bank);
 
+        Bank mergedBank = entityManager.merge(bank);
+       return bankRepository.save(mergedBank);
     }
 
     public Bank deleteBank(Bank bank) {

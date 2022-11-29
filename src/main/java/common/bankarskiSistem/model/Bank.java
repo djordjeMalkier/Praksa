@@ -54,5 +54,14 @@ public class Bank {
 
     }
 
-
+    @Override
+    public String toString() {
+        return "Bank{" +
+                "idBank=" + idBank +
+                ", name='" + name + '\'' +
+                ", address='" + address + '\'' +
+                ", bankAccounts=" + bankAccounts.size() +
+                ", exchangeRates=" + exchangeRates.getName() +
+                '}';
+    }
 }

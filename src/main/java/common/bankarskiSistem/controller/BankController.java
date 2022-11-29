@@ -30,23 +30,11 @@ public class BankController {
 
     private final ExchangeRatesMapper mapperER = ExchangeRatesMapper.INSTANCE;
 
-    @PostMapping
-    public ResponseEntity<BankDto> saveBankWithoutExchangeRates(@RequestBody BankDto bankDto) {
+    @PostMapping("/save")
+    public ResponseEntity<BankDto> saveBank(@RequestBody BankDto bankDto) {
         Bank savedBank;
         try {
-            savedBank =  bankService.createBankWithoutExchangeRates(mapper.convertToEntity(bankDto));
-
-        } catch (NullPointerException | NameOfTheBankAlreadyExistException exception) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, exception.getMessage(), exception);
-        }
-
-        return ok(mapper.convertToDTO(savedBank));
-    }
-    @PostMapping("/postWithExchangeRates")
-    public ResponseEntity<BankDto> saveBankWithExchangeRates(@RequestBody BankDto bankDto) {
-        Bank savedBank;
-        try {
-            savedBank =  bankService.createBankWithExchangeRates(mapper.convertToEntity(bankDto));
+            savedBank =  bankService.createBank(mapper.convertToEntity(bankDto));
 
         } catch (NullPointerException | NameOfTheBankAlreadyExistException exception) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, exception.getMessage(), exception);
