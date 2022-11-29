@@ -14,7 +14,6 @@ public interface BankAccountMapper {
     @Mapping(source = "currency", target = "currency")
     @Mapping(source = "accountType", target = "accountType")
     @Mapping(source = "user", target = "user")
-    @Mapping(source = "bank", target = "bank")
     BankAccountDTO convertToDTO(BankAccount bankAccount);
 
     @InheritInverseConfiguration

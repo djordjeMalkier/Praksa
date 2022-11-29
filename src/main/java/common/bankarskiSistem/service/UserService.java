@@ -6,6 +6,7 @@ import common.bankarskiSistem.exceptions.EntityNotFoundException;
 import common.bankarskiSistem.model.BankAccount;
 import common.bankarskiSistem.model.Currency;
 import common.bankarskiSistem.model.User;
+import common.bankarskiSistem.repository.BankAccountRepository;
 import common.bankarskiSistem.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,6 +28,8 @@ public class UserService {
     private static final Logger log = LoggerFactory.getLogger(BankarskiSistem.class);
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private BankAccountRepository bankAccountRepository;
     @Autowired
     private ConversionService conversionService;
 
@@ -183,13 +186,23 @@ public class UserService {
                 .reduce((double) 0, Double::sum);
     }
 
-    public BankAccount deleteAccount(String personalId, BankAccount bankAccount){
+    public BankAccount deleteAccountById(String personalId, Integer idAccount) throws EntityNotFoundException {
+        if(personalId == null)
+            throw new NullPointerException("Null personal id");
+        if(idAccount == null)
+            throw new NullPointerException("Null account id");
+
         User user = getUserByPersonalID(personalId);
-        if(bankAccount != null) {
-            user.getBankAccounts().remove(bankAccount);
+        BankAccount bankAccountToBeDeleted = getBankAccountByID(personalId, idAccount);
+        if (user.getBankAccounts().contains(bankAccountToBeDeleted)) {
+            user.remove(bankAccountToBeDeleted);
             userRepository.save(user);
-            return bankAccount;
-        } else throw new NullPointerException("The bank account does not exist!");
+            bankAccountRepository.deleteByIdAccount(bankAccountToBeDeleted.getIdAccount());
+        }
+        else
+            throw new EntityNotFoundException("User " + personalId + " doesn't have account " + idAccount);
+
+        return bankAccountToBeDeleted;
     }
 
     public List<BankAccount> deleteAllAccounts(String personalId){

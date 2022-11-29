@@ -54,4 +54,9 @@ public class User {
         bankAccounts.add(bankAccount);
         bankAccount.setUser(this);
     }
+
+    public void remove(BankAccount bankAccount) {
+        bankAccounts.remove(bankAccount);
+        bankAccount.setUser(null);
+    }
 }

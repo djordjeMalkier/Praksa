@@ -174,6 +174,16 @@ public class UserController {
         }
         return ok(mapBankAccount.convertToDTO(savedBankAccount));
     }
+
+    @DeleteMapping("/deleteAccountById/{personalId}/{idAccount}")
+    public ResponseEntity<BankAccountDTO> deleteAccountById(@PathVariable String personalId, @PathVariable Integer idAccount) {
+        try {
+            BankAccount bankAccount = userService.deleteAccountById(personalId, idAccount);
+            return ok(mapBankAccount.convertToDTO(bankAccount));
+        } catch (EntityNotFoundException exception) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, exception.getMessage(), exception);
+        }
+    }
     /*
     TODO
     * updateUser
