@@ -51,7 +51,7 @@ public class BankController {
 
 
             bank = bankService.findById(idBank);
-            bankService.addExchangeRates(mapperER.convertToEntity(exchangeRatesDTO),bank);
+            bankService.addExchangeRates(mapperER.convertToEntity(exchangeRatesDTO).getIdExchangeRates(),bank);
 
         } catch (NullPointerException exception) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, exception.getMessage(), exception);

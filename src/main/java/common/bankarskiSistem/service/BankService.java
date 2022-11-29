@@ -104,14 +104,14 @@ public class BankService {
 
     }
 
-    public Bank addExchangeRates(ExchangeRates exchangeRates, Bank bank) {
-        if (exchangeRates == null)
-            throw new NullPointerException("The exchange rates is null.");
+    public Bank addExchangeRates(Integer idExchangeRates, Bank bank) {
+      /*  if (exchangeRates == null)
+            throw new NullPointerException("The exchange rates is null.");*/
         if(bankRepository.findByIdBank(bank.getIdBank()).isEmpty())
             throw new NullPointerException("The bank does not exist.");
         Bank updatedBank = bankRepository.findByIdBank(bank.getIdBank()).get();
       //  ExchangeRates exchangeRatesMerged = entityManager.merge(exchangeRates);
-        updatedBank.setExchangeRates(exchangeRates);
+        updatedBank.setExchangeRates(exchangeRatesRepository.findByIdExchangeRates(idExchangeRates).get());
         return bankRepository.save(updatedBank);
 
      //   return updatedBank;

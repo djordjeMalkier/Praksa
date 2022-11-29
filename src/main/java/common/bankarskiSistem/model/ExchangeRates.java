@@ -33,7 +33,7 @@ public class ExchangeRates {
     @OneToMany(mappedBy = "exchangeRates")
     private List<Conversion> conversions;
 
-    @OneToMany(mappedBy = "exchangeRates", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "exchangeRates", cascade = CascadeType.MERGE)
     //@OneToMany(mappedBy = "exchangeRates")
     @JsonIgnore
     private List<Bank> banks;
