@@ -72,6 +72,20 @@ public class BankService {
         return bank;
     }
 
+    public Bank updateBank(Bank bank) throws NameOfTheBankAlreadyExistException {
+        if(bankRepository.findByIdBank(bank.getIdBank()).isEmpty())
+            throw new NullPointerException("The bank does not exist.");
+        if(bankRepository.findByName(bank.getName()).isPresent()) {
+            throw new NameOfTheBankAlreadyExistException("Name already exist.");
+        }
+        Bank updatedBank = bankRepository.findByIdBank(bank.getIdBank()).get();
+
+        updatedBank.setName(bank.getName() == null ? updatedBank.getName() : bank.getName());
+        updatedBank.setAddress(bank.getAddress() == null ? updatedBank.getAddress() : bank.getAddress());
+        bankRepository.save(updatedBank);
+        return updatedBank;
+    }
+
     /**
      *
      * @param address of the bank
@@ -86,7 +100,7 @@ public class BankService {
         updatedBank.setAddress(address);
         bankRepository.save(updatedBank);
 
-        return bank;
+        return updatedBank;
 
     }
 

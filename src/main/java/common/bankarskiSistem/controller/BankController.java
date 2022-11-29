@@ -81,35 +81,35 @@ public class BankController {
         return ok(mapper.convertToDTO(bank));
     }
 
-    @PutMapping("/putName/{idBank}")
-    public ResponseEntity<BankDto> updateBankName(@PathVariable Integer idBank, @RequestBody BankDto updatedBank){
+    @PutMapping("/setName")
+    public ResponseEntity<BankDto> updateBankName(@RequestBody BankDto updatedBank){
         Bank bank;
         try{
-            bank = bankService.findById(idBank);
-            bankService.updateBankName(updatedBank.getName(), bank);
+            bank = mapper.convertToEntity(updatedBank);
+            bank.setAddress(null);
+            return ok(mapper.convertToDTO(bankService.updateBank(bank)));
 
         } catch (NullPointerException exception) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, exception.getMessage(), exception);
         } catch (NameOfTheBankAlreadyExistException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
         }
-
-        return ok(mapper.convertToDTO(bank));
     }
 
-    @PutMapping("/putAddress/{idBank}")
-    public ResponseEntity<BankDto> updateBankAddress(@PathVariable Integer idBank, @RequestBody BankDto updatedBank){
+
+    @PutMapping("/setAddress")
+    public ResponseEntity<BankDto> updateBankAddress(@RequestBody BankDto updatedBank){
         Bank bank;
         try{
-            bank = bankService.findById(idBank);
-            bankService.updateBankAddress(updatedBank.getAddress(), bank);
-
+            bank = mapper.convertToEntity(updatedBank);
+            bank.setName(null);
+            return ok(mapper.convertToDTO(bankService.updateBank(bank)));
 
         } catch (NullPointerException exception) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, exception.getMessage(), exception);
+        } catch (NameOfTheBankAlreadyExistException exception) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, exception.getMessage(), exception);
         }
-
-        return ok(mapper.convertToDTO(bank));
     }
     @GetMapping("/getAllUsers/{idBank}")
     public ResponseEntity<Set<UserDTO>> getAllUsers(@PathVariable Integer idBank) {
