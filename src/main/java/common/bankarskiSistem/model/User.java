@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ import java.util.List;
 @Getter
 @Setter
 @AllArgsConstructor
+@DynamicUpdate
 public class User {
     @Id
     @Column(name="personal_id", nullable = false)
@@ -29,7 +31,7 @@ public class User {
     @Column(name="address", nullable = false)
     private String address;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<BankAccount> bankAccounts = new ArrayList<>();
 
     public User(String personalId, String name, String surname, String address) {

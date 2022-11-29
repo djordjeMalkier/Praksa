@@ -29,7 +29,7 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
     @Autowired
-    private BankAccountRepository bankAccountRepository;
+    private BankAccountRepository  bankAccountRepository;
     @Autowired
     private ConversionService conversionService;
 
@@ -197,20 +197,11 @@ public class UserService {
         if (user.getBankAccounts().contains(bankAccountToBeDeleted)) {
             user.remove(bankAccountToBeDeleted);
             userRepository.save(user);
-            bankAccountRepository.deleteByIdAccount(bankAccountToBeDeleted.getIdAccount());
         }
         else
             throw new EntityNotFoundException("User " + personalId + " doesn't have account " + idAccount);
 
         return bankAccountToBeDeleted;
-    }
-
-    public List<BankAccount> deleteAllAccounts(String personalId){
-        User user = getUserByPersonalID(personalId);
-        List<BankAccount> bankAccounts = user.getBankAccounts();
-        user.setBankAccounts(new ArrayList<BankAccount>());
-        userRepository.save(user);
-        return bankAccounts;
     }
 
     public List<BankAccount> getAllAccounts(String personalId){
@@ -221,7 +212,9 @@ public class UserService {
     public BankAccount getBankAccountByID(String personalId, Integer accountId){
         User user = getUserByPersonalID(personalId);
         for (BankAccount bankAccount : user.getBankAccounts()){
-            if(bankAccount.getIdAccount().equals(accountId)) return bankAccount;
+            if(Objects.equals(bankAccount.getIdAccount(), accountId)) {
+                return bankAccount;
+            }
         }
         return null;
     }
