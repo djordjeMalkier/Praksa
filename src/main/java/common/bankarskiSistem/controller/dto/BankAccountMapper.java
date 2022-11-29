@@ -5,6 +5,9 @@ import org.mapstruct.InheritInverseConfiguration;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
+
+import java.util.List;
+
 @Mapper
 public interface BankAccountMapper {
     BankAccountMapper INSTANCE = Mappers.getMapper(BankAccountMapper.class);
@@ -19,4 +22,6 @@ public interface BankAccountMapper {
 
     @InheritInverseConfiguration
     BankAccount convertToEntity(BankAccountDTO bankAccountDTO);
+
+    List<BankAccountDTO> bankAccountsToDTO(List<BankAccount> accountDTOS);
 }

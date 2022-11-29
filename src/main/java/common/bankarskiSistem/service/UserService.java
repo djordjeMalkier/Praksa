@@ -6,6 +6,7 @@ import common.bankarskiSistem.exceptions.EntityNotFoundException;
 import common.bankarskiSistem.model.BankAccount;
 import common.bankarskiSistem.model.Currency;
 import common.bankarskiSistem.model.User;
+import common.bankarskiSistem.repository.BankAccountRepository;
 import common.bankarskiSistem.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,6 +28,8 @@ public class UserService {
     private static final Logger log = LoggerFactory.getLogger(BankarskiSistem.class);
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private BankAccountRepository  bankAccountRepository;
     @Autowired
     private ConversionService conversionService;
 
@@ -183,21 +186,22 @@ public class UserService {
                 .reduce((double) 0, Double::sum);
     }
 
-    public BankAccount deleteAccount(String personalId, BankAccount bankAccount){
-        User user = getUserByPersonalID(personalId);
-        if(bankAccount != null) {
-            user.getBankAccounts().remove(bankAccount);
-            userRepository.save(user);
-            return bankAccount;
-        } else throw new NullPointerException("The bank account does not exist!");
-    }
+    public BankAccount deleteAccountById(String personalId, Integer idAccount) throws EntityNotFoundException {
+        if(personalId == null)
+            throw new NullPointerException("Null personal id");
+        if(idAccount == null)
+            throw new NullPointerException("Null account id");
 
-    public List<BankAccount> deleteAllAccounts(String personalId){
         User user = getUserByPersonalID(personalId);
-        List<BankAccount> bankAccounts = user.getBankAccounts();
-        user.setBankAccounts(new ArrayList<BankAccount>());
-        userRepository.save(user);
-        return bankAccounts;
+        BankAccount bankAccountToBeDeleted = getBankAccountByID(personalId, idAccount);
+        if (user.getBankAccounts().contains(bankAccountToBeDeleted)) {
+            user.remove(bankAccountToBeDeleted);
+            userRepository.save(user);
+        }
+        else
+            throw new EntityNotFoundException("User " + personalId + " doesn't have account " + idAccount);
+
+        return bankAccountToBeDeleted;
     }
 
     public List<BankAccount> getAllAccounts(String personalId){
@@ -208,7 +212,9 @@ public class UserService {
     public BankAccount getBankAccountByID(String personalId, Integer accountId){
         User user = getUserByPersonalID(personalId);
         for (BankAccount bankAccount : user.getBankAccounts()){
-            if(bankAccount.getIdAccount().equals(accountId)) return bankAccount;
+            if(Objects.equals(bankAccount.getIdAccount(), accountId)) {
+                return bankAccount;
+            }
         }
         return null;
     }

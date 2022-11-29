@@ -29,7 +29,7 @@ public class User {
     @Column(name="address", nullable = false)
     private String address;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<BankAccount> bankAccounts = new ArrayList<>();
 
     public User(String personalId, String name, String surname, String address) {
@@ -53,5 +53,10 @@ public class User {
     public void addAccount(BankAccount bankAccount) {
         bankAccounts.add(bankAccount);
         bankAccount.setUser(this);
+    }
+
+    public void remove(BankAccount bankAccount) {
+        bankAccounts.remove(bankAccount);
+        bankAccount.setUser(null);
     }
 }

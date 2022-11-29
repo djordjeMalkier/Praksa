@@ -23,10 +23,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
-import static org.springframework.http.ResponseEntity.badRequest;
-import static org.springframework.http.ResponseEntity.ok;
+import static org.springframework.http.ResponseEntity.*;
+import static org.springframework.http.ResponseEntity.notFound;
 
 @RestController
 @RequestMapping(value = "/users", method = RequestMethod.GET)
@@ -174,24 +177,80 @@ public class UserController {
         }
         return ok(mapBankAccount.convertToDTO(savedBankAccount));
     }
-    /*
-    TODO
-    * updateUser
-    * deleteUserByPersonalId
-    * createBankAccountForUser
-    *
-    * payInUserBankAccount
-    * payOutUserBankAccount
-    * transferFromUserAccountToAnotherAccount
-    * getAccountBalance
-    * getAllBankAccountBalance
-    *
-    * deleteOneAccount
-    * deleteAllAccount
-    * getAllAccounts
-    * getBankAccountById
-    *
-    * */
 
+    @DeleteMapping("/{personal_id}/accounts/{bankAccountID}/delete")
+    public ResponseEntity<BankAccountDTO> deleteAccount(
+            @PathVariable String personal_id,
+            @PathVariable Integer bankAccountID
+    ) {
+        BankAccount bankAccount = null;
+        BankAccount deletedBankAccount = null;
+        try {
+            deletedBankAccount = userService.deleteAccountById(personal_id, bankAccountID);
+
+        } catch (NullPointerException exception) {
+
+            return badRequest().build();
+        } catch (EntityNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        return ok(mapBankAccount.convertToDTO(deletedBankAccount));
+    }
+
+    @DeleteMapping("/{personal_id}/accounts/delete")
+    public ResponseEntity<List<BankAccountDTO>> deleteAllAccounts(@PathVariable String personal_id) {
+        User user = null;
+        List<BankAccount> bankAccounts = new ArrayList<>();
+        try {
+            user = userService.getUserByPersonalID(personal_id);
+            bankAccounts = user.getBankAccounts();
+
+            if(!bankAccounts.isEmpty()){
+                for (BankAccount bankAccount: bankAccounts){
+                    userService.deleteAccountById(personal_id, bankAccount.getIdAccount());
+                }
+            }
+
+        } catch (NullPointerException exception) {
+            return badRequest().build();
+        } catch (EntityNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+
+        return ok(mapBankAccount.bankAccountsToDTO(bankAccounts));
+    }
+
+    @GetMapping("/{personal_id}/accounts")
+    public ResponseEntity<List<BankAccountDTO>> getAllAccounts(@PathVariable String personal_id) {
+        User user = null;
+        try{
+            user = userService.getUserByPersonalID(personal_id);
+            return ok(mapBankAccount.bankAccountsToDTO(user.getBankAccounts()));
+        } catch (NullPointerException exception) {
+            return notFound().build();
+        }
+    }
+
+    @GetMapping("{personal_id}/accounts/{account_id}")
+    public ResponseEntity<BankAccountDTO> getAccount(
+            @PathVariable String personal_id,
+            @PathVariable Integer account_id
+    ) {
+        User user = null;
+        try{
+            user = userService.getUserByPersonalID(personal_id);
+            log.info(user.toString());
+
+            List<BankAccount> bankAccounts = user.getBankAccounts();
+            for(BankAccount account : bankAccounts){
+                if (account.getIdAccount().equals(account_id)) {
+                    return ok(mapBankAccount.convertToDTO(account));
+                }
+            }
+        } catch (NullPointerException exception) {
+            return notFound().build();
+        }
+        return null;
+    }
 
 }
