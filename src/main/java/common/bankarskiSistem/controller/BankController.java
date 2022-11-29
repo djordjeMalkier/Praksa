@@ -43,6 +43,24 @@ public class BankController {
         return ok(mapper.convertToDTO(savedBank));
     }
 
+    //addExchangeRates
+    @PutMapping("/putExchangeRates/{idBank}")
+    public ResponseEntity<BankDto> addExchangeRates(@PathVariable Integer idBank, @RequestBody ExchangeRatesDTO exchangeRatesDTO){
+        Bank bank;
+        try{
+
+
+            bank = bankService.findById(idBank);
+            bankService.addExchangeRates(mapperER.convertToEntity(exchangeRatesDTO),bank);
+
+        } catch (NullPointerException exception) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, exception.getMessage(), exception);
+
+        }
+
+        return ok(mapper.convertToDTO(bank));
+    }
+
    @DeleteMapping("/delete/{idBank}")
     public ResponseEntity<BankDto> deleteBank(@PathVariable Integer idBank) {
         Bank bank;
@@ -96,9 +114,6 @@ public class BankController {
 
         return ok(mapper.convertToDTO(bank));
     }
-
-
-
     @GetMapping("/getAllUsers/{idBank}")
     public ResponseEntity<Set<UserDTO>> getAllUsers(@PathVariable Integer idBank) {
         Set<UserDTO> users;

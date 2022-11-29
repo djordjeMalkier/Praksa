@@ -15,10 +15,9 @@ import java.util.List;
 public class ExchangeRatesDTO {
     private Integer idExchangeRates;
     private String name;
-
     private List<Conversion> conversions;
 
-    //private List<Bank> banks;
+  //  private List<Bank> banks;
 
     /*@Override
     public String toString() {

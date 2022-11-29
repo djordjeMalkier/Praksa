@@ -1,6 +1,7 @@
 package common.bankarskiSistem.controller.dto;
 
 import common.bankarskiSistem.model.Currency;
+import common.bankarskiSistem.model.ExchangeRates;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,7 +16,18 @@ public class ConversionDTO {
     private Currency currencyFrom;
     private Currency currencyTo;
     private double value;
-    private ExchangeRatesDTO exchangeRates;
+    private ExchangeRates exchangeRates;
+
+    /*@Override
+    public String toString() {
+        return "ConversionDTO{" +
+                "idConversion=" + idConversion +
+                ", currencyFrom=" + currencyFrom +
+                ", currencyTo=" + currencyTo +
+                ", value=" + value +
+                ", exchangeRates=" + exchangeRates +
+                '}';
+    }*/
 
     @Override
     public String toString() {
@@ -24,7 +36,6 @@ public class ConversionDTO {
                 ", currencyFrom=" + currencyFrom +
                 ", currencyTo=" + currencyTo +
                 ", value=" + value +
-                ", exchangeRates=" + exchangeRates +
                 '}';
     }
 }

@@ -16,7 +16,7 @@ public interface ExchangeRatesMapper {
     @Mapping(source = "idExchangeRates", target = "idExchangeRates")
     @Mapping(source = "name", target = "name")
     @Mapping(source = "conversions", target = "conversions")
-   // @Mapping(source = "banks", target = "banks")
+   //@Mapping(source = "banks", target = "banks")
     ExchangeRatesDTO convertToDTO(ExchangeRates exchangeRates);
 
     @InheritInverseConfiguration

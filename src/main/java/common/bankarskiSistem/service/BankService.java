@@ -48,8 +48,7 @@ public class BankService {
         if(bankRepository.findByName(bank.getName()).isPresent())
             throw new NameOfTheBankAlreadyExistException("Name of the bank already exists.");
 
-        Bank mergedBank = entityManager.merge(bank);
-       return bankRepository.save(mergedBank);
+        return bankRepository.save(bank);
     }
 
     public Bank deleteBank(Bank bank) {
@@ -105,14 +104,28 @@ public class BankService {
 
     }
 
+    public Bank addExchangeRates(ExchangeRates exchangeRates, Bank bank) {
+        if (exchangeRates == null)
+            throw new NullPointerException("The exchange rates is null.");
+        if(bankRepository.findByIdBank(bank.getIdBank()).isEmpty())
+            throw new NullPointerException("The bank does not exist.");
+        Bank updatedBank = bankRepository.findByIdBank(bank.getIdBank()).get();
+      //  ExchangeRates exchangeRatesMerged = entityManager.merge(exchangeRates);
+        updatedBank.setExchangeRates(exchangeRates);
+        return bankRepository.save(updatedBank);
+
+     //   return updatedBank;
+
+    }
     /**
      *
      * @param exchangeRates object of ExchangeRates
      * @return exchange rates that was created
      */
-    public ExchangeRates createExchangeRates( ExchangeRates exchangeRates) {
+    public ExchangeRates createExchangeRates(ExchangeRates exchangeRates) {
         if(exchangeRates == null)
             throw new NullPointerException("The bank is null.");
+        //ExchangeRates mergedExchangeRates = entityManager.merge(exchangeRates);
         return exchangeRatesRepository.save(exchangeRates);
     }
 

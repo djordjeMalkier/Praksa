@@ -23,7 +23,7 @@ import java.util.List;
 @AllArgsConstructor
 public class ExchangeRates {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    //@GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "idExchangeRates", nullable = false)
     private Integer idExchangeRates;
 
@@ -38,4 +38,13 @@ public class ExchangeRates {
     @JsonIgnore
     private List<Bank> banks;
 
+    @Override
+    public String toString() {
+        return "ExchangeRates{" +
+                "idExchangeRates=" + idExchangeRates +
+                ", name='" + name + '\'' +
+                ", conversions=" + conversions.size() +
+                ", banks=" + banks.size() +
+                '}';
+    }
 }
