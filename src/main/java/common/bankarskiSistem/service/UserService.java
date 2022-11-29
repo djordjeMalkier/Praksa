@@ -75,11 +75,11 @@ public class UserService {
     public User deleteUserByPersonalId(String id) throws EntityNotFoundException {
         if(id == null)
             throw new NullPointerException("Null personal id");
-        if (userRepository.findByPersonalId(id).isEmpty())
+        Optional<User> userOptional = userRepository.findByPersonalId(id);
+        if (userOptional.isEmpty())
             throw new EntityNotFoundException("User not found!");
-
         userRepository.deleteByPersonalId(id);
-        return userRepository.findByPersonalId(id).get();
+        return userOptional.get();
     }
 
     //CREATE BANK ACCOUNT for user
