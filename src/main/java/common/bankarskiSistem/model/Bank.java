@@ -1,5 +1,6 @@
 package common.bankarskiSistem.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -27,10 +28,11 @@ public class Bank {
     private String name;
     @Column(name="address", nullable = false)
     private String address;
-    @OneToMany(mappedBy = "bank")
+    @OneToMany(mappedBy = "bank", cascade = CascadeType.ALL)
     private List<BankAccount> bankAccounts;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "idExchangeRates")
+    @JsonIgnore
     private ExchangeRates exchangeRates;
 
     public Bank(Integer idBank, String name, String address){
@@ -47,8 +49,7 @@ public class Bank {
         this.exchangeRates = exchangeRates;
     }
 
-    public Bank(int idBank, String name, String address, List<BankAccount> bankAccounts, ExchangeRates exchangeRates) {
-        this.idBank = idBank;
+    public Bank( String name, String address, List<BankAccount> bankAccounts, ExchangeRates exchangeRates) {
         this.name = name;
         this.address = address;
         this.bankAccounts = bankAccounts;
@@ -57,7 +58,17 @@ public class Bank {
 
     public Bank() {
         this.bankAccounts = new ArrayList<>();
+
     }
 
-
+    @Override
+    public String toString() {
+        return "Bank{" +
+                "idBank=" + idBank +
+                ", name='" + name + '\'' +
+                ", address='" + address + '\'' +
+                ", bankAccounts=" + bankAccounts.size() +
+                ", exchangeRates=" + exchangeRates.getName() +
+                '}';
+    }
 }

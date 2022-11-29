@@ -1,26 +1,28 @@
 package common.bankarskiSistem.service;
 
 import common.bankarskiSistem.exceptions.NameOfTheBankAlreadyExistException;
-import common.bankarskiSistem.model.*;
+import common.bankarskiSistem.model.Bank;
+import common.bankarskiSistem.model.BankAccount;
+import common.bankarskiSistem.model.ExchangeRates;
+import common.bankarskiSistem.model.User;
 import common.bankarskiSistem.repository.BankRepository;
-import common.bankarskiSistem.repository.ConversionRepository;
 import common.bankarskiSistem.repository.ExchangeRatesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import javax.transaction.Transactional;
+import java.util.HashSet;
+import java.util.Set;
 
 @Service
+@Transactional
 public class BankService {
     @Autowired
     private BankRepository bankRepository;
     @Autowired
     private ExchangeRatesRepository exchangeRatesRepository;
 
-    @Autowired
-    private ConversionRepository conversionRepository;
+
     /**
      *
      * @param bank the bank
@@ -29,24 +31,23 @@ public class BankService {
     public Bank createBank(Bank bank) throws NameOfTheBankAlreadyExistException {
         if(bank == null)
             throw new NullPointerException("The bank is null.");
-        if(!bankRepository.findByName(bank.getName()).isEmpty())
+        if(bankRepository.findByName(bank.getName()).isPresent())
             throw new NameOfTheBankAlreadyExistException("Name of the bank already exists.");
+
         return bankRepository.save(bank);
     }
 
-    /**
-     *
-     * @param bank of the bank to be deleted
-     */
     public Bank deleteBank(Bank bank) {
-        if(bankRepository.findById(bank.getIdBank()).isEmpty())
+        if(bankRepository.findByIdBank(bank.getIdBank()).isEmpty())
             throw new NullPointerException("The bank does not exist.");
-        bankRepository.deleteById(bank.getIdBank());
+        bankRepository.deleteByIdBank(bank.getIdBank());
 
         return bank;
     }
 
     public Bank findById(Integer idBank){
+        if(bankRepository.findByIdBank(idBank).isEmpty())
+            throw new NullPointerException("The bank does not exist.");
         return bankRepository.findByIdBank(idBank).get();
     }
 
@@ -55,14 +56,34 @@ public class BankService {
      * @param name of the bank
      * @param bank of the bank
      */
-    public Bank updateBankName(String name, Bank bank) {
+    public Bank updateBankName(String name, Bank bank) throws NameOfTheBankAlreadyExistException {
         if (name == null)
             throw new NullPointerException("The name is null.");
         if(bankRepository.findByIdBank(bank.getIdBank()).isEmpty())
             throw new NullPointerException("The bank does not exist.");
-        bankRepository.findByIdBank(bank.getIdBank()).get().setName(name);
+        if(bankRepository.findByName(name).isPresent()) {
+            throw new NameOfTheBankAlreadyExistException("Name already exist.");
+        }
+        Bank updatedBank = bankRepository.findByIdBank(bank.getIdBank()).get();
+
+        updatedBank.setName(name);
+        bankRepository.save(updatedBank);
 
         return bank;
+    }
+
+    public Bank updateBank(Bank bank) throws NameOfTheBankAlreadyExistException {
+        if(bankRepository.findByIdBank(bank.getIdBank()).isEmpty())
+            throw new NullPointerException("The bank does not exist.");
+        if(bankRepository.findByName(bank.getName()).isPresent()) {
+            throw new NameOfTheBankAlreadyExistException("Name already exist.");
+        }
+        Bank updatedBank = bankRepository.findByIdBank(bank.getIdBank()).get();
+
+        updatedBank.setName(bank.getName() == null ? updatedBank.getName() : bank.getName());
+        updatedBank.setAddress(bank.getAddress() == null ? updatedBank.getAddress() : bank.getAddress());
+        bankRepository.save(updatedBank);
+        return updatedBank;
     }
 
     /**
@@ -73,14 +94,24 @@ public class BankService {
     public Bank updateBankAddress(String address, Bank bank) {
         if (address == null)
             throw new NullPointerException("The address is null.");
-        if(bankRepository.findById(bank.getIdBank()).isEmpty())
+        if(bankRepository.findByIdBank(bank.getIdBank()).isEmpty())
             throw new NullPointerException("The bank does not exist.");
-        bankRepository.findById(bank.getIdBank()).get().setAddress(address);
+        Bank updatedBank = bankRepository.findByIdBank(bank.getIdBank()).get();
+        updatedBank.setAddress(address);
+        bankRepository.save(updatedBank);
 
-        return bank;
+        return updatedBank;
 
     }
 
+    public Bank addExchangeRates(Integer idExchangeRates, Bank bank) {
+        if(bankRepository.findByIdBank(bank.getIdBank()).isEmpty())
+            throw new NullPointerException("The bank does not exist.");
+        Bank updatedBank = bankRepository.findByIdBank(bank.getIdBank()).get();
+        updatedBank.setExchangeRates(exchangeRatesRepository.findByIdExchangeRates(idExchangeRates).get());
+        return bankRepository.save(updatedBank);
+
+    }
     /**
      *
      * @param exchangeRates object of ExchangeRates
@@ -88,19 +119,14 @@ public class BankService {
      */
     public ExchangeRates createExchangeRates(ExchangeRates exchangeRates) {
         if(exchangeRates == null)
-            throw new NullPointerException("The exchange rate is null.");
+            throw new NullPointerException("The bank is null.");
         return exchangeRatesRepository.save(exchangeRates);
     }
 
-    /**
-     * @param bank of bank
-     * @return exchange rates
-     */
-    public ExchangeRates getExchangeRates(Bank bank) {
-        if (bank == null)
-            throw new NullPointerException("The bank is null.");
-
-        return bank.getExchangeRates();
+    public ExchangeRates findByIdExchangeRates(Integer idExchangeRates) {
+        if(exchangeRatesRepository.findByIdExchangeRates(idExchangeRates).isEmpty())
+            throw new NullPointerException("The exchange rates do not exist.");
+        return exchangeRatesRepository.findByIdExchangeRates(idExchangeRates).get();
     }
 
     /**
@@ -108,11 +134,13 @@ public class BankService {
      * @param exchangeRates object of ExchangeRates
      * @return exchange rates
      */
-    public ExchangeRates updateExchangeRates(ExchangeRates exchangeRates) {
-        for(Conversion conversion: exchangeRates.getConversions()) {
-            if(Objects.equals(conversion.getExchangeRates().getIdExchangeRates(), exchangeRates.getIdExchangeRates()))
-                conversionRepository.save(conversion);
-        }
+    public ExchangeRates updateExchangeRates(ExchangeRates exchangeRates,String name) {
+        if(exchangeRatesRepository.findByIdExchangeRates(exchangeRates.getIdExchangeRates()).isEmpty())
+            throw new NullPointerException("The exchanges rates do not exist.");
+        ExchangeRates updatedExchangeRates = exchangeRatesRepository.findByIdExchangeRates(exchangeRates.getIdExchangeRates()).get();
+        exchangeRatesRepository.save(updatedExchangeRates);
+        updatedExchangeRates.setName(name);
+
         return exchangeRates;
     }
 
@@ -121,14 +149,15 @@ public class BankService {
      * @param bank object
      * @return list of users
      */
-    public List<User> getAllUsers(Bank bank) {
+    public Set<User> getAllUsers(Bank bank) {
         if (bank == null)
             throw new NullPointerException("The bank is null.");
-        List<User> users = new ArrayList<>();
+        Set<User> users = new HashSet<>();
 
         for (BankAccount account: bank.getBankAccounts()) {
             users.add(account.getUser());
         }
+
         return users;
     }
 
