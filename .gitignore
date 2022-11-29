@@ -12,3 +12,4 @@ Praksa.iml
 /out/
 /target/
 target/classes/common/bankarskiSistem/utils/Constants.class
+/src/main/resources/application.properties
