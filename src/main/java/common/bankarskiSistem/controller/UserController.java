@@ -6,13 +6,10 @@ import common.bankarskiSistem.controller.dto.BankAccountDTO;
 import common.bankarskiSistem.controller.dto.BankAccountMapper;
 import common.bankarskiSistem.controller.dto.UserDTO;
 import common.bankarskiSistem.controller.dto.UserMapper;
-
-import common.bankarskiSistem.model.Currency;
-
 import common.bankarskiSistem.exceptions.EntityAlreadyExistsException;
 import common.bankarskiSistem.exceptions.EntityNotFoundException;
 import common.bankarskiSistem.model.BankAccount;
-
+import common.bankarskiSistem.model.Currency;
 import common.bankarskiSistem.model.User;
 import common.bankarskiSistem.service.UserService;
 import org.slf4j.Logger;
@@ -25,11 +22,9 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 import static org.springframework.http.ResponseEntity.*;
-import static org.springframework.http.ResponseEntity.notFound;
 
 @RestController
 @RequestMapping(value = "/users", method = RequestMethod.GET)
@@ -75,7 +70,8 @@ public class UserController {
             double balance = userService.getBalance(personalId, idAccount, currency);
             String currencyName = currency.isPresent() ? currency.get().toString() : "";
             return ok(balance + " " + currencyName);
-        } catch (NullPointerException exception) {
+        } catch (EntityNotFoundException |
+                 NullPointerException exception) {
             throw new ResponseStatusException(
                     HttpStatus.NOT_FOUND, exception.getMessage(), exception);
         }
@@ -104,6 +100,7 @@ public class UserController {
             return ok(balance);
         } catch (NullPointerException |
                  ArithmeticException |
+                 EntityNotFoundException |
                  IllegalArgumentException exception) {
             throw new ResponseStatusException(
                     HttpStatus.NOT_FOUND, exception.getMessage(), exception);
@@ -119,6 +116,7 @@ public class UserController {
             return ok(balance);
         } catch (NullPointerException |
                  ArithmeticException |
+                 EntityNotFoundException |
                  IllegalArgumentException exception) {
             throw new ResponseStatusException(
                     HttpStatus.NOT_FOUND, exception.getMessage(), exception);
@@ -135,6 +133,7 @@ public class UserController {
             return ok("Successful transfer of " + transferMoney);
         } catch (NullPointerException |
                  ArithmeticException |
+                 EntityNotFoundException |
                  IllegalArgumentException exception) {
             throw new ResponseStatusException(
                     HttpStatus.NOT_FOUND, exception.getMessage(), exception);
