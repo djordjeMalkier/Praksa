@@ -40,7 +40,7 @@ public class BankController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, exception.getMessage(), exception);
         }
 
-        return ok(mapper.convertToDTO(savedBank));
+        return ok(mapper.convertToDTOShow(savedBank));
     }
 
     @PostMapping("/addExchangeRates")
@@ -70,7 +70,7 @@ public class BankController {
         return "The bank is deleted successfully.";
     }
 
-    @GetMapping("/get")
+    @GetMapping
     public ResponseEntity<BankDto> getBankById(@RequestParam Integer idBank) {
         Bank bank;
         try{
