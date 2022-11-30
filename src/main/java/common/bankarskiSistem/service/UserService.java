@@ -40,7 +40,7 @@ public class UserService {
         if(user == null)
             throw new NullPointerException("Null user");
         User existingUser
-                = userRepository.findById(user.getPersonalId())
+                = userRepository.findByPersonalId(user.getPersonalId())
                 .orElse(null);
         if (existingUser == null)
             throw new EntityNotFoundException("User not found!");
@@ -71,7 +71,7 @@ public class UserService {
     }
 
     // DELETE user by personal id (jmbg)
-    public User deleteUserByPersonalId(String id) throws EntityNotFoundException {
+    public User deleteUserById(String id) throws EntityNotFoundException {
         if(id == null)
             throw new NullPointerException("Null personal id");
         Optional<User> userOptional = userRepository.findByPersonalId(id);
