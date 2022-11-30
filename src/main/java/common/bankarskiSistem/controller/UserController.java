@@ -165,12 +165,12 @@ public class UserController {
     public ResponseEntity<BankAccountDTO> addBankAccount(@RequestBody BankAccountDTO bankAccountDTO) {
         BankAccount savedBankAccount;
         try {
-            BankAccount bankAccount = mapBankAccount.convertToEntity(bankAccountDTO);
+            BankAccount bankAccount = mapBankAccount.bankAccountDTOToBankAccount(bankAccountDTO);
             savedBankAccount = userService.createBankAccount(bankAccount);
         } catch (EntityAlreadyExistsException exception) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, exception.getMessage(), exception);
         }
-        return ok(mapBankAccount.convertToDTO(savedBankAccount));
+        return ok(mapBankAccount.bankAccountToBankAccountDTO(savedBankAccount));
     }
 
     @DeleteMapping("/deleteBankAccount")
@@ -189,7 +189,7 @@ public class UserController {
         } catch (EntityNotFoundException e) {
             throw new RuntimeException(e);
         }
-        return ok(mapBankAccount.convertToDTO(deletedBankAccount));
+        return ok(mapBankAccount.bankAccountToBankAccountDTO(deletedBankAccount));
     }
 
     @DeleteMapping("/deleteBankAccounts")
@@ -227,7 +227,7 @@ public class UserController {
         }
     }
 
-    @GetMapping("/getAccount")
+    @GetMapping("/getBankAccount")
     public ResponseEntity<BankAccountDTO> getBankAccount(
             @RequestParam String personalId,
             @RequestParam Integer accountId
@@ -240,7 +240,7 @@ public class UserController {
             List<BankAccount> bankAccounts = user.getBankAccounts();
             for(BankAccount account : bankAccounts){
                 if (account.getIdAccount().equals(accountId)) {
-                    return ok(mapBankAccount.convertToDTO(account));
+                    return ok(mapBankAccount.convertToDTOShow(account));
                 }
             }
         } catch (NullPointerException exception) {
