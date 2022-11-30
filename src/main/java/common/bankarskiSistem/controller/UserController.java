@@ -175,10 +175,10 @@ public class UserController {
         return ok(mapBankAccount.convertToDTO(savedBankAccount));
     }
 
-    @DeleteMapping("/{personal_id}/accounts/{bankAccountID}/delete")
+    @DeleteMapping("/deleteAccount")
     public ResponseEntity<BankAccountDTO> deleteAccount(
-            @PathVariable String personal_id,
-            @PathVariable Integer bankAccountID
+            @RequestParam String personal_id,
+            @RequestParam Integer bankAccountID
     ) {
         BankAccount bankAccount = null;
         BankAccount deletedBankAccount = null;
@@ -194,8 +194,8 @@ public class UserController {
         return ok(mapBankAccount.convertToDTO(deletedBankAccount));
     }
 
-    @DeleteMapping("/{personal_id}/accounts/delete")
-    public ResponseEntity<List<BankAccountDTO>> deleteAllAccounts(@PathVariable String personal_id) {
+    @DeleteMapping("/deleteAccounts")
+    public ResponseEntity<List<BankAccountDTO>> deleteAllAccounts(@RequestParam String personal_id) {
         User user = null;
         List<BankAccount> bankAccounts = new ArrayList<>();
         try {
@@ -217,8 +217,8 @@ public class UserController {
         return ok(mapBankAccount.bankAccountsToDTO(bankAccounts));
     }
 
-    @GetMapping("/{personal_id}/accounts")
-    public ResponseEntity<List<BankAccountDTO>> getAllAccounts(@PathVariable String personal_id) {
+    @GetMapping("/getAllAccounts")
+    public ResponseEntity<List<BankAccountDTO>> getAllAccounts(@RequestParam String personal_id) {
         User user = null;
         try{
             user = userService.getUserByPersonalID(personal_id);
@@ -228,10 +228,10 @@ public class UserController {
         }
     }
 
-    @GetMapping("{personal_id}/accounts/{account_id}")
+    @GetMapping("{getAccount")
     public ResponseEntity<BankAccountDTO> getAccount(
-            @PathVariable String personal_id,
-            @PathVariable Integer account_id
+            @RequestParam String personal_id,
+            @RequestParam Integer account_id
     ) {
         User user = null;
         try{
