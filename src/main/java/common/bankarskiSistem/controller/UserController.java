@@ -46,7 +46,7 @@ public class UserController {
         } catch (EntityAlreadyExistsException exception) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, exception.getMessage(), exception);
         }
-        return ok(mapUser.userToUserDTO(savedUser));
+        return ok(mapUser.userToUserDTOShow(savedUser));
     }
 
     @GetMapping("/get/{personalId}")
@@ -54,7 +54,7 @@ public class UserController {
         User user;
         try {
             user = userService.getUserByPersonalID(personalId);
-            return ok(mapUser.userToUserDTO(user));
+            return ok(mapUser.userToUserDTOShow(user));
         } catch (NullPointerException exception) {
             throw new ResponseStatusException(
                     HttpStatus.NOT_FOUND, exception.getMessage(), exception);
@@ -149,7 +149,7 @@ public class UserController {
         } catch (EntityNotFoundException exception) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, exception.getMessage(), exception);
         }
-        return ok(mapUser.userToUserDTO(savedUser));
+        return ok(mapUser.userToUserDTOShow(savedUser));
     }
 
     @DeleteMapping("/delete/{id}")
@@ -157,7 +157,7 @@ public class UserController {
         User user;
         try {
             user = userService.deleteUserByPersonalId(id);
-            return ok(mapUser.userToUserDTO(user));
+            return ok(mapUser.userToUserDTOShow(user));
         } catch (EntityNotFoundException exception) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, exception.getMessage(), exception);
         }
