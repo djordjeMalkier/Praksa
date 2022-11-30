@@ -94,6 +94,7 @@ public class UserService {
         return bankAccountMerged;
     }
 
+    @Transactional
     public double payIn(String personalId, Integer idAccount, double payment) throws EntityNotFoundException {
         if (idAccount == null) throw new NullPointerException("No account");
 
@@ -108,6 +109,7 @@ public class UserService {
         return bankAccount.getBalance();
     }
 
+    @Transactional
     public double payOut(String personalId, Integer idAccount, double payment)
             throws IllegalArgumentException, ArithmeticException, EntityNotFoundException {
         if (idAccount == null) throw new NullPointerException("No account");
@@ -124,6 +126,7 @@ public class UserService {
         return bankAccount.getBalance();
     }
 
+    @Transactional
     public double transfer(String personalId, Integer idAccountFrom, Integer idAccountTo, double payment)
             throws EntityNotFoundException {
         if (idAccountFrom == null || idAccountTo == null)
@@ -192,6 +195,7 @@ public class UserService {
                 .reduce((double) 0, Double::sum);
     }
 
+    @Transactional
     public BankAccount deleteBankAccountById(String personalId, Integer idAccount) throws EntityNotFoundException {
         if(personalId == null)
             throw new NullPointerException("Null personal id");
