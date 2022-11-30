@@ -6,7 +6,6 @@ import common.bankarskiSistem.exceptions.EntityNotFoundException;
 import common.bankarskiSistem.model.BankAccount;
 import common.bankarskiSistem.model.Currency;
 import common.bankarskiSistem.model.User;
-import common.bankarskiSistem.repository.BankAccountRepository;
 import common.bankarskiSistem.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,8 +26,7 @@ public class UserService {
     private static final Logger log = LoggerFactory.getLogger(BankarskiSistem.class);
     @Autowired
     private UserRepository userRepository;
-    @Autowired
-    private BankAccountRepository  bankAccountRepository;
+
     @Autowired
     private ConversionService conversionService;
 
@@ -40,7 +38,7 @@ public class UserService {
         if(user == null)
             throw new NullPointerException("Null user");
         User existingUser
-                = userRepository.findById(user.getPersonalId())
+                = userRepository.findByPersonalId(user.getPersonalId())
                 .orElse(null);
         if (existingUser == null)
             throw new EntityNotFoundException("User not found!");
@@ -71,7 +69,7 @@ public class UserService {
     }
 
     // DELETE user by personal id (jmbg)
-    public User deleteUserByPersonalId(String id) throws EntityNotFoundException {
+    public User deleteUserById(String id) throws EntityNotFoundException {
         if(id == null)
             throw new NullPointerException("Null personal id");
         Optional<User> userOptional = userRepository.findByPersonalId(id);
@@ -95,13 +93,13 @@ public class UserService {
         return bankAccountMerged;
     }
 
-    public double payIn(String personalID, Integer idAccount, double payment) throws EntityNotFoundException {
+    public double payIn(String personalId, Integer idAccount, double payment) throws EntityNotFoundException {
         if (idAccount == null) throw new NullPointerException("No account");
 
         if (payment <= 0)
             throw new IllegalArgumentException("Payment must be positive");
 
-        User user = getUserByPersonalID(personalID);
+        User user = getUserByPersonalID(personalId);
         BankAccount bankAccount = getBankAccountByIdAccount(user, idAccount);
         bankAccount.setBalance(bankAccount.getBalance() + payment);
         userRepository.save(user);
@@ -109,13 +107,13 @@ public class UserService {
         return bankAccount.getBalance();
     }
 
-    public double payOut(String personalID, Integer idAccount, double payment)
+    public double payOut(String personalId, Integer idAccount, double payment)
             throws IllegalArgumentException, ArithmeticException, EntityNotFoundException {
         if (idAccount == null) throw new NullPointerException("No account");
 
         if (payment <= 0)
             throw new IllegalArgumentException("Payout must be positive");
-        User user = getUserByPersonalID(personalID);
+        User user = getUserByPersonalID(personalId);
         BankAccount bankAccount = getBankAccountByIdAccount(user, idAccount);
         if (payment > bankAccount.getBalance())
             throw new ArithmeticException("Payout is greater than balance");
@@ -125,7 +123,7 @@ public class UserService {
         return bankAccount.getBalance();
     }
 
-    public double transfer(String personalID, Integer idAccountFrom, Integer idAccountTo, double payment)
+    public double transfer(String personalId, Integer idAccountFrom, Integer idAccountTo, double payment)
             throws EntityNotFoundException {
         if (idAccountFrom == null || idAccountTo == null)
             throw new NullPointerException("No accounts");
@@ -133,30 +131,30 @@ public class UserService {
         if (payment <= 0)
             throw new IllegalArgumentException("Payout must be positive");
 
-        BankAccount accountFrom = getBankAccountByID(personalID, idAccountFrom);
-        BankAccount accountTo = getBankAccountByID(personalID, idAccountTo);
+        BankAccount accountFrom = getBankAccountByID(personalId, idAccountFrom);
+        BankAccount accountTo = getBankAccountByID(personalId, idAccountTo);
 
 
         if (accountFrom.getCurrency() != accountTo.getCurrency()) {
-            payOut(personalID, accountFrom.getIdAccount(), payment);
+            payOut(personalId, accountFrom.getIdAccount(), payment);
             double convertedCurrency = conversionService.convert(
                     accountFrom.getCurrency(),
                     accountTo.getCurrency(),
                     accountFrom.getBank());
             payment *= convertedCurrency;
-            payIn(personalID, accountTo.getIdAccount(), payment);
+            payIn(personalId, accountTo.getIdAccount(), payment);
             return payment;
         } else {
-            payOut(personalID, accountFrom.getIdAccount(), payment);
-            payIn(personalID, accountTo.getIdAccount(), payment);
+            payOut(personalId, accountFrom.getIdAccount(), payment);
+            payIn(personalId, accountTo.getIdAccount(), payment);
             return payment;
         }
     }
 
-    public double getBalance(String personalID, Integer idAccount, Optional<Currency> currencyTo)
+    public double getBalance(String personalId, Integer idAccount, Optional<Currency> currencyTo)
             throws EntityNotFoundException {
         if (idAccount == null) throw new NullPointerException("No account");
-        User user = getUserByPersonalID(personalID);
+        User user = getUserByPersonalID(personalId);
         BankAccount bankAccount = getBankAccountByIdAccount(user, idAccount);
         double conversionRate = 1;
 
@@ -169,23 +167,23 @@ public class UserService {
         return bankAccount.getBalance() * conversionRate;
     }
 
-    private BankAccount getBankAccountByIdAccount(User user, Integer idAccount) throws EntityNotFoundException {
+    private BankAccount getBankAccountByIdAccount(User user, Integer bankAccountId) throws EntityNotFoundException {
         Optional<BankAccount> bankAccountOptional = user.getBankAccounts()
                 .stream()
-                .filter(ba -> Objects.equals(ba.getIdAccount(), idAccount))
+                .filter(ba -> Objects.equals(ba.getIdAccount(), bankAccountId))
                 .findAny();
         if (bankAccountOptional.isEmpty())
-            throw new EntityNotFoundException("Account [" + idAccount + "] not found");
+            throw new EntityNotFoundException("Account [" + bankAccountId + "] not found");
         return bankAccountOptional.get();
     }
 
-    public double getAllBalance(String personalID, Optional<Currency> currencyTo) {
-        User user = getUserByPersonalID(personalID);
+    public double getAllBalance(String personalId, Optional<Currency> currencyTo) {
+        User user = getUserByPersonalID(personalId);
         Optional<Currency> finalCurrencyTo = currencyTo.isEmpty() ?  Optional.of(Currency.EUR) : currencyTo;
         return user.getBankAccounts().stream()
                 .map(account -> {
                     try {
-                        return getBalance(personalID, account.getIdAccount(), finalCurrencyTo);
+                        return getBalance(personalId, account.getIdAccount(), finalCurrencyTo);
                     } catch (EntityNotFoundException e) {
                         throw new RuntimeException(e.getMessage());
                     }
@@ -193,7 +191,7 @@ public class UserService {
                 .reduce((double) 0, Double::sum);
     }
 
-    public BankAccount deleteAccountById(String personalId, Integer idAccount) throws EntityNotFoundException {
+    public BankAccount deleteBankAccountById(String personalId, Integer idAccount) throws EntityNotFoundException {
         if(personalId == null)
             throw new NullPointerException("Null personal id");
         if(idAccount == null)

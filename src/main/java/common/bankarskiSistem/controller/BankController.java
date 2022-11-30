@@ -99,7 +99,7 @@ public class BankController {
     public ResponseEntity<Set<UserDTO>> getAllUsers(@RequestParam Integer idBank) {
         Set<UserDTO> users;
         try{
-            users = mapperUser.usersTOUsersDTO(bankService.getAllUsers(bankService.findById(idBank)));
+            users = mapperUser.userToUserDTOShow(bankService.getAllUsers(bankService.findById(idBank)));
                 return ok(users);
 
             } catch (NullPointerException exception) {

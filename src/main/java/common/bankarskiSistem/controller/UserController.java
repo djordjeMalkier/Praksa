@@ -36,7 +36,7 @@ public class UserController {
     private final UserMapper mapUser = UserMapper.INSTANCE;
     private final BankAccountMapper mapBankAccount = BankAccountMapper.INSTANCE;
 
-    @PostMapping
+    @PostMapping("/add")
     public ResponseEntity<UserDTO> saveUser(@RequestBody UserDTO userDto) {
         User savedUser;
         try {
@@ -46,26 +46,25 @@ public class UserController {
         } catch (EntityAlreadyExistsException exception) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, exception.getMessage(), exception);
         }
-        return ok(mapUser.userToUserDTO(savedUser));
+        return ok(mapUser.userToUserDTOShow(savedUser));
     }
 
-    @GetMapping("/get/{personalId}")
-    public ResponseEntity<UserDTO> getUserById(@PathVariable String personalId) {
+    @GetMapping
+    public ResponseEntity<UserDTO> getUserById(@RequestParam String id) {
         User user;
         try {
-            user = userService.getUserByPersonalID(personalId);
-            return ok(mapUser.userToUserDTO(user));
+            user = userService.getUserByPersonalID(id);
+            return ok(mapUser.userToUserDTOShow(user));
         } catch (NullPointerException exception) {
             throw new ResponseStatusException(
                     HttpStatus.NOT_FOUND, exception.getMessage(), exception);
         }
     }
 
-    @GetMapping(value = {"/getAccountBalance/{personalId}/{idAccount}",
-            "/getAccountBalance/{personalId}/{idAccount}/{currency}"})
-    public ResponseEntity<String> getAccountBalance(@PathVariable String personalId,
-                                      @PathVariable Integer idAccount,
-                                      @PathVariable(required = false) Optional<Currency> currency) {
+    @GetMapping(value = "/getBankAccountBalance")
+    public ResponseEntity<String> getAccountBalance(@RequestParam String personalId,
+                                      @RequestParam Integer idAccount,
+                                      @RequestParam(required = false) Optional<Currency> currency) {
         try{
             double balance = userService.getBalance(personalId, idAccount, currency);
             String currencyName = currency.isPresent() ? currency.get().toString() : "";
@@ -77,10 +76,9 @@ public class UserController {
         }
     }
 
-    @GetMapping(value = {"/getAllBankAccountBalance/{personalId}",
-            "/getAllBankAccountBalance/{personalId}/{currency}"})
-    public ResponseEntity<String> getAllBankAccountBalance(@PathVariable String personalId,
-                                      @PathVariable(required = false) Optional<Currency> currency) {
+    @GetMapping(value = "/getAllBalance")
+    public ResponseEntity<String> getAllBankAccountBalance(@RequestParam String personalId,
+                                      @RequestParam(required = false) Optional<Currency> currency) {
         try{
             double balance = userService.getAllBalance(personalId, currency);
             String currencyName = currency.isPresent() ? currency.get().toString() : "EUR";
@@ -91,10 +89,10 @@ public class UserController {
         }
     }
 
-    @PutMapping("/payIn/{personalId}/{idAccount}/{payment}")
-    public ResponseEntity<Double> payInUserBankAccount(@PathVariable String personalId,
-                                                       @PathVariable Integer idAccount,
-                                                       @PathVariable Double payment) {
+    @PutMapping("/payIn")
+    public ResponseEntity<Double> payInUserBankAccount(@RequestParam String personalId,
+                                                       @RequestParam Integer idAccount,
+                                                       @RequestParam Double payment) {
         try{
             double balance = userService.payIn(personalId, idAccount, payment);
             return ok(balance);
@@ -107,10 +105,10 @@ public class UserController {
         }
     }
 
-    @PutMapping("/payOut/{personalId}/{idAccount}/{payment}")
-    public ResponseEntity<Double> payOutUserBankAccount(@PathVariable String personalId,
-                                                       @PathVariable Integer idAccount,
-                                                       @PathVariable Double payment) {
+    @PutMapping("/payOut")
+    public ResponseEntity<Double> payOutUserBankAccount(@RequestParam String personalId,
+                                                       @RequestParam Integer idAccount,
+                                                       @RequestParam Double payment) {
         try{
             double balance = userService.payOut(personalId, idAccount, payment);
             return ok(balance);
@@ -123,11 +121,11 @@ public class UserController {
         }
     }
 
-    @PutMapping("/transfer/{personalId}/{idAccountFrom}/{idAccountTo}/{payment}")
-    public ResponseEntity<String> transferFromUserAccountToAnotherUserAccount(@PathVariable String personalId,
-                                                        @PathVariable Integer idAccountFrom,
-                                                        @PathVariable Integer idAccountTo,
-                                                        @PathVariable Double payment) {
+    @PutMapping("/transfer")
+    public ResponseEntity<String> transferFromUserAccountToAnotherUserAccount(@RequestParam String personalId,
+                                                        @RequestParam Integer idAccountFrom,
+                                                        @RequestParam Integer idAccountTo,
+                                                        @RequestParam Double payment) {
         try{
             double transferMoney = userService.transfer(personalId, idAccountFrom, idAccountTo, payment);
             return ok("Successful transfer of " + transferMoney);
@@ -144,29 +142,27 @@ public class UserController {
     public ResponseEntity<UserDTO> updateUser(@RequestBody UserDTO userDto) {
         User savedUser;
         try {
-
             User user = mapUser.userDTOtoUser(userDto);
             savedUser = userService.updateUser(user);
-
         } catch (EntityNotFoundException exception) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, exception.getMessage(), exception);
         }
-        return ok(mapUser.userToUserDTO(savedUser));
+        return ok(mapUser.userToUserDTOShow(savedUser));
     }
 
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<UserDTO> deleteUserByPersonalId(@PathVariable String id) {
+    @DeleteMapping("/delete")
+    public ResponseEntity<UserDTO> deleteUserById(@RequestParam String id) {
         User user;
         try {
-            user = userService.deleteUserByPersonalId(id);
-            return ok(mapUser.userToUserDTO(user));
+            user = userService.deleteUserById(id);
+            return ok(mapUser.userToUserDTOShow(user));
         } catch (EntityNotFoundException exception) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, exception.getMessage(), exception);
         }
     }
 
-    @PostMapping("/addBankAccountForUser")
-    public ResponseEntity<BankAccountDTO> addBankAccountForUser(@RequestBody BankAccountDTO bankAccountDTO) {
+    @PostMapping("/addBankAccount")
+    public ResponseEntity<BankAccountDTO> addBankAccount(@RequestBody BankAccountDTO bankAccountDTO) {
         BankAccount savedBankAccount;
         try {
             BankAccount bankAccount = mapBankAccount.convertToEntity(bankAccountDTO);
@@ -177,15 +173,15 @@ public class UserController {
         return ok(mapBankAccount.convertToDTO(savedBankAccount));
     }
 
-    @DeleteMapping("/{personal_id}/accounts/{bankAccountID}/delete")
-    public ResponseEntity<BankAccountDTO> deleteAccount(
-            @PathVariable String personal_id,
-            @PathVariable Integer bankAccountID
+    @DeleteMapping("/deleteBankAccount")
+    public ResponseEntity<BankAccountDTO> deleteBankAccount(
+            @RequestParam String personalId,
+            @RequestParam Integer bankAccountId
     ) {
         BankAccount bankAccount = null;
         BankAccount deletedBankAccount = null;
         try {
-            deletedBankAccount = userService.deleteAccountById(personal_id, bankAccountID);
+            deletedBankAccount = userService.deleteBankAccountById(personalId, bankAccountId);
 
         } catch (NullPointerException exception) {
 
@@ -196,17 +192,17 @@ public class UserController {
         return ok(mapBankAccount.convertToDTO(deletedBankAccount));
     }
 
-    @DeleteMapping("/{personal_id}/accounts/delete")
-    public ResponseEntity<List<BankAccountDTO>> deleteAllAccounts(@PathVariable String personal_id) {
+    @DeleteMapping("/deleteBankAccounts")
+    public ResponseEntity<List<BankAccountDTO>> deleteAllBankAccounts(@RequestParam String personalId) {
         User user = null;
         List<BankAccount> bankAccounts = new ArrayList<>();
         try {
-            user = userService.getUserByPersonalID(personal_id);
+            user = userService.getUserByPersonalID(personalId);
             bankAccounts = user.getBankAccounts();
 
             if(!bankAccounts.isEmpty()){
                 for (BankAccount bankAccount: bankAccounts){
-                    userService.deleteAccountById(personal_id, bankAccount.getIdAccount());
+                    userService.deleteBankAccountById(personalId, bankAccount.getIdAccount());
                 }
             }
 
@@ -219,30 +215,31 @@ public class UserController {
         return ok(mapBankAccount.bankAccountsToDTO(bankAccounts));
     }
 
-    @GetMapping("/{personal_id}/accounts")
-    public ResponseEntity<List<BankAccountDTO>> getAllAccounts(@PathVariable String personal_id) {
+    @GetMapping("/getAllBankAccounts")
+    public ResponseEntity<List<BankAccountDTO>> getAllBankAccounts(@RequestParam String personalId) {
         User user = null;
         try{
-            user = userService.getUserByPersonalID(personal_id);
-            return ok(mapBankAccount.bankAccountsToDTO(user.getBankAccounts()));
+            user = userService.getUserByPersonalID(personalId);
+            List<BankAccount> bankAccounts = user.getBankAccounts();
+            return ok(mapBankAccount.bankAccountsToDTO(bankAccounts));
         } catch (NullPointerException exception) {
             return notFound().build();
         }
     }
 
-    @GetMapping("{personal_id}/accounts/{account_id}")
-    public ResponseEntity<BankAccountDTO> getAccount(
-            @PathVariable String personal_id,
-            @PathVariable Integer account_id
+    @GetMapping("/getAccount")
+    public ResponseEntity<BankAccountDTO> getBankAccount(
+            @RequestParam String personalId,
+            @RequestParam Integer accountId
     ) {
         User user = null;
         try{
-            user = userService.getUserByPersonalID(personal_id);
+            user = userService.getUserByPersonalID(personalId);
             log.info(user.toString());
 
             List<BankAccount> bankAccounts = user.getBankAccounts();
             for(BankAccount account : bankAccounts){
-                if (account.getIdAccount().equals(account_id)) {
+                if (account.getIdAccount().equals(accountId)) {
                     return ok(mapBankAccount.convertToDTO(account));
                 }
             }
