@@ -6,7 +6,6 @@ import common.bankarskiSistem.exceptions.EntityNotFoundException;
 import common.bankarskiSistem.model.BankAccount;
 import common.bankarskiSistem.model.Currency;
 import common.bankarskiSistem.model.User;
-import common.bankarskiSistem.repository.BankAccountRepository;
 import common.bankarskiSistem.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,8 +26,7 @@ public class UserService {
     private static final Logger log = LoggerFactory.getLogger(BankarskiSistem.class);
     @Autowired
     private UserRepository userRepository;
-    @Autowired
-    private BankAccountRepository  bankAccountRepository;
+
     @Autowired
     private ConversionService conversionService;
 
@@ -40,7 +38,7 @@ public class UserService {
         if(user == null)
             throw new NullPointerException("Null user");
         User existingUser
-                = userRepository.findById(user.getPersonalId())
+                = userRepository.findByPersonalId(user.getPersonalId())
                 .orElse(null);
         if (existingUser == null)
             throw new EntityNotFoundException("User not found!");
@@ -71,7 +69,7 @@ public class UserService {
     }
 
     // DELETE user by personal id (jmbg)
-    public User deleteUserByPersonalId(String id) throws EntityNotFoundException {
+    public User deleteUserById(String id) throws EntityNotFoundException {
         if(id == null)
             throw new NullPointerException("Null personal id");
         Optional<User> userOptional = userRepository.findByPersonalId(id);
@@ -169,13 +167,13 @@ public class UserService {
         return bankAccount.getBalance() * conversionRate;
     }
 
-    private BankAccount getBankAccountByIdAccount(User user, Integer idAccount) throws EntityNotFoundException {
+    private BankAccount getBankAccountByIdAccount(User user, Integer bankAccountId) throws EntityNotFoundException {
         Optional<BankAccount> bankAccountOptional = user.getBankAccounts()
                 .stream()
-                .filter(ba -> Objects.equals(ba.getIdAccount(), idAccount))
+                .filter(ba -> Objects.equals(ba.getIdAccount(), bankAccountId))
                 .findAny();
         if (bankAccountOptional.isEmpty())
-            throw new EntityNotFoundException("Account [" + idAccount + "] not found");
+            throw new EntityNotFoundException("Account [" + bankAccountId + "] not found");
         return bankAccountOptional.get();
     }
 
@@ -193,7 +191,7 @@ public class UserService {
                 .reduce((double) 0, Double::sum);
     }
 
-    public BankAccount deleteAccountById(String personalId, Integer idAccount) throws EntityNotFoundException {
+    public BankAccount deleteBankAccountById(String personalId, Integer idAccount) throws EntityNotFoundException {
         if(personalId == null)
             throw new NullPointerException("Null personal id");
         if(idAccount == null)
