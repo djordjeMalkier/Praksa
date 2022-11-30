@@ -227,7 +227,7 @@ public class UserController {
         }
     }
 
-    @GetMapping("/getAccount")
+    @GetMapping("/getBankAccount")
     public ResponseEntity<BankAccountDTO> getBankAccount(
             @RequestParam String personalId,
             @RequestParam Integer accountId
