@@ -165,12 +165,12 @@ public class UserController {
     public ResponseEntity<BankAccountDTO> addBankAccount(@RequestBody BankAccountDTO bankAccountDTO) {
         BankAccount savedBankAccount;
         try {
-            BankAccount bankAccount = mapBankAccount.bankAccountDTOToBankAccount(bankAccountDTO);
+            BankAccount bankAccount = mapBankAccount.DTOToEntity(bankAccountDTO);
             savedBankAccount = userService.createBankAccount(bankAccount);
         } catch (EntityAlreadyExistsException exception) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, exception.getMessage(), exception);
         }
-        return ok(mapBankAccount.bankAccountToBankAccountDTO(savedBankAccount));
+        return ok(mapBankAccount.entityToDTO(savedBankAccount));
     }
 
     @DeleteMapping("/deleteBankAccount")
@@ -189,7 +189,7 @@ public class UserController {
         } catch (EntityNotFoundException e) {
             throw new RuntimeException(e);
         }
-        return ok(mapBankAccount.bankAccountToBankAccountDTO(deletedBankAccount));
+        return ok(mapBankAccount.entityToDTO(deletedBankAccount));
     }
 
     @DeleteMapping("/deleteBankAccounts")
@@ -212,7 +212,7 @@ public class UserController {
             throw new RuntimeException(e);
         }
 
-        return ok(mapBankAccount.bankAccountsToDTO(bankAccounts));
+        return ok(mapBankAccount.entityListToDTOShow(bankAccounts));
     }
 
     @GetMapping("/getAllBankAccounts")
@@ -221,7 +221,7 @@ public class UserController {
         try{
             user = userService.getUserByPersonalID(personalId);
             List<BankAccount> bankAccounts = user.getBankAccounts();
-            return ok(mapBankAccount.bankAccountsToDTO(bankAccounts));
+            return ok(mapBankAccount.entityListToDTOShow(bankAccounts));
         } catch (NullPointerException exception) {
             return notFound().build();
         }
@@ -240,7 +240,7 @@ public class UserController {
             List<BankAccount> bankAccounts = user.getBankAccounts();
             for(BankAccount account : bankAccounts){
                 if (account.getIdAccount().equals(accountId)) {
-                    return ok(mapBankAccount.convertToDTOShow(account));
+                    return ok(mapBankAccount.entityToDTOShow(account));
                 }
             }
         } catch (NullPointerException exception) {
