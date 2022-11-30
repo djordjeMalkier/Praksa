@@ -1,7 +1,5 @@
 package common.bankarskiSistem.controller.dto;
 
-import common.bankarskiSistem.model.BankAccount;
-import common.bankarskiSistem.model.ExchangeRates;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,8 +15,8 @@ public class BankDto {
     Integer idBank;
     String name;
     String address;
-    List<BankAccount> bankAccounts;
-    ExchangeRates exchangeRates;
+    List<BankAccountDTO> bankAccounts;
+    ExchangeRatesDTO exchangeRates;
 
     @Override
     public String toString() {

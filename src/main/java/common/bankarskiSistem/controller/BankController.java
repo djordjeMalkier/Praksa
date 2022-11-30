@@ -55,7 +55,7 @@ public class BankController {
 
         }
 
-        return ok(mapper.convertToDTO(bank));
+        return ok(mapper.convertToDTOShowER(bank));
     }
 
    @DeleteMapping("/delete")
@@ -67,7 +67,6 @@ public class BankController {
         } catch (NullPointerException exception) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, exception.getMessage(), exception);
         }
-        ok(mapper.convertToDTO(bank));
         return "The bank is deleted successfully.";
     }
 
@@ -79,15 +78,15 @@ public class BankController {
         } catch (NullPointerException exception) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, exception.getMessage(), exception);
         }
-        return ok(mapper.convertToDTO(bank));
+        return ok(mapper.convertToDTOShow(bank));
     }
 
     @PutMapping("/update")
-    public ResponseEntity<BankDto> updateBankAddress(@RequestBody BankDto updatedBank){
+    public ResponseEntity<BankDto> updateBank(@RequestBody BankDto updatedBank){
         Bank bank;
         try{
             bank = mapper.convertToEntity(updatedBank);
-            return ok(mapper.convertToDTO(bankService.updateBank(bank)));
+            return ok(mapper.convertToDTOShow(bankService.updateBank(bank)));
 
         } catch (NullPointerException exception) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, exception.getMessage(), exception);
@@ -100,7 +99,7 @@ public class BankController {
         Set<UserDTO> users;
         try{
             users = mapperUser.userToUserDTOShow(bankService.getAllUsers(bankService.findById(idBank)));
-                return ok(users);
+            return ok(users);
 
             } catch (NullPointerException exception) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, exception.getMessage(), exception);

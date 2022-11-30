@@ -65,7 +65,7 @@ public class ExchangeRatesController {
         } catch (NullPointerException exception) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, exception.getMessage(), exception);
         }
-        return ok(mapperC.convertToDTO(conversion));
+        return ok(mapperC.convertToDTOShow(conversion));
     }
 
     @PutMapping("/updateConversion")
@@ -78,7 +78,7 @@ public class ExchangeRatesController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, exception.getMessage(), exception);
         }
 
-        return ok(mapperC.convertToDTO(conversion));
+        return ok(mapperC.convertToDTOShow(conversion));
     }
 
     @DeleteMapping("/deleteConversion")
@@ -90,19 +90,19 @@ public class ExchangeRatesController {
         } catch (NullPointerException exception) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, exception.getMessage(), exception);
         }
-        ok(mapperC.convertToDTO(conversion));
+
         return "The conversion is deleted successfully.";
     }
 
     @GetMapping("/getConversion")
-    public ResponseEntity<ConversionDTO> getConversionById(@RequestParam(value = "h") Integer idConversion) {
+    public ResponseEntity<ConversionDTO> getConversionById(@RequestParam Integer idConversion) {
         Conversion conversion;
         try{
             conversion = conversionService.findByIdConversion(idConversion);
         } catch (NullPointerException exception) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, exception.getMessage(), exception);
         }
-        return ok(mapperC.convertToDTO(conversion));
+        return ok(mapperC.convertToDTOShow(conversion));
     }
 
 }
