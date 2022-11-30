@@ -165,12 +165,12 @@ public class UserController {
     public ResponseEntity<BankAccountDTO> addBankAccount(@RequestBody BankAccountDTO bankAccountDTO) {
         BankAccount savedBankAccount;
         try {
-            BankAccount bankAccount = mapBankAccount.convertToEntity(bankAccountDTO);
+            BankAccount bankAccount = mapBankAccount.DTOToEntity(bankAccountDTO);
             savedBankAccount = userService.createBankAccount(bankAccount);
         } catch (EntityAlreadyExistsException exception) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, exception.getMessage(), exception);
         }
-        return ok(mapBankAccount.convertToDTO(savedBankAccount));
+        return ok(mapBankAccount.entityToDTOShow(savedBankAccount));
     }
 
     @DeleteMapping("/deleteBankAccount")
@@ -189,10 +189,10 @@ public class UserController {
         } catch (EntityNotFoundException e) {
             throw new RuntimeException(e);
         }
-        return ok(mapBankAccount.convertToDTO(deletedBankAccount));
+        return ok(mapBankAccount.entityToDTOShow(deletedBankAccount));
     }
 
-    @DeleteMapping("/deleteBankAccounts")
+    @DeleteMapping("/deleteAllBankAccounts")
     public ResponseEntity<List<BankAccountDTO>> deleteAllBankAccounts(@RequestParam String personalId) {
         User user = null;
         List<BankAccount> bankAccounts = new ArrayList<>();
@@ -212,7 +212,7 @@ public class UserController {
             throw new RuntimeException(e);
         }
 
-        return ok(mapBankAccount.bankAccountsToDTO(bankAccounts));
+        return ok(mapBankAccount.entityListToDTOShow(bankAccounts));
     }
 
     @GetMapping("/getAllBankAccounts")
@@ -221,13 +221,13 @@ public class UserController {
         try{
             user = userService.getUserByPersonalID(personalId);
             List<BankAccount> bankAccounts = user.getBankAccounts();
-            return ok(mapBankAccount.bankAccountsToDTO(bankAccounts));
+            return ok(mapBankAccount.entityListToDTOShow(bankAccounts));
         } catch (NullPointerException exception) {
             return notFound().build();
         }
     }
 
-    @GetMapping("/getAccount")
+    @GetMapping("/getBankAccount")
     public ResponseEntity<BankAccountDTO> getBankAccount(
             @RequestParam String personalId,
             @RequestParam Integer accountId
@@ -240,7 +240,7 @@ public class UserController {
             List<BankAccount> bankAccounts = user.getBankAccounts();
             for(BankAccount account : bankAccounts){
                 if (account.getIdAccount().equals(accountId)) {
-                    return ok(mapBankAccount.convertToDTO(account));
+                    return ok(mapBankAccount.entityToDTOShow(account));
                 }
             }
         } catch (NullPointerException exception) {

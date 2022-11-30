@@ -21,7 +21,8 @@ public class UserDTO {
     private String surname;
 
     private String address;
-    private List<BankAccount> bankAccounts;
+
+    private List<BankAccountDTO> bankAccounts;
 
     @Override
     public String toString() {

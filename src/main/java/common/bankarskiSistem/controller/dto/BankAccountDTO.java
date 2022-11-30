@@ -18,9 +18,11 @@ public class BankAccountDTO {
 
     private Currency currency;
     private AccountType accountType;
-    private User user;
+    private UserDTO user;
 
-    public BankAccountDTO(AccountType accountType, Currency currency, User user, int idAccount) {
+    private BankDto bank;
+
+    public BankAccountDTO(AccountType accountType, Currency currency, UserDTO user, int idAccount, BankDto bank) {
         if(accountType == null || currency == null || user == null) {
             throw new NullPointerException("Null value while creating account");
         }
@@ -29,10 +31,11 @@ public class BankAccountDTO {
         this.currency = currency;
         this.idAccount = idAccount;
         this.user = user;
+        this.bank = bank;
     }
 
-    public BankAccountDTO(AccountType accountType, Currency currency, User user, float balance, int idAccount) {
-        this(accountType, currency, user,  idAccount);
+    public BankAccountDTO(AccountType accountType, Currency currency, UserDTO user, BankDto bank, float balance, int idAccount) {
+        this(accountType, currency, user,  idAccount, bank);
         this.balance = balance;
     }
 
