@@ -36,7 +36,7 @@ public class UserController {
     private final UserMapper mapUser = UserMapper.INSTANCE;
     private final BankAccountMapper mapBankAccount = BankAccountMapper.INSTANCE;
 
-    @PostMapping
+    @PostMapping("/add")
     public ResponseEntity<UserDTO> saveUser(@RequestBody UserDTO userDto) {
         User savedUser;
         try {
@@ -49,11 +49,11 @@ public class UserController {
         return ok(mapUser.userToUserDTO(savedUser));
     }
 
-    @GetMapping("/get/{personalId}")
-    public ResponseEntity<UserDTO> getUserById(@PathVariable String personalId) {
+    @GetMapping
+    public ResponseEntity<UserDTO> getUserById(@RequestParam String id) {
         User user;
         try {
-            user = userService.getUserByPersonalID(personalId);
+            user = userService.getUserByPersonalID(id);
             return ok(mapUser.userToUserDTO(user));
         } catch (NullPointerException exception) {
             throw new ResponseStatusException(
@@ -61,7 +61,7 @@ public class UserController {
         }
     }
 
-    @GetMapping(value = "/getAccountBalance")
+    @GetMapping(value = "/getBankAccountBalance")
     public ResponseEntity<String> getAccountBalance(@RequestParam String personalId,
                                       @RequestParam Integer idAccount,
                                       @RequestParam(required = false) Optional<Currency> currency) {
@@ -142,29 +142,27 @@ public class UserController {
     public ResponseEntity<UserDTO> updateUser(@RequestBody UserDTO userDto) {
         User savedUser;
         try {
-
             User user = mapUser.userDTOtoUser(userDto);
             savedUser = userService.updateUser(user);
-
         } catch (EntityNotFoundException exception) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, exception.getMessage(), exception);
         }
         return ok(mapUser.userToUserDTO(savedUser));
     }
 
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<UserDTO> deleteUserByPersonalId(@PathVariable String id) {
+    @DeleteMapping("/delete")
+    public ResponseEntity<UserDTO> deleteUserById(@RequestParam String id) {
         User user;
         try {
-            user = userService.deleteUserByPersonalId(id);
+            user = userService.deleteUserById(id);
             return ok(mapUser.userToUserDTO(user));
         } catch (EntityNotFoundException exception) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, exception.getMessage(), exception);
         }
     }
 
-    @PostMapping("/addBankAccountForUser")
-    public ResponseEntity<BankAccountDTO> addBankAccountForUser(@RequestBody BankAccountDTO bankAccountDTO) {
+    @PostMapping("/addBankAccount")
+    public ResponseEntity<BankAccountDTO> addBankAccount(@RequestBody BankAccountDTO bankAccountDTO) {
         BankAccount savedBankAccount;
         try {
             BankAccount bankAccount = mapBankAccount.convertToEntity(bankAccountDTO);
