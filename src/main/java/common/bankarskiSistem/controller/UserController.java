@@ -61,11 +61,10 @@ public class UserController {
         }
     }
 
-    @GetMapping(value = {"/getAccountBalance/{personalId}/{idAccount}",
-            "/getAccountBalance/{personalId}/{idAccount}/{currency}"})
-    public ResponseEntity<String> getAccountBalance(@PathVariable String personalId,
-                                      @PathVariable Integer idAccount,
-                                      @PathVariable(required = false) Optional<Currency> currency) {
+    @GetMapping(value = "/getAccountBalance")
+    public ResponseEntity<String> getAccountBalance(@RequestParam String personalId,
+                                      @RequestParam Integer idAccount,
+                                      @RequestParam(required = false) Optional<Currency> currency) {
         try{
             double balance = userService.getBalance(personalId, idAccount, currency);
             String currencyName = currency.isPresent() ? currency.get().toString() : "";
@@ -77,10 +76,9 @@ public class UserController {
         }
     }
 
-    @GetMapping(value = {"/getAllBankAccountBalance/{personalId}",
-            "/getAllBankAccountBalance/{personalId}/{currency}"})
-    public ResponseEntity<String> getAllBankAccountBalance(@PathVariable String personalId,
-                                      @PathVariable(required = false) Optional<Currency> currency) {
+    @GetMapping(value = "/getAllBalance")
+    public ResponseEntity<String> getAllBankAccountBalance(@RequestParam String personalId,
+                                      @RequestParam(required = false) Optional<Currency> currency) {
         try{
             double balance = userService.getAllBalance(personalId, currency);
             String currencyName = currency.isPresent() ? currency.get().toString() : "EUR";
@@ -91,10 +89,10 @@ public class UserController {
         }
     }
 
-    @PutMapping("/payIn/{personalId}/{idAccount}/{payment}")
-    public ResponseEntity<Double> payInUserBankAccount(@PathVariable String personalId,
-                                                       @PathVariable Integer idAccount,
-                                                       @PathVariable Double payment) {
+    @PutMapping("/payIn")
+    public ResponseEntity<Double> payInUserBankAccount(@RequestParam String personalId,
+                                                       @RequestParam Integer idAccount,
+                                                       @RequestParam Double payment) {
         try{
             double balance = userService.payIn(personalId, idAccount, payment);
             return ok(balance);
@@ -107,10 +105,10 @@ public class UserController {
         }
     }
 
-    @PutMapping("/payOut/{personalId}/{idAccount}/{payment}")
-    public ResponseEntity<Double> payOutUserBankAccount(@PathVariable String personalId,
-                                                       @PathVariable Integer idAccount,
-                                                       @PathVariable Double payment) {
+    @PutMapping("/payOut")
+    public ResponseEntity<Double> payOutUserBankAccount(@RequestParam String personalId,
+                                                       @RequestParam Integer idAccount,
+                                                       @RequestParam Double payment) {
         try{
             double balance = userService.payOut(personalId, idAccount, payment);
             return ok(balance);
@@ -123,11 +121,11 @@ public class UserController {
         }
     }
 
-    @PutMapping("/transfer/{personalId}/{idAccountFrom}/{idAccountTo}/{payment}")
-    public ResponseEntity<String> transferFromUserAccountToAnotherUserAccount(@PathVariable String personalId,
-                                                        @PathVariable Integer idAccountFrom,
-                                                        @PathVariable Integer idAccountTo,
-                                                        @PathVariable Double payment) {
+    @PutMapping("/transfer")
+    public ResponseEntity<String> transferFromUserAccountToAnotherUserAccount(@RequestParam String personalId,
+                                                        @RequestParam Integer idAccountFrom,
+                                                        @RequestParam Integer idAccountTo,
+                                                        @RequestParam Double payment) {
         try{
             double transferMoney = userService.transfer(personalId, idAccountFrom, idAccountTo, payment);
             return ok("Successful transfer of " + transferMoney);
