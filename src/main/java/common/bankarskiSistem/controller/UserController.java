@@ -170,7 +170,7 @@ public class UserController {
         } catch (EntityAlreadyExistsException exception) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, exception.getMessage(), exception);
         }
-        return ok(mapBankAccount.entityToDTO(savedBankAccount));
+        return ok(mapBankAccount.entityToDTOShow(savedBankAccount));
     }
 
     @DeleteMapping("/deleteBankAccount")
@@ -189,10 +189,10 @@ public class UserController {
         } catch (EntityNotFoundException e) {
             throw new RuntimeException(e);
         }
-        return ok(mapBankAccount.entityToDTO(deletedBankAccount));
+        return ok(mapBankAccount.entityToDTOShow(deletedBankAccount));
     }
 
-    @DeleteMapping("/deleteBankAccounts")
+    @DeleteMapping("/deleteAllBankAccounts")
     public ResponseEntity<List<BankAccountDTO>> deleteAllBankAccounts(@RequestParam String personalId) {
         User user = null;
         List<BankAccount> bankAccounts = new ArrayList<>();
