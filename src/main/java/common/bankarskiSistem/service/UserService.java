@@ -20,7 +20,6 @@ import java.util.Objects;
 import java.util.Optional;
 
 @Service
-@Transactional
 public class UserService {
 
     private static final Logger log = LoggerFactory.getLogger(BankarskiSistem.class);
@@ -34,6 +33,7 @@ public class UserService {
     private EntityManager entityManager;
 
     // UPDATE user
+    @Transactional
     public User updateUser(User user) throws EntityNotFoundException {
         if(user == null)
             throw new NullPointerException("Null user");
@@ -50,6 +50,7 @@ public class UserService {
     }
 
     // CREATE user
+    @Transactional
     public User saveUser(User user) throws EntityAlreadyExistsException {
         if(user == null)
             throw new NullPointerException("Null user");
@@ -69,6 +70,7 @@ public class UserService {
     }
 
     // DELETE user by personal id (jmbg)
+    @Transactional
     public User deleteUserById(String id) throws EntityNotFoundException {
         if(id == null)
             throw new NullPointerException("Null personal id");
@@ -80,6 +82,7 @@ public class UserService {
     }
 
     //CREATE BANK ACCOUNT for user
+    @Transactional
     public BankAccount createBankAccount(BankAccount bankAccount) throws EntityAlreadyExistsException {
         if(bankAccount == null)
             throw new NullPointerException("Null bank account");
