@@ -38,9 +38,8 @@ public class UserService {
         if(user == null)
             throw new NullPointerException("Null user");
         User existingUser
-                = userRepository.findByPersonalId(user.getPersonalId())
-                .orElse(null);
-        if (existingUser == null)
+                = userRepository.getReferenceById(user.getPersonalId());
+        if (existingUser.getPersonalId().isEmpty())
             throw new EntityNotFoundException("User not found!");
 
         existingUser.setName(user.getName());
@@ -55,9 +54,8 @@ public class UserService {
         if(user == null)
             throw new NullPointerException("Null user");
         User existingUser
-                = userRepository.findByPersonalId(user.getPersonalId())
-                .orElse(null);
-        if (existingUser == null) {
+                = userRepository.getReferenceById(user.getPersonalId());
+        if (existingUser.getPersonalId().isEmpty()) {
             if(!user.getBankAccounts().isEmpty()){
                 for(BankAccount account : user.getBankAccounts()){
                     account.setUser(user);
