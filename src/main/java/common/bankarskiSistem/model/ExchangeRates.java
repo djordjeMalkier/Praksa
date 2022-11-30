@@ -30,7 +30,8 @@ public class ExchangeRates {
     @Column(name = "name")
     private String name;
 
-    @OneToMany(mappedBy = "exchangeRates")
+    @OneToMany(mappedBy = "exchangeRates", cascade = CascadeType.MERGE)
+    //@OneToMany(mappedBy = "exchangeRates")
     private List<Conversion> conversions;
 
     @OneToMany(mappedBy = "exchangeRates", cascade = CascadeType.MERGE)

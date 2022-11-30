@@ -16,7 +16,8 @@ public interface UserMapper {
     @InheritInverseConfiguration(name = "userToUserDTO")
     User userDTOtoUser(UserDTO userDTO);
 
-    Set<UserDTO> usersTOUsersDTO(Set<User> users);
+    @IterableMapping(qualifiedByName = "userToUserDTOShow")
+    Set<UserDTO> userToUserDTOShow(Set<User> users);
 
     @Named(value = "userToUserDTOShow")
     @BeanMapping(ignoreByDefault = true)

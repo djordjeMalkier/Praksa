@@ -30,7 +30,7 @@ public class BankController {
 
     private final ExchangeRatesMapper mapperER = ExchangeRatesMapper.INSTANCE;
 
-    @PostMapping("/save")
+    @PostMapping("/add")
     public ResponseEntity<BankDto> saveBank(@RequestBody BankDto bankDto) {
         Bank savedBank;
         try {
@@ -43,8 +43,8 @@ public class BankController {
         return ok(mapper.convertToDTO(savedBank));
     }
 
-    @PutMapping("/putExchangeRates/{idBank}")
-    public ResponseEntity<BankDto> addExchangeRates(@PathVariable Integer idBank, @RequestBody ExchangeRatesDTO exchangeRatesDTO){
+    @PostMapping("/addExchangeRates")
+    public ResponseEntity<BankDto> addExchangeRates(@RequestParam Integer idBank, @RequestBody ExchangeRatesDTO exchangeRatesDTO){
         Bank bank;
         try {
             bank = bankService.findById(idBank);
@@ -58,8 +58,8 @@ public class BankController {
         return ok(mapper.convertToDTO(bank));
     }
 
-   @DeleteMapping("/delete/{idBank}")
-    public ResponseEntity<BankDto> deleteBank(@PathVariable Integer idBank) {
+   @DeleteMapping("/delete")
+    public String deleteBank(@RequestParam Integer idBank) {
         Bank bank;
         try{
             bank = bankService.findById(idBank);
@@ -67,11 +67,12 @@ public class BankController {
         } catch (NullPointerException exception) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, exception.getMessage(), exception);
         }
-        return ok(mapper.convertToDTO(bank));
+        ok(mapper.convertToDTO(bank));
+        return "The bank is deleted successfully.";
     }
 
-    @GetMapping("/get/{idBank}")
-    public ResponseEntity<BankDto> getBankById(@PathVariable Integer idBank) {
+    @GetMapping("/get")
+    public ResponseEntity<BankDto> getBankById(@RequestParam Integer idBank) {
         Bank bank;
         try{
             bank = bankService.findById(idBank);
@@ -81,28 +82,11 @@ public class BankController {
         return ok(mapper.convertToDTO(bank));
     }
 
-    @PutMapping("/setName")
-    public ResponseEntity<BankDto> updateBankName(@RequestBody BankDto updatedBank){
-        Bank bank;
-        try{
-            bank = mapper.convertToEntity(updatedBank);
-            bank.setAddress(null);
-            return ok(mapper.convertToDTO(bankService.updateBank(bank)));
-
-        } catch (NullPointerException exception) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, exception.getMessage(), exception);
-        } catch (NameOfTheBankAlreadyExistException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
-        }
-    }
-
-
-    @PutMapping("/setAddress")
+    @PutMapping("/update")
     public ResponseEntity<BankDto> updateBankAddress(@RequestBody BankDto updatedBank){
         Bank bank;
         try{
             bank = mapper.convertToEntity(updatedBank);
-            bank.setName(null);
             return ok(mapper.convertToDTO(bankService.updateBank(bank)));
 
         } catch (NullPointerException exception) {
@@ -111,11 +95,11 @@ public class BankController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, exception.getMessage(), exception);
         }
     }
-    @GetMapping("/getAllUsers/{idBank}")
-    public ResponseEntity<Set<UserDTO>> getAllUsers(@PathVariable Integer idBank) {
+    @GetMapping("/getAllUsers")
+    public ResponseEntity<Set<UserDTO>> getAllUsers(@RequestParam Integer idBank) {
         Set<UserDTO> users;
         try{
-            users = mapperUser.usersTOUsersDTO(bankService.getAllUsers(bankService.findById(idBank)));
+            users = mapperUser.userToUserDTOShow(bankService.getAllUsers(bankService.findById(idBank)));
                 return ok(users);
 
             } catch (NullPointerException exception) {
@@ -123,8 +107,8 @@ public class BankController {
         }
     }
 
-    @GetMapping("/getExchangeRates/{idBank}")
-    public ResponseEntity<ExchangeRatesDTO> getExchangeRates(@PathVariable Integer idBank) {
+    @GetMapping("/getExchangeRates")
+    public ResponseEntity<ExchangeRatesDTO> getExchangeRates(@RequestParam Integer idBank) {
         Bank bank;
         ExchangeRates exchangeRates;
         try{
@@ -136,6 +120,5 @@ public class BankController {
         }
         return ok(mapperER.convertToDTO(exchangeRates));
     }
-
 
 }
