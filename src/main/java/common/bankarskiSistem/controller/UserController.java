@@ -177,13 +177,13 @@ public class UserController {
 
     @DeleteMapping("/deleteAccount")
     public ResponseEntity<BankAccountDTO> deleteAccount(
-            @RequestParam String personal_id,
-            @RequestParam Integer bankAccountID
+            @RequestParam String personalId,
+            @RequestParam Integer bankAccountId
     ) {
         BankAccount bankAccount = null;
         BankAccount deletedBankAccount = null;
         try {
-            deletedBankAccount = userService.deleteAccountById(personal_id, bankAccountID);
+            deletedBankAccount = userService.deleteAccountById(personalId, bankAccountId);
 
         } catch (NullPointerException exception) {
 
@@ -195,16 +195,16 @@ public class UserController {
     }
 
     @DeleteMapping("/deleteAccounts")
-    public ResponseEntity<List<BankAccountDTO>> deleteAllAccounts(@RequestParam String personal_id) {
+    public ResponseEntity<List<BankAccountDTO>> deleteAllAccounts(@RequestParam String personalId) {
         User user = null;
         List<BankAccount> bankAccounts = new ArrayList<>();
         try {
-            user = userService.getUserByPersonalID(personal_id);
+            user = userService.getUserByPersonalID(personalId);
             bankAccounts = user.getBankAccounts();
 
             if(!bankAccounts.isEmpty()){
                 for (BankAccount bankAccount: bankAccounts){
-                    userService.deleteAccountById(personal_id, bankAccount.getIdAccount());
+                    userService.deleteAccountById(personalId, bankAccount.getIdAccount());
                 }
             }
 
@@ -218,29 +218,29 @@ public class UserController {
     }
 
     @GetMapping("/getAllAccounts")
-    public ResponseEntity<List<BankAccountDTO>> getAllAccounts(@RequestParam String personal_id) {
+    public ResponseEntity<List<BankAccountDTO>> getAllAccounts(@RequestParam String personalId) {
         User user = null;
         try{
-            user = userService.getUserByPersonalID(personal_id);
+            user = userService.getUserByPersonalID(personalId);
             return ok(mapBankAccount.bankAccountsToDTO(user.getBankAccounts()));
         } catch (NullPointerException exception) {
             return notFound().build();
         }
     }
 
-    @GetMapping("{getAccount")
+    @GetMapping("/getAccount")
     public ResponseEntity<BankAccountDTO> getAccount(
-            @RequestParam String personal_id,
-            @RequestParam Integer account_id
+            @RequestParam String personalId,
+            @RequestParam Integer accountId
     ) {
         User user = null;
         try{
-            user = userService.getUserByPersonalID(personal_id);
+            user = userService.getUserByPersonalID(personalId);
             log.info(user.toString());
 
             List<BankAccount> bankAccounts = user.getBankAccounts();
             for(BankAccount account : bankAccounts){
-                if (account.getIdAccount().equals(account_id)) {
+                if (account.getIdAccount().equals(accountId)) {
                     return ok(mapBankAccount.convertToDTO(account));
                 }
             }
