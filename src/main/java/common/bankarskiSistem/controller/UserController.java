@@ -61,7 +61,7 @@ public class UserController {
         }
     }
 
-    @GetMapping(value = "/getAccountBalance")
+    @GetMapping(value = "/getBankAccountBalance")
     public ResponseEntity<String> getAccountBalance(@RequestParam String personalId,
                                       @RequestParam Integer idAccount,
                                       @RequestParam(required = false) Optional<Currency> currency) {
