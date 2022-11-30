@@ -169,13 +169,13 @@ public class UserService {
         return bankAccount.getBalance() * conversionRate;
     }
 
-    private BankAccount getBankAccountByIdAccount(User user, Integer idAccount) throws EntityNotFoundException {
+    private BankAccount getBankAccountByIdAccount(User user, Integer bankAccountId) throws EntityNotFoundException {
         Optional<BankAccount> bankAccountOptional = user.getBankAccounts()
                 .stream()
-                .filter(ba -> Objects.equals(ba.getIdAccount(), idAccount))
+                .filter(ba -> Objects.equals(ba.getIdAccount(), bankAccountId))
                 .findAny();
         if (bankAccountOptional.isEmpty())
-            throw new EntityNotFoundException("Account [" + idAccount + "] not found");
+            throw new EntityNotFoundException("Account [" + bankAccountId + "] not found");
         return bankAccountOptional.get();
     }
 
@@ -193,7 +193,7 @@ public class UserService {
                 .reduce((double) 0, Double::sum);
     }
 
-    public BankAccount deleteAccountById(String personalId, Integer idAccount) throws EntityNotFoundException {
+    public BankAccount deleteBankAccountById(String personalId, Integer idAccount) throws EntityNotFoundException {
         if(personalId == null)
             throw new NullPointerException("Null personal id");
         if(idAccount == null)
