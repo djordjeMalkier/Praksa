@@ -230,7 +230,7 @@ public class UserController {
         }
     }
 
-    @GetMapping("{getAccount")
+    @GetMapping("/getAccount")
     public ResponseEntity<BankAccountDTO> getAccount(
             @RequestParam String personal_id,
             @RequestParam Integer account_id
