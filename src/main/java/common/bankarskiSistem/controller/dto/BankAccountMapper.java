@@ -10,24 +10,20 @@ import java.util.List;
 public interface BankAccountMapper {
     BankAccountMapper INSTANCE = Mappers.getMapper(BankAccountMapper.class);
 
-    @Named(value = "bankAccountToBankAccountDTO")
-    BankAccountDTO bankAccountToBankAccountDTO(BankAccount bankAccount);
+    @Named(value = "entityToDTO")
+    BankAccountDTO entityToDTO(BankAccount bankAccount);
 
-    @InheritInverseConfiguration(name = "bankAccountToBankAccountDTO")
-    BankAccount bankAccountDTOToBankAccount(BankAccountDTO bankAccountDTO);
+    @InheritInverseConfiguration(name = "entityToDTO")
+    BankAccount DTOToEntity(BankAccountDTO bankAccountDTO);
 
-    @Named(value = "convertToDTOShow")
+    @Named(value = "entityToDTOShow")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(source = "idAccount", target = "idAccount")
     @Mapping(source = "balance", target = "balance")
     @Mapping(source = "currency", target = "currency")
     @Mapping(source = "accountType", target = "accountType")
-    BankAccountDTO convertToDTOShow(BankAccount bankAccount);
+    BankAccountDTO entityToDTOShow(BankAccount bankAccount);
 
-    @InheritInverseConfiguration(name = "convertToDTOShow")
-    BankAccount convertToBankAccountShow(BankAccountDTO bankAccountDTO);
-
-
-    @IterableMapping(qualifiedByName = "convertToDTOShow")
-    List<BankAccountDTO> bankAccountsToDTO(List<BankAccount> accountDTOS);
+    @IterableMapping(qualifiedByName = "entityToDTOShow")
+    List<BankAccountDTO> entityListToDTOShow(List<BankAccount> accountDTOS);
 }
