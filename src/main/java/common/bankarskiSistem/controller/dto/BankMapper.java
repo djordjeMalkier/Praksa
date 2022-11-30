@@ -12,6 +12,7 @@ public interface BankMapper {
     BankMapper INSTANCE = Mappers.getMapper(BankMapper.class);
     BankDto convertToDTO(Bank bank);
 
+
     @InheritInverseConfiguration
     Bank convertToEntity(BankDto bankDto);
 
