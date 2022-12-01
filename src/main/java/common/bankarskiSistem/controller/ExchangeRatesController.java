@@ -8,7 +8,6 @@ import common.bankarskiSistem.model.Conversion;
 import common.bankarskiSistem.model.ExchangeRates;
 import common.bankarskiSistem.service.BankService;
 import common.bankarskiSistem.service.ConversionService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,15 +17,18 @@ import org.springframework.web.server.ResponseStatusException;
 import static org.springframework.http.ResponseEntity.ok;
 
 @RequestMapping(value="/exchangeRates")
-@RequiredArgsConstructor
 @RestController
 public class ExchangeRatesController {
-    @Autowired
     private final BankService bankService;
-    @Autowired
     private final ConversionService conversionService;
     private final ExchangeRatesMapper mapperER = ExchangeRatesMapper.INSTANCE;
     private final ConversionMapper mapperC = ConversionMapper.INSTANCE;
+
+    @Autowired
+    public ExchangeRatesController(BankService bankService, ConversionService conversionService) {
+        this.bankService = bankService;
+        this.conversionService = conversionService;
+    }
 
     @PostMapping("/add")
     public ResponseEntity<ExchangeRatesDTO> saveExchangeRates(@RequestBody ExchangeRatesDTO exchangeRatesDTO) {
