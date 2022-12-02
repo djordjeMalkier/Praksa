@@ -53,10 +53,11 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<UserDTO> getUserById(@RequestParam String id) {
+    public ResponseEntity<UserDTO> getUserById(@RequestParam String personalId) {
         User user;
         try {
-            user = userService.getUserByPersonalID(id);
+            user = userService.getUserByPersonalID(personalId);
+
             return ok(mapUser.userToUserDTOShow(user));
         } catch (NullPointerException exception) {
             throw new ResponseStatusException(

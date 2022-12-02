@@ -1,10 +1,9 @@
 package common.bankarskiSistem.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.DynamicUpdate;
+import org.springframework.cache.annotation.Cacheable;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -17,6 +16,8 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @DynamicUpdate
+@Cacheable(value = "User")
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class User {
     @Id
     @Column(name="personal_id", nullable = false)
@@ -31,15 +32,16 @@ public class User {
     @Column(name="address", nullable = false)
     private String address;
 
+    @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<BankAccount> bankAccounts = new ArrayList<>();
+    private List<BankAccount> bankAccounts;// = new ArrayList<>();
 
     public User(String personalId, String name, String surname, String address) {
         this.personalId = personalId;
         this.name = name;
         this.surname = surname;
         this.address = address;
-       /* this.bankAccounts = new ArrayList<>();*/
+        this.bankAccounts = new ArrayList<>();
     }
 
     @Override

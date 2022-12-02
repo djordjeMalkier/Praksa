@@ -10,6 +10,8 @@ import common.bankarskiSistem.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,13 +36,12 @@ public class UserService {
 
     // UPDATE user
     @Transactional
+    @CachePut(value = "User")
     public User updateUser(User user) throws EntityNotFoundException {
         if(user == null)
             throw new NullPointerException("Null user");
-        User existingUser
+        User existingUser //= getUserByPersonalID(user.getPersonalId());
                 = userRepository.getReferenceById(user.getPersonalId());
-        if (existingUser.getPersonalId().isEmpty())
-            throw new EntityNotFoundException("User not found!");
 
         existingUser.setName(user.getName());
         existingUser.setSurname(user.getSurname());
@@ -229,6 +230,7 @@ public class UserService {
         return null;
     }
 
+    @Cacheable(value = "User")
     public User getUserByPersonalID(String personalID) throws NullPointerException {
         if(personalID == null)
             throw new NullPointerException("Null personal id");
