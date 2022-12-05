@@ -51,17 +51,19 @@ public class Zadatak04 {
         System.out.println("Proizvod van dijagonala: " + proizvodNiGlavnaNiSporedna);
     }
 
-    private static int[][] inputMatrix() throws IOException {
+    public static int[][] inputMatrix() throws IOException {
         Scanner sc = new Scanner(System.in);
         System.out.println("Insert dimension and matrix elements:");
 
         if (!sc.hasNextInt()) throw new IOException("Matrix dimension is not number");
+        int matrixSizeN = sc.nextInt();
+        if (!sc.hasNextInt()) throw new IOException("Matrix dimension is not number");
+        int matrixSizeM = sc.nextInt();
 
-        int matrixSize = sc.nextInt();
-        int[][] matrix = new int[matrixSize][matrixSize];
+        int[][] matrix = new int[matrixSizeN][matrixSizeM];
 
-        for (int i = 0; i < matrixSize; i++)
-            for (int j = 0; j < matrixSize; j++) {
+        for (int i = 0; i < matrixSizeN; i++)
+            for (int j = 0; j < matrixSizeM; j++) {
                 if (!sc.hasNextInt()) throw new IOException("Matrix element is not number");
                 matrix[i][j] = sc.nextInt();
             }

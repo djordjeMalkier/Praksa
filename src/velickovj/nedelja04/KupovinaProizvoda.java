@@ -1,6 +1,10 @@
 package velickovj.nedelja04;
 
-import java.util.*;
+import zivkovicj.vrednostProizvoda.Proizvod;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
 
 public class KupovinaProizvoda {
     public static void main(String[] args) {
