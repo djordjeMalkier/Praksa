@@ -1,6 +1,6 @@
 package tamara.zadaci;
 
-import org.apache.commons.lang3.ArrayUtils;
+//import org.apache.commons.lang3.ArrayUtils;
 
 import java.util.Arrays;
 import java.util.Scanner;
@@ -28,7 +28,7 @@ public class PermutujBrojDobijNajveci {
         }
 
         Arrays.sort(nizCifara);
-        ArrayUtils.reverse(nizCifara);
+   //     ArrayUtils.reverse(nizCifara);
 
         int konacanBroj = 0;
         for (int broj : nizCifara) {
