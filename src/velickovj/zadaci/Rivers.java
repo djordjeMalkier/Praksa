@@ -48,6 +48,7 @@ public class Rivers {
             counter++;
             counter = findRiver(matrix, i-1, j, counter);
         }
+
         if(j < matrix[0].length -1 && matrix[i][j+1] == 1){
             matrix[i][j+1] = 0;
             counter++;
