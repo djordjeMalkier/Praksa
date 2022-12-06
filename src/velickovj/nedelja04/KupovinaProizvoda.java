@@ -1,5 +1,7 @@
 package velickovj.nedelja04;
 
+import zivkovicj.vrednostProizvoda.Proizvod;
+
 import java.util.*;
 
 public class KupovinaProizvoda {

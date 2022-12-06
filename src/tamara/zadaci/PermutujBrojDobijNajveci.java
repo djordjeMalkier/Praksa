@@ -28,7 +28,7 @@ public class PermutujBrojDobijNajveci {
         }
 
         Arrays.sort(nizCifara);
-       // ArrayUtils.reverse(nizCifara);
+   //     ArrayUtils.reverse(nizCifara);
 
         int konacanBroj = 0;
         for (int broj : nizCifara) {
