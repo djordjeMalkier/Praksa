@@ -30,11 +30,14 @@ import static org.springframework.http.ResponseEntity.*;
 @RequestMapping(value = "/users", method = RequestMethod.GET)
 public class UserController {
     private static final Logger log = LoggerFactory.getLogger(BankarskiSistem.class);
-    @Autowired
-    private UserService userService;
-
+    private final UserService userService;
     private final UserMapper mapUser = UserMapper.INSTANCE;
     private final BankAccountMapper mapBankAccount = BankAccountMapper.INSTANCE;
+
+    @Autowired
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
 
     @PostMapping("/add")
     public ResponseEntity<UserDTO> saveUser(@RequestBody UserDTO userDto) {
@@ -178,7 +181,6 @@ public class UserController {
             @RequestParam String personalId,
             @RequestParam Integer bankAccountId
     ) {
-        BankAccount bankAccount = null;
         BankAccount deletedBankAccount = null;
         try {
             deletedBankAccount = userService.deleteBankAccountById(personalId, bankAccountId);

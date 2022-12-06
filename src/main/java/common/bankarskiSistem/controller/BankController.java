@@ -5,7 +5,6 @@ import common.bankarskiSistem.exceptions.NameOfTheBankAlreadyExistException;
 import common.bankarskiSistem.model.Bank;
 import common.bankarskiSistem.model.ExchangeRates;
 import common.bankarskiSistem.service.BankService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +16,6 @@ import java.util.Set;
 import static org.springframework.http.ResponseEntity.ok;
 
 @RequestMapping(value="/bank")
-@RequiredArgsConstructor
 @RestController
 public class BankController {
     @Autowired
@@ -25,6 +23,11 @@ public class BankController {
     private final BankMapper mapper = BankMapper.INSTANCE;
     private final UserMapper mapperUser = UserMapper.INSTANCE;
     private final ExchangeRatesMapper mapperER = ExchangeRatesMapper.INSTANCE;
+
+    @Autowired
+    public BankController(BankService bankService) {
+        this.bankService = bankService;
+    }
 
     @PostMapping("/add")
     public ResponseEntity<BankDto> saveBank(@RequestBody BankDto bankDto) {
