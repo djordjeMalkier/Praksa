@@ -20,14 +20,10 @@ import static org.springframework.http.ResponseEntity.ok;
 @RequiredArgsConstructor
 @RestController
 public class BankController {
-
     @Autowired
     private final BankService bankService;
-
     private final BankMapper mapper = BankMapper.INSTANCE;
-
-    private final UserMapper mapperUser=UserMapper.INSTANCE;
-
+    private final UserMapper mapperUser = UserMapper.INSTANCE;
     private final ExchangeRatesMapper mapperER = ExchangeRatesMapper.INSTANCE;
 
     @PostMapping("/add")
@@ -40,7 +36,7 @@ public class BankController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, exception.getMessage(), exception);
         }
 
-        return ok(mapper.convertToDTOShow(savedBank));
+        return ok(mapper.convertToDTO(savedBank));
     }
 
     @PostMapping("/addExchangeRates")
@@ -61,7 +57,7 @@ public class BankController {
    @DeleteMapping("/delete")
     public String deleteBank(@RequestParam Integer idBank) {
         Bank bank;
-        try{
+        try {
             bank = bankService.findById(idBank);
             bankService.deleteBank(bank);
         } catch (NullPointerException exception) {
@@ -70,10 +66,10 @@ public class BankController {
         return "The bank is deleted successfully.";
     }
 
-    @GetMapping
+    @GetMapping("/get")
     public ResponseEntity<BankDto> getBankById(@RequestParam Integer idBank) {
         Bank bank;
-        try{
+        try {
             bank = bankService.findById(idBank);
         } catch (NullPointerException exception) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, exception.getMessage(), exception);
