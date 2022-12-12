@@ -14,15 +14,20 @@ import common.bankarskiSistem.model.User;
 import common.bankarskiSistem.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Scanner;
 
 import static org.springframework.http.ResponseEntity.*;
 
@@ -34,7 +39,10 @@ public class UserController {
     private final UserMapper mapUser = UserMapper.INSTANCE;
     private final BankAccountMapper mapBankAccount = BankAccountMapper.INSTANCE;
 
-    @Autowired
+    @Value("https://docs.oracle.com/javase/tutorial/essential/environment/paths.html")
+    private UrlResource resourceUrl;
+
+    //@Autowired
     public UserController(UserService userService) {
         this.userService = userService;
     }
@@ -50,6 +58,41 @@ public class UserController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, exception.getMessage(), exception);
         }
         return ok(mapUser.userToUserDTOShow(savedUser));
+    }
+
+    @GetMapping(value = "/url")
+    public ResponseEntity<String> urlResourceExample
+            (@RequestParam String path) {
+        try {
+            UrlResource url = new UrlResource(path);
+            log.info("Is open: " + url.isOpen());
+            log.info("File name: " + url.getFilename());
+            if (!url.exists())
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+            //printResource(url.getInputStream());
+
+            FileSystemResource file = new FileSystemResource(
+
+                    "src/main/resources/example.txt");
+            log.info(printResource(file.getInputStream()));
+
+            return ok(printResource(resourceUrl.getInputStream()));
+
+        } catch (NullPointerException | IOException exception) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, exception.getMessage(), exception);
+        }
+    }
+
+    private String printResource(InputStream inputStream) {
+        StringBuilder sb = new StringBuilder();
+        Scanner sc = new Scanner(inputStream);
+        while (sc.hasNextLine()) {
+            sb.append(sc.nextLine());
+            sb.append("\n");
+        }
+        sc.close();
+        return sb.toString();
     }
 
     @GetMapping
