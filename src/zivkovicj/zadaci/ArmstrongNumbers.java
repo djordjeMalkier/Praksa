@@ -6,7 +6,7 @@ import java.util.List;
 public class ArmstrongNumbers {
     public static void main(String[] args) {
 
-        for (int i = 0; i <= 9999; i++) {
+        for (int i = 0; i <= 99999; i++) {
             sumDigits(i);
             if (i == sumDigits(i)) {
                 System.out.println(i);
