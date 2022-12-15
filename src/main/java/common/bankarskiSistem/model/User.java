@@ -5,9 +5,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.DynamicUpdate;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Entity
@@ -17,10 +20,13 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @DynamicUpdate
-public class User {
+public class User implements UserDetails {
     @Id
     @Column(name="personal_id", nullable = false)
     private String personalId;
+
+    @Column(name="password", nullable = false)
+    private String password;
 
     @Column(name="name", nullable = false)
     private String name;
@@ -42,6 +48,15 @@ public class User {
        /* this.bankAccounts = new ArrayList<>();*/
     }
 
+    public User(String personalId, String name, String surname, String address, String password) {
+        this.personalId = personalId;
+        this.name = name;
+        this.surname = surname;
+        this.address = address;
+        this.password = password;
+    }
+
+
     @Override
     public String toString() {
         return "User{" +
@@ -60,5 +75,44 @@ public class User {
     public void remove(BankAccount bankAccount) {
         bankAccounts.remove(bankAccount);
         bankAccount.setUser(null);
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return null;
+    }
+
+    @Override
+    public String getUsername() {
+        return personalId;
+    }
+
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true; //TODO
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true; //TODO
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true; //TODO
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true; //TODO
+    }
+
+    public void eraseCredentials(){
+        this.password = null;
     }
 }

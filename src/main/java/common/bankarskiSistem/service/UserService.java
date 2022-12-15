@@ -7,9 +7,12 @@ import common.bankarskiSistem.model.BankAccount;
 import common.bankarskiSistem.model.Currency;
 import common.bankarskiSistem.model.User;
 import common.bankarskiSistem.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,14 +23,12 @@ import java.util.Objects;
 import java.util.Optional;
 
 @Service
-public class UserService {
+@RequiredArgsConstructor
+public class UserService implements UserDetailsService {
 
     private static final Logger log = LoggerFactory.getLogger(BankarskiSistem.class);
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private ConversionService conversionService;
+    private final UserRepository userRepository;
+    private final ConversionService conversionService;
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -236,5 +237,10 @@ public class UserService {
         if (userOptional.isEmpty())
             throw new NullPointerException("User [" + personalID + "] not found");
         return userOptional.get();
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String personalId) throws UsernameNotFoundException {
+        return getUserByPersonalID(personalId);
     }
 }
