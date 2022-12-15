@@ -12,6 +12,7 @@ import common.bankarskiSistem.model.BankAccount;
 import common.bankarskiSistem.model.Currency;
 import common.bankarskiSistem.model.User;
 import common.bankarskiSistem.service.UserService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,7 @@ import static org.springframework.http.ResponseEntity.*;
 
 @RestController
 @RequestMapping(value = "/users", method = RequestMethod.GET)
+@SecurityRequirement(name = "bearerAuth")
 public class UserController {
     private static final Logger log = LoggerFactory.getLogger(BankarskiSistem.class);
     private final UserService userService;
