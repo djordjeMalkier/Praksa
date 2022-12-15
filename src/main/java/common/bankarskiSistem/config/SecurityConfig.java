@@ -25,13 +25,26 @@ public class SecurityConfig {
 
     private final UserRepository userRepository;
 
+    private final static String[] AUTH_WHITELIST = {
+            "/swagger-ui/index.html",
+            "/swagger-ui.html",
+            "/**/auth/**",
+            "/swagger-ui/index.html/*",
+            "/v3/api-docs/",
+            "/swagger-ui/",
+            "/v2/api-docs/",
+            "/swagger-resources/",
+            "/swagger-ui/**",
+    };
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/**/auth/**")
+                .antMatchers(AUTH_WHITELIST)
                 .permitAll()
+
                 .anyRequest()
                 .authenticated()
                 .and()
