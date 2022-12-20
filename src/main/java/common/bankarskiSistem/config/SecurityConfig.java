@@ -36,7 +36,6 @@ public class SecurityConfig {
             "/swagger-resources/",
             "/swagger-ui/**",
             "/webjars/**",
-            "/v3/**",
             "/swagger-resources/**"
     };
 
@@ -45,13 +44,25 @@ public class SecurityConfig {
         http
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/users/**").hasRole("USER_ADMIN")
-                .antMatchers("/users/payIn").hasRole("USER_PAYMENT")
-                .antMatchers("/users/payOut").hasRole("USER_PAYMENT")
-                .antMatchers("/users/transfer").hasRole("USER_TRANSFER")
-                .antMatchers("/users/transfer").hasAuthority("USER_TRANSFER")
                 .antMatchers(AUTH_WHITELIST).permitAll()
-                .anyRequest().authenticated()
+                .antMatchers("/users/update").hasAuthority("user_admin")
+                .antMatchers("/users/add").hasAuthority("user_admin")
+                .antMatchers("/users/delete").hasAuthority("user_admin")
+                .antMatchers("/users").hasAuthority("user_admin")
+                .antMatchers("/bank/add").hasAuthority("bank_admin")
+                .antMatchers("/bank/update").hasAuthority("bank_admin")
+                .antMatchers("/bank/delete").hasAuthority("bank_admin")
+                .antMatchers("/users/addBankAccount").hasAuthority("account_admin")
+                .antMatchers("/users/deleteBankAccount").hasAuthority("account_admin")
+                .antMatchers("/users/deleteAllBankAccounts").hasAuthority("account_admin")
+                .antMatchers("/users/getBankAccount").hasAuthority("account_admin")
+                .antMatchers("/users/getBankAccountBalance").hasAuthority("account_admin")
+                .antMatchers("/users/getAllBankAccounts").hasAuthority("account_admin")
+                .antMatchers("/users/getAllBalance").hasAuthority("account_admin")
+                .antMatchers("/users/payOut").hasAuthority("user_payment")
+                .antMatchers("/users/payIn").hasAuthority("user_payment")
+                .antMatchers("/users/transfer").hasAuthority("user_transfer")
+                .antMatchers("/users/**").authenticated()
                 .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
