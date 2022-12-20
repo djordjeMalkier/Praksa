@@ -63,6 +63,7 @@ public class SecurityConfig {
                 .antMatchers("/users/payIn").hasAuthority("user_payment")
                 .antMatchers("/users/transfer").hasAuthority("user_transfer")
                 .antMatchers("/users/**").authenticated()
+                .antMatchers("/bank/**").authenticated()
                 .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
