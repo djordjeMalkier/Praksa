@@ -40,6 +40,7 @@ public class JwtUtils {
 
     public String generateToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
+        claims.put("roles", userDetails.getAuthorities().toString());
         return createToken(claims, userDetails.getUsername());
     }
 

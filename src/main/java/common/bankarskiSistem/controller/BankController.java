@@ -5,6 +5,7 @@ import common.bankarskiSistem.exceptions.NameOfTheBankAlreadyExistException;
 import common.bankarskiSistem.model.Bank;
 import common.bankarskiSistem.model.ExchangeRates;
 import common.bankarskiSistem.service.BankService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,7 @@ import static org.springframework.http.ResponseEntity.ok;
 
 @RequestMapping(value="/bank")
 @RestController
+@SecurityRequirement(name = "bearerAuth")
 public class BankController {
     @Autowired
     private final BankService bankService;

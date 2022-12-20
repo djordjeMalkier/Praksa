@@ -13,7 +13,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -46,11 +45,13 @@ public class SecurityConfig {
         http
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers(AUTH_WHITELIST)
-                .permitAll()
-
-                .anyRequest()
-                .authenticated()
+                .antMatchers("/users/**").hasRole("USER_ADMIN")
+                .antMatchers("/users/payIn").hasRole("USER_PAYMENT")
+                .antMatchers("/users/payOut").hasRole("USER_PAYMENT")
+                .antMatchers("/users/transfer").hasRole("USER_TRANSFER")
+                .antMatchers("/users/transfer").hasAuthority("USER_TRANSFER")
+                .antMatchers(AUTH_WHITELIST).permitAll()
+                .anyRequest().authenticated()
                 .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
