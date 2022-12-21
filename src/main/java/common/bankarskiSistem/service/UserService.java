@@ -54,14 +54,9 @@ public class UserService implements UserDetailsService {
     public User saveUser(User user) throws EntityAlreadyExistsException {
         if(user == null)
             throw new NullPointerException("Null user");
-        User existingUser
-                = userRepository.getReferenceById(user.getPersonalId());
-        if (existingUser.getPersonalId().isEmpty()) {
-            if(!user.getBankAccounts().isEmpty()){
-                for(BankAccount account : user.getBankAccounts()){
-                    account.setUser(user);
-                }
-            }
+        Optional<User> existingUser
+                = userRepository.findByPersonalId(user.getPersonalId());
+        if (existingUser.isEmpty()) {
             return userRepository.save(user);
         }
 

@@ -25,5 +25,6 @@ public interface UserMapper {
     @Mapping(source="name", target="name")
     @Mapping(source="surname", target="surname")
     @Mapping(source="address", target="address")
+    @Mapping(source="password", target = "password")
     UserDTO userToUserDTOShow(User savedUser);
 }

@@ -20,6 +20,8 @@ public class UserDTO {
 
     private String surname;
 
+    private String password;
+
     private String address;
 
     private List<BankAccountDTO> bankAccounts;
