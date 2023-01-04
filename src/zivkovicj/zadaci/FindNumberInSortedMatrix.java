@@ -1,6 +1,5 @@
 package zivkovicj.zadaci;
 
-import javax.persistence.criteria.CriteriaBuilder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
