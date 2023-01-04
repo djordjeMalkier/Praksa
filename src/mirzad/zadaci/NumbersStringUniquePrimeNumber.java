@@ -1,52 +1,45 @@
 package mirzad.zadaci;
 
+import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.HashMap;
+
+import static java.lang.System.exit;
 
 public class NumbersStringUniquePrimeNumber {
 
+
     public static void main(String[] args) {
-        String numbers = "1234567843423";
-        HashMap<Integer, Integer> primeNumbersCount = checkNumbersCount(numbers);
-
-        for (int i = 0; i < numbers.length(); i++){
-            int number = Integer.parseInt(String.valueOf(numbers.charAt(i)));
-            if(isPrime(number)){
-                int count = primeNumbersCount.get(number);
-                if (count == 1) {
-                    System.out.println(number);
-                    break;
-                }
-            }
+        String numbers = "14115785965";
+        if(!numbers.matches("[0-9]+")) {
+            System.out.println("Ne sadrzi samo cifre");
+            exit(1);
         }
-
+        ArrayList<BigInteger> list = new ArrayList<>();
+        HashMap<String, Integer> primeNumbersCount = checkNumbersCount(numbers, list);
+        for (BigInteger number : list) {
+            if (primeNumbersCount.get(String.valueOf(number)) == 1) System.out.println(number);
+            break;
+        }
     }
 
-    private static HashMap<Integer, Integer> checkNumbersCount(String numbers) {
-        HashMap<Integer, Integer> hashMap = new HashMap<>();
+    private static HashMap<String, Integer> checkNumbersCount(String numbers, ArrayList<BigInteger> list) {
+        HashMap<String, Integer> hashMap = new HashMap<>();
         for(int i = 0; i < numbers.length(); i++){
-            int number = Integer.parseInt(String.valueOf(numbers.charAt(i)));
-                if(!hashMap.containsKey(number)) {
-                    hashMap.put(number, 1);
-                }else {
-                    int count = hashMap.get(number);
-                    hashMap.put(number, count + 1);
+            for (int j = i; j < numbers.length(); j++) {
+                BigInteger number = new BigInteger(numbers.substring(i,j+1));
+                if (number.isProbablePrime(1)) {
+                    list.add(number);
+                    if (!hashMap.containsKey(String.valueOf(number))) {
+                        hashMap.put(String.valueOf(number), 1);
+                    } else {
+                        int count = hashMap.get(String.valueOf(number));
+                        hashMap.put(String.valueOf(number), count + 1);
+                    }
                 }
+            }
 
         }
         return hashMap;
-    }
-
-    private static  boolean isPrime(int num)
-    {
-        if(num<=1)
-        {
-            return false;
-        }
-        for(int i=2;i<=num/2;i++)
-        {
-            if((num%i)==0)
-                return  false;
-        }
-        return true;
     }
 }
