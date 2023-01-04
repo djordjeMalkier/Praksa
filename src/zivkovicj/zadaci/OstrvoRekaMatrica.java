@@ -1,6 +1,5 @@
 package zivkovicj.zadaci;
 
-import javax.persistence.criteria.CriteriaBuilder;
 import java.util.*;
 
 public class OstrvoRekaMatrica {
