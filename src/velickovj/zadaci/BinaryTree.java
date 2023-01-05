@@ -4,6 +4,7 @@ public class BinaryTree {
     private Node root;
 
     BinaryTree() {
+
         root = null;
     }
 
@@ -16,6 +17,7 @@ public class BinaryTree {
     }
 
     public void insert(int key) {
+
         root = insertKey(root, key);
     }
     public Node insertKey(Node root, int key) {
