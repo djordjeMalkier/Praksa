@@ -25,10 +25,12 @@ public class BinaryTree {
             root = new Node(key);
             return root;
         }
-        if (key < root.getKey())
-           root.setLeft( insertKey(root.getLeft(), key));
-        else if (key > root.getKey())
+        if (key < root.getKey()) {
+            root.setLeft(insertKey(root.getLeft(), key));
+        }
+        else if (key > root.getKey()) {
             root.setRight(insertKey(root.getRight(), key));
+        }
 
         return root;
     }
