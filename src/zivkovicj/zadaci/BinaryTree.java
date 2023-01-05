@@ -98,7 +98,7 @@ public class BinaryTree {
         return newRoot;
     }
 
-    public  Node rightRotate(Node node) {
+    public  Node rightRotate(Node root) {
         Node newRoot = root.left;
         root.left = newRoot.right;
         newRoot.right = root;
@@ -112,10 +112,15 @@ public class BinaryTree {
         }
         int leftHeight = getHeight(node.left);
         int rightHeight = getHeight(node.right);
-        return Math.max(leftHeight, rightHeight) + 1;
+
+        if (leftHeight > rightHeight) {
+            return leftHeight + 1;
+        } else {
+            return rightHeight + 1;
+        }
     }
 
-    private int getBalance( Node root) {
+    private int getBalance(Node root) {
         if (root == null) {
             return 0;
         }
