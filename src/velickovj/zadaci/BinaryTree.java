@@ -31,12 +31,4 @@ public class BinaryTree {
         return root;
     }
 
-
-    public void printTree(Node root) {
-        if (root != null) {
-            printTree(root.getLeft());
-            System.out.print(root.getKey() + " -> ");
-            printTree(root.getRight());
-        }
-    }
 }

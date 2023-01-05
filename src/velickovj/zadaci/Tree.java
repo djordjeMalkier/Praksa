@@ -67,9 +67,14 @@ public class Tree {
         tree.insert(10);
         tree.insert(14);
         tree.insert(4);
-        tree.printTree(tree.getRoot());
+        tree.insert(20);
+        tree.insert(21);
+        tree.insert(22);
+        tree.insert(25);
+
+        System.out.println("Binarno stablo");
         System.out.println();
-       printTree(tree.getRoot(),null,false);
+        printTree(tree.getRoot(),null,false);
 
 
         BalancedBinaryTree tree1 = new BalancedBinaryTree();
@@ -82,7 +87,12 @@ public class Tree {
         tree1.setNode(tree1.insertNode(tree1.getNode(), 61));
         tree1.setNode(tree1.insertNode(tree1.getNode(), 8));
         tree1.setNode(tree1.insertNode(tree1.getNode(), 11));
-        tree1.printTree(tree1.getNode());
+        tree1.setNode(tree1.insertNode(tree1.getNode(), 62));
+        tree1.setNode(tree1.insertNode(tree1.getNode(), 63));
+        tree1.setNode(tree1.insertNode(tree1.getNode(), 64));
+        tree1.setNode(tree1.insertNode(tree1.getNode(), 65));
+
+        System.out.println("Izbalansirano binarno stablo");
         System.out.println();
         printTree(tree1.getNode(),null,false);
 
