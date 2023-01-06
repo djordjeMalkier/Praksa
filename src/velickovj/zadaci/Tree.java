@@ -70,6 +70,34 @@ public class Tree {
         return 1+Math.max(depth(root.getLeft()), depth(root.getRight()));
     }
 
+    public static boolean sameTree(Node root1, Node root2) {
+        if (root1 == null && root2 == null)
+            return true;
+
+        if (root1 == null || root2 == null)
+            return false;
+
+        return (root1.getKey() == root2.getKey()
+                && sameTree(root1.getLeft(), root2.getLeft())
+                && sameTree(root1.getRight(), root2.getRight()));
+    }
+    public static boolean subTree(Node root1, Node root2){
+
+        if(root2 == null)
+            return true;
+
+        if (root1 == null)
+            return false;
+
+        if(sameTree(root1, root2))
+            return true;
+
+        return (subTree(root1.getLeft(), root2) || subTree(root1.getRight(), root2));
+
+
+
+    }
+
 
 
     public static void main(String[] args) {
@@ -88,10 +116,21 @@ public class Tree {
         tree.insert(22);
         tree.insert(25);
 
-        System.out.println("Binarno stablo");
-        System.out.println();
+        System.out.println("---Binarno stablo---");
+        System.out.println("Stablo 1");
         printTree(tree.getRoot(),null,false);
         System.out.println(depth(tree.getRoot()));
+
+        BinaryTree subtree1=new BinaryTree();
+
+        subtree1.insert(6);
+        subtree1.insert(7);
+        subtree1.insert(4);
+        System.out.println("Stablo 2");
+        printTree(subtree1.getRoot(),null,false);
+
+       // printTree(subtree1.getRoot(),null,false);
+        System.out.println("Stablo 2 je podstablo stabla1 :"+ subTree(tree.getRoot(),subtree1.getRoot()));
 
 
 
@@ -109,10 +148,24 @@ public class Tree {
         tree1.setNode(tree1.insertNode(tree1.getNode(), 64));
         tree1.setNode(tree1.insertNode(tree1.getNode(), 65));
 
-        System.out.println("Izbalansirano binarno stablo");
+        System.out.println("---Izbalansirano binarno stablo---");
         System.out.println();
         printTree(tree1.getNode(),null,false);
         System.out.println(depth(tree1.getNode()));
+
+        BalancedBinaryTree subtree2 = new BalancedBinaryTree();
+        subtree2.setNode(subtree2.insertNode(subtree2.getNode(), 63));
+        subtree2.setNode(subtree2.insertNode(subtree2.getNode(), 62));
+        subtree2.setNode(subtree2.insertNode(subtree2.getNode(), 64));
+        subtree2.setNode(subtree2.insertNode(subtree2.getNode(), 65));
+
+
+        printTree(subtree2.getNode(), null, false);
+
+        System.out.println("Stablo 2 je podstablo stabla1 :"+subTree(tree1.getNode(), subtree2.getNode()));
+
+
+
 
 
         BalancedBinaryTree tree2 = new BalancedBinaryTree();
@@ -125,7 +178,7 @@ public class Tree {
         tree2.setNode(tree2.insertNode(tree2.getNode(), 1));
         tree2.setNode(tree2.insertNode(tree2.getNode(), 5));
 
-        System.out.println("Izbalansirano binarno stablo");
+        System.out.println("---Izbalansirano binarno stablo---");
         System.out.println();
         printTree(tree2.getNode(),null,false);
         System.out.println(depth(tree2.getNode()));
