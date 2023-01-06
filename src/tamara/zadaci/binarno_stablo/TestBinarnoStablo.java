@@ -11,8 +11,8 @@ public class TestBinarnoStablo {
         stablo.ubaci(1);
         stablo.ubaci(4);
 
-        // Balansiranje stabla
-        stablo.balansiraj();
         stablo.ispisiStablo(stablo.getKorijen());
+
+        stablo.dubinaStabla();
     }
 }

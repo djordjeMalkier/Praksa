@@ -6,7 +6,6 @@ public class BinarnoStablo {
     public Cvor getKorijen() {
         return korijen;
     }
-
     public void balansiraj() {
         korijen = balansiranje(korijen);
     }
@@ -27,29 +26,27 @@ public class BinarnoStablo {
     }
 
     private Cvor balansiranje(Cvor cvor) {
-        // Izračunajte razliku u visini levog i desnog podstabla
         int razlikaUVisini = vratiRazlikuUVisini(cvor);
 
-        // Ako je razlika veća od 1, treba da rotiramo stablo
+        // Ako je razlika veća od 1, rotiraj
         if (razlikaUVisini > 1) {
-            // Ako je visina levog podstabla veća, rotirajmo ulevo
+            // Ako je visina lijevog podstabla veća, rotiraj ulevo
             if (vratiRazlikuUVisini(cvor.getLijevo()) > 0) {
                 cvor = rotirajULijevo(cvor);
             } else {
-                // U suprotnom, rotirajmo udesno
+                // U suprotnom, udesno
                 cvor = zarotirajDesnoLijevo(cvor);
             }
         } else if (razlikaUVisini < -1) {
-            // Ako je razlika manja od -1, rotirajmo udesno
+            // Ako je razlika manja od -1, rotiraj udesno
             if (vratiRazlikuUVisini(cvor.getDesno()) < 0) {
                 cvor = rotirajUDesno(cvor);
             } else {
-                // U suprotnom, rotirajmo ulevo-udesno
+                // U suprotnom, rotiraj lijevo-desno
                 cvor = zarotirajLijevoDesno(cvor);
             }
         }
 
-        // Vratimo izbalansirani cvor
         return cvor;
     }
 
@@ -97,4 +94,18 @@ public class BinarnoStablo {
             ispisiStablo(cvor.getDesno());
         }
     }
+
+    public void dubinaStabla() {
+        System.out.println("\nDubina je: " + dubina(korijen));
+    }
+
+    private int dubina(Cvor cvor) {
+        if (cvor == null) {
+            return 0;
+        }
+        int dubinaLijevog = dubina(cvor.getLijevo());
+        int dubinaDesnog = dubina(cvor.getDesno());
+        return 1 + Math.max(dubinaLijevog, dubinaDesnog);
+    }
+
 }
