@@ -70,6 +70,29 @@ public class Tree {
         return 1+Math.max(depth(root.getLeft()), depth(root.getRight()));
     }
 
+    public static boolean isPresent(Node root, int number){
+        if(root == null)
+            return false;
+
+        if(root.getKey() == number){
+            return true;
+        }
+
+        return isPresent(root.getRight(),number) || isPresent(root.getLeft(),number);
+
+    }
+
+    public static boolean hasSameRoot(Node root, int number1, int number2){
+        if(isPresent(root.getLeft(),number1) && isPresent(root.getLeft(),number2)){
+            return true;
+        }
+        if(isPresent(root.getRight(),number1) && isPresent(root.getRight(),number2)){
+            return true;
+        }
+        return false;
+
+    }
+
 
 
     public static void main(String[] args) {
@@ -92,6 +115,7 @@ public class Tree {
         System.out.println();
         printTree(tree.getRoot(),null,false);
         System.out.println(depth(tree.getRoot()));
+        System.out.println(hasSameRoot(tree.getRoot(),10,3));
 
 
 
@@ -113,6 +137,7 @@ public class Tree {
         System.out.println();
         printTree(tree1.getNode(),null,false);
         System.out.println(depth(tree1.getNode()));
+        System.out.println(hasSameRoot(tree1.getNode(),33,13));
 
 
         BalancedBinaryTree tree2 = new BalancedBinaryTree();
@@ -129,6 +154,7 @@ public class Tree {
         System.out.println();
         printTree(tree2.getNode(),null,false);
         System.out.println(depth(tree2.getNode()));
+        System.out.println(hasSameRoot(tree2.getNode(), 3,8));
 
 
     }
