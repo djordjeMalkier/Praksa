@@ -1,6 +1,5 @@
 package zivkovicj.zadaci.binarytree;
 
-import velickovj.zadaci.Node;
 
 import java.util.*;
 

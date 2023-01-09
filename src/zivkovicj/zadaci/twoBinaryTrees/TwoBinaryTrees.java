@@ -1,6 +1,5 @@
 package zivkovicj.zadaci.twoBinaryTrees;
 
-import zivkovicj.zadaci.BinaryTree;
 
 import java.util.*;
 
