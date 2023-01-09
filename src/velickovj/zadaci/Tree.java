@@ -98,6 +98,29 @@ public class Tree {
 
     }
 
+    public static boolean isPresent(Node root, int number){
+        if(root == null)
+            return false;
+
+        if(root.getKey() == number){
+            return true;
+        }
+
+        return isPresent(root.getRight(),number) || isPresent(root.getLeft(),number);
+
+    }
+
+    public static boolean hasSameRoot(Node root, int number1, int number2){
+        if(isPresent(root.getLeft(),number1) && isPresent(root.getLeft(),number2)){
+            return true;
+        }
+        if(isPresent(root.getRight(),number1) && isPresent(root.getRight(),number2)){
+            return true;
+        }
+        return false;
+
+    }
+
 
 
     public static void main(String[] args) {
@@ -120,6 +143,8 @@ public class Tree {
         System.out.println("Stablo 1");
         printTree(tree.getRoot(),null,false);
         System.out.println(depth(tree.getRoot()));
+        System.out.println("Imaju istog pretka: "+hasSameRoot(tree.getRoot(), 10,14));
+        System.out.println("Imaju istog pretka: "+hasSameRoot(tree.getRoot(), 10,3));
 
         BinaryTree subtree1=new BinaryTree();
 
@@ -128,6 +153,7 @@ public class Tree {
         subtree1.insert(4);
         System.out.println("Stablo 2");
         printTree(subtree1.getRoot(),null,false);
+
 
        // printTree(subtree1.getRoot(),null,false);
         System.out.println("Stablo 2 je podstablo stabla1 :"+ subTree(tree.getRoot(),subtree1.getRoot()));
