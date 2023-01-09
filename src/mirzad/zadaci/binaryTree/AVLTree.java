@@ -1,5 +1,8 @@
 package mirzad.zadaci.binaryTree;
 
+import java.util.LinkedList;
+import java.util.Queue;
+
 class AVLTree {
 
     Node root;
@@ -88,28 +91,89 @@ class AVLTree {
             preOrder(node.left);
             preOrder(node.right);
         }
+
+    }
+
+    public void printLevelOrder() {
+        Queue<Node> queue = new LinkedList<Node>();
+        queue.add(root);
+        queue.add(null);
+        while (!queue.isEmpty()) {
+
+            Node temp = queue.poll();
+            if(temp!=null)
+                System.out.print(temp.value + " ");
+
+            if(temp == null) {
+                System.out.println();
+                if(queue.isEmpty()) break;
+                queue.add(null);
+                continue;
+            }
+
+            if (temp.left != null) {
+                queue.add(temp.left);
+            }
+
+            if (temp.right != null) {
+                queue.add(temp.right);
+            }
+        }
+    }
+
+    int findDepth(Node node)
+    {
+
+        if (node == null)
+            return 0;
+
+        else {
+
+
+            int leftDepth = findDepth(node.left);
+            int rightDepth = findDepth(node.right);
+
+            if (leftDepth > rightDepth)
+                return (leftDepth + 1);
+
+            else
+                return (rightDepth + 1);
+
+        }
+    }
+
+    Node commonAncestor(Node root, int p, int q) {
+        if(root==null)
+            return null;
+
+        if(root.value==p || root.value==q)
+            return root;
+
+        Node left= commonAncestor(root.left,p,q);
+        Node right= commonAncestor(root.right,p,q);
+
+        if(left!=null && right!=null)
+            return root;
+
+        return(left!=null ? left : right);
     }
 
     public static void main(String[] args) {
         AVLTree tree = new AVLTree();
 
-        /* Constructing tree given in the above figure */
-        tree.root = tree.insert(tree.root, 10);
-        tree.root = tree.insert(tree.root, 20);
-        tree.root = tree.insert(tree.root, 30);
-        tree.root = tree.insert(tree.root, 40);
-        tree.root = tree.insert(tree.root, 50);
-        tree.root = tree.insert(tree.root, 25);
+        tree.root = tree.insert(tree.root, 6);
+        tree.root = tree.insert(tree.root, 4);
+        tree.root = tree.insert(tree.root, 8);
+        tree.root = tree.insert(tree.root, 3);
+        tree.root = tree.insert(tree.root, 11);
+        tree.root = tree.insert(tree.root, 2);
+        tree.root = tree.insert(tree.root, 1);
+        tree.root = tree.insert(tree.root, 5);
 
-        /* The constructed AVL Tree would be
-             30
-            /  \
-          20   40
-         /  \     \
-        10  25    50
-        */
-        System.out.println("Preorder traversal" +
-                " of constructed tree is : ");
-        tree.preOrder(tree.root);
+        tree.printLevelOrder();
+        System.out.println(tree.findDepth(tree.root));
+
+        Node node = tree.commonAncestor(tree.root, 2, 4);
+        System.out.println(node.value);
     }
 }
